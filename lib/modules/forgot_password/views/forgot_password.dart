@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
-import 'package:hkdigiskill/modules/sign_in/controllers/sign_in_controller.dart';
+import 'package:hkdigiskill/modules/forgot_password/controllers/forgot_password_controller.dart';
 import 'package:hkdigiskill/shared/widgets/app_text_field.dart';
 
-class SignIn extends GetView<SignInController> {
-  const SignIn({super.key});
+class ForgotPassword extends GetView<ForgotPasswordController> {
+  const ForgotPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Sign In',
+        title: const Text(
+          'Forgot Password',
           style: TextStyle(
             color: AppColors.textLight,
             fontWeight: FontWeight.w600,
@@ -22,6 +22,7 @@ class SignIn extends GetView<SignInController> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
+        iconTheme: IconThemeData(color: AppColors.textLight),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(24),
@@ -34,21 +35,14 @@ class SignIn extends GetView<SignInController> {
               keyboardType: TextInputType.emailAddress,
               controller: controller.emailController,
             ),
-            AppTextField(
-              label: "Password",
-              isRequired: true,
-              keyboardType: TextInputType.visiblePassword,
-              controller: controller.passwordController,
-              obscureText: true,
-            ),
             TextButton(
-              onPressed: controller.onForgotPasswordTap,
+              onPressed: controller.onForgotEmailTap,
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              child: Text("Forgot Password?"),
+              child: Text("Forgot Email?"),
             ),
-            Gap(24),
+            Gap(10),
             InkWell(
-              onTap: controller.onLoginTap,
+              onTap: controller.onSendOtpTap,
               child: Container(
                 height: 56,
                 width: double.infinity,
@@ -58,7 +52,7 @@ class SignIn extends GetView<SignInController> {
                 ),
                 child: Center(
                   child: Text(
-                    "Log in",
+                    "Send OTP",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -69,7 +63,7 @@ class SignIn extends GetView<SignInController> {
                 ),
               ),
             ),
-            Gap(20),
+            Gap(16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

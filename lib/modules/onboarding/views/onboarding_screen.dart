@@ -27,15 +27,22 @@ class OnboardingScreen extends GetView<OnboardingController> {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.primary.withValues(alpha: 0.6),
-                        AppColors.primary,
-                      ],
-                      stops: const [0.4, 0.9],
-                    ),
+                    // gradient: LinearGradient(
+                    //   begin: Alignment.topCenter,
+                    //   end: Alignment.bottomCenter,
+                    //   colors: [
+                    //     AppColors.primary.withValues(alpha: 0.6),
+                    //     AppColors.primary,
+                    //   ],
+                    //   stops: const [0.4, 0.9],
+                    // ),
+                  ),
+                  alignment: Alignment.bottomCenter,
+                  child: Image(
+                    image: AssetImage(AppImages.logo),
+                    width: 200,
+                    height: 120,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),

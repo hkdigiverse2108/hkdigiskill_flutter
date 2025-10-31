@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class SplashController extends GetxController {
   // Example observable state
   var isLoading = true.obs;
+  final storage = StorageService();
 
   // Initialize logic here
   @override
@@ -16,7 +18,13 @@ class SplashController extends GetxController {
   void _fakeLoading() async {
     await Future.delayed(Duration(seconds: 3));
     isLoading.value = false;
-    Get.offAllNamed(Routes.onboarding);
+    if (storage.isLoggedIn) {
+      Get.offAllNamed(Routes.navigation);
+    } else if (storage.seenOnboarding) {
+      Get.offAllNamed(Routes.login);
+    } else {
+      Get.offAllNamed(Routes.onboarding);
+    }
     // Navigate or perform other actions after splash
   }
 }

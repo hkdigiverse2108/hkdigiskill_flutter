@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 
 class OnboardingController extends GetxController {
   final RxInt currentStep = 0.obs;
   int totalSteps = 0;
+  final storage = StorageService();
 
   @override
   void onInit() {
@@ -30,7 +33,7 @@ class OnboardingController extends GetxController {
       // You can add more images as needed
       title: "Get certified",
       description:
-          "Earn certificates upon course completion to showcase your new skills.",
+          "Earn certificates upon courses completion to showcase your new skills.",
     ),
   ];
 
@@ -39,13 +42,15 @@ class OnboardingController extends GetxController {
       currentStep.value++;
     } else {
       // Navigate to home or login screen when onboarding is complete
-      // Get.offAllNamed(Routes.HOME);
+      storage.seenOnboarding = true;
+      Get.offAllNamed(Routes.login);
     }
   }
 
   void skipToEnd() {
     // Navigate to home or login screen
-    // Get.offAllNamed(Routes.HOME);
+    storage.seenOnboarding = true;
+    Get.offAllNamed(Routes.login);
   }
 
   void previousStep() {

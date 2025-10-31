@@ -10,13 +10,13 @@ import 'app/utils/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize GetX storage
   await GetStorage.init();
-  
+
   // Initialize services
   await initializeServices();
-  
+
   runApp(const MyApp());
 }
 
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      // darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       initialRoute: Routes.splash,
       getPages: AppPages.pages,
