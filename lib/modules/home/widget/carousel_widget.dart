@@ -31,15 +31,30 @@ class _ImageCardCarouselState extends State<ImageCardCarousel> {
               itemCount: widget.imageList.length,
               onPageChanged: (index) => setState(() => _currentPage = index),
               itemBuilder: (context, index) {
-                return Image.network(
-                  widget.imageList[index],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  loadingBuilder: (context, child, progress) => progress == null
-                      ? child
-                      : Center(child: CircularProgressIndicator()),
-                  errorBuilder: (context, error, stackTrace) => Center(
-                    child: Icon(Icons.broken_image, color: AppColors.error),
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: Container(
+                      color: AppColors.backgroundLight,
+                      width: double.infinity,
+                      height: 180,
+                      child: Image.network(
+                        widget.imageList[index],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        loadingBuilder: (context, child, progress) =>
+                            progress == null
+                            ? child
+                            : Center(child: CircularProgressIndicator()),
+                        errorBuilder: (context, error, stackTrace) => Center(
+                          child: Icon(
+                            Icons.broken_image,
+                            color: AppColors.error,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },

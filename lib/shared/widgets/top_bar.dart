@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({super.key});
@@ -11,10 +13,15 @@ class TopBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Profile image (use your network/local asset)
-        CircleAvatar(
-          radius: 20,
-          backgroundImage: NetworkImage(
-            'https://randomuser.me/api/portraits/women/32.jpg', // Replace with actual user image URL
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.profile);
+          },
+          child: CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage(
+              'https://randomuser.me/api/portraits/women/32.jpg', // Replace with actual user image URL
+            ),
           ),
         ),
 
