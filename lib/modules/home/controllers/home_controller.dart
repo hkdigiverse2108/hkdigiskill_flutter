@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 
 class HomeController extends GetxController {
   final navigationController = Get.find<NavigationController>();
@@ -135,5 +136,13 @@ class HomeController extends GetxController {
 
   void onCourseViewAll() {
     navigationController.currentIndex.value = 2;
+  }
+
+  void onCategoryViewAll() {
+    navigationController.currentIndex.value = 1;
+  }
+
+  void onBlogViewAll() {
+    Get.toNamed(Routes.blogs);
   }
 }

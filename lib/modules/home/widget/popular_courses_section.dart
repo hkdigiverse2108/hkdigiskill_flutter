@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class PopularCoursesSection extends StatelessWidget {
@@ -98,6 +99,13 @@ class PopularCoursesSection extends StatelessWidget {
                               width: width - 40,
                               height: 145,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: width - 40,
+                                  height: 145,
+                                  color: Colors.grey,
+                                );
+                              },
                             ),
                           ),
                           Positioned(

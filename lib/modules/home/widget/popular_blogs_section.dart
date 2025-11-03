@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 
 class PopularBlogsSection extends StatelessWidget {
   final List<Map<String, dynamic>> blogs;
+  final VoidCallback onViewAll;
 
-  const PopularBlogsSection({super.key, required this.blogs});
+  const PopularBlogsSection({
+    super.key,
+    required this.blogs,
+    required this.onViewAll,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +79,13 @@ class PopularBlogsSection extends StatelessWidget {
                         width: 240,
                         height: 170,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 240,
+                            height: 170,
+                            color: Colors.grey,
+                          );
+                        },
                       ),
                     ),
                     Positioned(
@@ -197,7 +211,7 @@ class PopularBlogsSection extends StatelessWidget {
                               size: 22,
                             ),
                             onPressed: () {
-                              // handle bookmark/add to reading list
+                              Get.toNamed(Routes.blogDetails);
                             },
                           ),
                         ),

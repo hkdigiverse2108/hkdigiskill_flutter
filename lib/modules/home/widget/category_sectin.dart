@@ -60,6 +60,7 @@ class CategoryGridSection extends StatelessWidget {
             childAspectRatio: 1.7,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
+            mainAxisExtent: 90,
           ),
           itemBuilder: (context, index) {
             final item = categories[index];

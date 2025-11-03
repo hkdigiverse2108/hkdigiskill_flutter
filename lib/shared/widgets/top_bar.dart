@@ -67,7 +67,7 @@ class TopBar extends StatelessWidget {
         // Notification icon
         InkWell(
           onTap: () {
-            // Get.toNamed(Routes.notification);
+            Get.toNamed(Routes.notification);
           },
           child: SvgPicture.asset(AppImages.notification),
         ),

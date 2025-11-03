@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/services/storage_service.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 
 class ProfileController extends GetxController {
   // -1 means none expanded, 0=Learning, 1=Company, 2=Account
   RxInt expandedSection = (-1).obs;
+  final storage = StorageService();
 
   void toggleSection(int index) {
     if (expandedSection.value == index) {
@@ -22,5 +25,10 @@ class ProfileController extends GetxController {
   void updateProfile() {
     // Your logic to update the profile
     // e.g., validate, call API, show dialog...
+  }
+
+  void signOut() {
+    storage.clearUserData();
+    Get.offAllNamed(Routes.login);
   }
 }

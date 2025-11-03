@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:hkdigiskill/modules/category/controllers/category_controller.dart';
+import 'package:hkdigiskill/modules/chat/controllers/chats_controller.dart';
 import 'package:hkdigiskill/modules/courses/controllers/courses_controller.dart';
 import 'package:hkdigiskill/modules/home/controllers/home_controller.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
+import 'package:hkdigiskill/modules/workshops/controllers/workshops_controller.dart';
 
 class NavigationBinding extends Bindings {
   @override
@@ -11,5 +13,7 @@ class NavigationBinding extends Bindings {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<CoursesController>(() => CoursesController());
     Get.lazyPut<CategoryController>(() => CategoryController());
+    Get.lazyPut<WorkshopsController>(() => WorkshopsController());
+    Get.lazyPut<ChatsController>(() => ChatsController());
   }
 }

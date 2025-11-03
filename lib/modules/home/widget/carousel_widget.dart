@@ -47,11 +47,10 @@ class _ImageCardCarouselState extends State<ImageCardCarousel> {
                             progress == null
                             ? child
                             : Center(child: CircularProgressIndicator()),
-                        errorBuilder: (context, error, stackTrace) => Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            color: AppColors.error,
-                          ),
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: double.infinity,
+                          height: 180,
+                          color: Colors.grey,
                         ),
                       ),
                     ),

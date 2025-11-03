@@ -31,7 +31,7 @@ class HomeScreen extends GetView<HomeController> {
               Gap(10),
               CategoryGridSection(
                 categories: controller.categories,
-                onViewAll: () {},
+                onViewAll: controller.onCategoryViewAll,
               ),
               Gap(10),
               PopularCoursesSection(
@@ -41,7 +41,10 @@ class HomeScreen extends GetView<HomeController> {
               Gap(10),
               StatCountersBar(counters: controller.counters),
               Gap(10),
-              PopularBlogsSection(blogs: controller.blogs),
+              PopularBlogsSection(
+                blogs: controller.blogs,
+                onViewAll: controller.onBlogViewAll,
+              ),
             ],
           ),
         ),

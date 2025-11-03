@@ -28,7 +28,7 @@ class SplashScreen extends GetView<SplashController> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                AppColors.primary.withValues(alpha: 0.6),
+                AppColors.primary.withValues(alpha: 0.4),
                 AppColors.primary,
               ],
               stops: const [0.4, 0.9],

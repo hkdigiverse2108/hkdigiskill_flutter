@@ -57,16 +57,19 @@ class ProfileMenuPage extends GetView<ProfileController> {
                 "Marvin McKinney",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
-              trailing: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.caption.withOpacity(0.3),
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(14),
-                child: SvgPicture.asset(
-                  AppImages.signOut,
-                  height: 16,
-                  width: 16,
+              trailing: InkWell(
+                onTap: controller.signOut,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.caption.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(14),
+                  child: SvgPicture.asset(
+                    AppImages.signOut,
+                    height: 16,
+                    width: 16,
+                  ),
                 ),
               ),
               onTap: () {},
@@ -119,7 +122,21 @@ class ProfileMenuPage extends GetView<ProfileController> {
                   "Privacy Policy",
                   "News Letter",
                 ],
-                actions: [() {}, () {}, () {}, () {}, () {}],
+                actions: [
+                  () {
+                    Get.toNamed(Routes.aboutUs);
+                  },
+                  () {
+                    Get.toNamed(Routes.contactUs);
+                  },
+                  () {
+                    Get.toNamed(Routes.termsCondition);
+                  },
+                  () {
+                    Get.toNamed(Routes.privacyPolicy);
+                  },
+                  () {},
+                ],
                 expanded: controller.expandedSection.value == 1,
                 onHeaderTap: () => controller.toggleSection(1),
               ),
@@ -147,22 +164,13 @@ class ProfileMenuPage extends GetView<ProfileController> {
             GestureDetector(
               onTap: () {}, // Help callback
               child: Container(
-                height: 55,
+                height: 85,
                 decoration: BoxDecoration(
                   color: Colors.blue.shade100,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Center(
-                  child: Text(
-                    "How can we help you?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.blue.shade700,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.asset(AppImages.help, fit: BoxFit.fill),
               ),
             ),
             const SizedBox(height: 24),

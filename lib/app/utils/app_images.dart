@@ -10,5 +10,6 @@ class AppImages {
   static const String onboardingBackground =
       'assets/images/onboardingImage.png';
   static const String courseImage = 'assets/images/courseBg.png';
+  static const String help = 'assets/images/help.jpg';
   // Add more as needed
 }
