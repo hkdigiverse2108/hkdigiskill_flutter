@@ -32,13 +32,30 @@ class UpdateProfilePage extends GetView<ProfileController> {
                 alignment: Alignment.bottomRight,
                 children: [
                   Obx(
-                    () => CircleAvatar(
-                      radius: 45,
-                      backgroundImage: NetworkImage(controller.photoUrl.value),
+                    () => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.backgroundLight,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(5),
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundImage: NetworkImage(
+                          controller.photoUrl.value,
+                        ),
+                      ),
                     ),
                   ),
                   Positioned(
-                    bottom: 0,
+                    top: 0,
+                    // bottom: 0,
                     right: 2,
                     child: InkWell(
                       onTap: () {
@@ -46,8 +63,9 @@ class UpdateProfilePage extends GetView<ProfileController> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: AppColors.primary,
                           shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
                         ),
                         padding: EdgeInsets.all(8),
                         child: Icon(

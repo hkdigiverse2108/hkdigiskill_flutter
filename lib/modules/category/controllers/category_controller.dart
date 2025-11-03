@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 
 class CategoryController extends GetxController {
   final List<Map<String, dynamic>> items = List.generate(
@@ -13,4 +14,8 @@ class CategoryController extends GetxController {
       "bgColor": Color(0xFFFDE7E3),
     },
   );
+
+  void onItemTap({required id}) {
+    Get.toNamed(Routes.courses, arguments: true);
+  }
 }

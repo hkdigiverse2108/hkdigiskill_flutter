@@ -117,7 +117,7 @@ class PopularCoursesSection extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFFCE74),
+                                color: AppColors.primaryLight,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -125,7 +125,7 @@ class PopularCoursesSection extends StatelessWidget {
                                   Icon(
                                     Icons.access_time_rounded,
                                     size: 16,
-                                    color: Color(0xFFD17D2A),
+                                    color: AppColors.primary,
                                   ),
                                   SizedBox(width: 3),
                                   Text(
@@ -134,7 +134,7 @@ class PopularCoursesSection extends StatelessWidget {
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Poppins',
-                                      color: Color(0xFFD17D2A),
+                                      color: AppColors.primary,
                                     ),
                                   ),
                                 ],
@@ -192,7 +192,7 @@ class PopularCoursesSection extends StatelessWidget {
                         child: Text(
                           course["price"],
                           style: TextStyle(
-                            color: Color(0xFFF05E54),
+                            color: AppColors.primary,
                             fontSize: 16,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,

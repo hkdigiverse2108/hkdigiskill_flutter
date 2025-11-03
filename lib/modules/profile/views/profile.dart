@@ -58,7 +58,7 @@ class ProfileMenuPage extends GetView<ProfileController> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               trailing: InkWell(
-                onTap: controller.signOut,
+                onTap: () => controller.showSignOutDialog(context),
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.caption.withOpacity(0.3),
@@ -153,7 +153,9 @@ class ProfileMenuPage extends GetView<ProfileController> {
                   () {
                     Get.toNamed(Routes.changePassword);
                   },
-                  () {},
+                  () {
+                    controller.onDeleteAccountTap(context);
+                  },
                 ],
                 expanded: controller.expandedSection.value == 2,
                 onHeaderTap: () => controller.toggleSection(2),

@@ -38,14 +38,14 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
             const SizedBox(height: 9),
             Row(
               children: [
-                Icon(Icons.calendar_today, size: 16, color: Colors.teal),
+                Icon(Icons.calendar_today, size: 16, color: AppColors.primary),
                 const SizedBox(width: 4),
                 Text(
                   controller.date,
                   style: TextStyle(fontSize: 13, color: Colors.grey[800]),
                 ),
                 const SizedBox(width: 10),
-                Icon(Icons.comment, size: 16, color: Colors.teal),
+                Icon(Icons.comment, size: 16, color: AppColors.primary),
                 const SizedBox(width: 4),
                 Text(
                   'Com ${controller.comments}',
@@ -87,7 +87,7 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.format_quote, color: Colors.teal),
+                      Icon(Icons.format_quote, color: AppColors.primary),
                       SizedBox(width: 5),
                     ],
                   ),
@@ -133,12 +133,12 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
                     margin: EdgeInsets.symmetric(horizontal: 3),
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.teal.shade50,
+                      color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       tag,
-                      style: TextStyle(fontSize: 13, color: Colors.teal[700]),
+                      style: TextStyle(fontSize: 13, color: AppColors.primary),
                     ),
                   ),
                 ),

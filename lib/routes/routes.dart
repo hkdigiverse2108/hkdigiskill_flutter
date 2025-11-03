@@ -39,6 +39,7 @@ import 'package:hkdigiskill/modules/chat/views/chat.dart';
 import 'package:hkdigiskill/modules/chat/views/chats.dart';
 import 'package:hkdigiskill/modules/courses/views/course_details_screen.dart';
 import 'package:hkdigiskill/modules/courses/views/courses.dart';
+import 'package:hkdigiskill/modules/courses/views/view_all_course.dart';
 import 'package:hkdigiskill/modules/faq/views/faq.dart';
 import 'package:hkdigiskill/modules/forgot_password/views/forgot_password.dart';
 import 'package:hkdigiskill/modules/gallery/views/gallery.dart';
@@ -98,6 +99,7 @@ class Routes {
   static const String chats = '/chats';
   static const String chatMassage = '/chat-massage';
   static const String notification = '/notification';
+  static const String viewAllCourse = '/view-all-course';
   // Add more routes as needed
 }
 
@@ -250,6 +252,11 @@ class AppPages {
       name: Routes.notification,
       page: () => const Notification(),
       binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: Routes.viewAllCourse,
+      page: () => const ViewAllCourse(),
+      // binding: ViewAllCourseBinding(),
     ),
   ];
 }

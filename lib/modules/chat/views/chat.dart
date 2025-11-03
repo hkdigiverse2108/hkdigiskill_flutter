@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/chat/controllers/chat_controller.dart';
 
 class Chat extends GetView<ChatController> {
@@ -14,7 +15,9 @@ class Chat extends GetView<ChatController> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage('assets/profile_martha.png'),
+              backgroundImage: NetworkImage(
+                "https://randomuser.me/api/portraits/women/32.jpg",
+              ),
             ),
             SizedBox(width: 8),
             Text(
@@ -147,8 +150,8 @@ class Chat extends GetView<ChatController> {
             padding: EdgeInsets.fromLTRB(12, 8, 12, 12),
             child: Row(
               children: [
-                Icon(Icons.emoji_emotions_outlined, color: Colors.grey),
-                SizedBox(width: 8),
+                // Icon(Icons.emoji_emotions_outlined, color: Colors.grey),
+                // SizedBox(width: 8),
                 Expanded(
                   child: TextField(
                     controller: controller.textController,
@@ -170,15 +173,10 @@ class Chat extends GetView<ChatController> {
                   ),
                 ),
                 SizedBox(width: 8),
-                Icon(Icons.attach_file, color: Colors.grey),
-                SizedBox(width: 8),
-                Icon(Icons.camera_alt, color: Colors.grey),
-                SizedBox(width: 4),
-                Icon(Icons.mic, color: Colors.green),
-                SizedBox(width: 4),
+
                 // Send Button
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.blue),
+                  icon: Icon(Icons.send, color: AppColors.primary),
                   onPressed: controller.sendMessage,
                 ),
               ],

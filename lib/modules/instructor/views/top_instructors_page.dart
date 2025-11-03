@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/instructor/controllers/instructor_controller.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
 
@@ -59,16 +60,16 @@ class TopInstructorsPage extends GetView<InstructorController> {
                     ? Center(
                         child: Container(
                           height: 200,
-                          color: Colors.teal.withOpacity(0.35),
+                          color: AppColors.primary.withValues(alpha: 0.35),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               const Spacer(),
-                              _circleIcon(AppImages.signOut),
+                              _circleIcon(AppImages.facebook),
                               Gap(4),
-                              _circleIcon(AppImages.signOut),
+                              _circleIcon(AppImages.twitter),
                               Gap(4),
-                              _circleIcon(AppImages.signOut),
+                              _circleIcon(AppImages.linkedin),
                               const Spacer(),
                             ],
                           ),

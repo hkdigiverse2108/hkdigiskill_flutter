@@ -15,6 +15,8 @@ class AppTextField extends StatelessWidget {
   final String? initialValue;
   final int minLines;
   final int maxLines;
+  final int? maxLength;
+  final double? height; // <- new argument
 
   const AppTextField({
     super.key,
@@ -30,6 +32,8 @@ class AppTextField extends StatelessWidget {
     this.initialValue,
     this.minLines = 1,
     this.maxLines = 1,
+    this.maxLength,
+    this.height, // <- new argument
   });
 
   @override
@@ -61,51 +65,61 @@ class AppTextField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
-          initialValue: initialValue,
-          enabled: enabled,
-          validator:
-              validator ??
-              (value) {
-                if (isRequired && (value == null || value.isEmpty)) {
-                  return 'This field is required';
-                }
-                return null;
-              },
-          style: TextStyle(
-            color: AppColors.textLight,
-            fontFamily: 'Poppins',
-            fontSize: 15,
-          ),
-          minLines: minLines,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(
-              color: AppColors.caption,
-              fontFamily: 'Poppins',
-              fontSize: 15,
+        SizedBox(
+          height: height, // <- uses custom height if provided
+          child: Align(
+            alignment: Alignment.center,
+            child: TextFormField(
+              controller: controller,
+              keyboardType: keyboardType,
+              obscureText: obscureText,
+              initialValue: initialValue,
+              enabled: enabled,
+              maxLength: maxLength,
+              validator:
+                  validator ??
+                  (value) {
+                    if (isRequired && (value == null || value.isEmpty)) {
+                      return 'This field is required';
+                    }
+                    return null;
+                  },
+              style: TextStyle(
+                color: AppColors.textLight,
+                fontFamily: 'Poppins',
+                fontSize: 15,
+              ),
+              minLines: minLines,
+              maxLines: maxLines,
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: TextStyle(
+                  color: AppColors.caption,
+                  fontFamily: 'Poppins',
+                  fontSize: 15,
+                ),
+                filled: true,
+                fillColor: AppColors.backgroundLight,
+                contentPadding: height != null
+                    ? EdgeInsets.symmetric(horizontal: 16, vertical: 0)
+                    : EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: AppColors.caption.withOpacity(0.5),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.error),
+                ),
+                suffixIcon: suffixIcon,
+              ),
             ),
-
-            filled: true,
-            fillColor: AppColors.backgroundLight,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.caption.withOpacity(0.5)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.error),
-            ),
-            suffixIcon: suffixIcon,
           ),
         ),
         const SizedBox(height: 15),

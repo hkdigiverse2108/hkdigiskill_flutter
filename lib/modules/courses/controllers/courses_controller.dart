@@ -1,6 +1,14 @@
 import 'package:get/get.dart';
 
 class CoursesController extends GetxController {
+  final isFilterMode = false.obs;
+
+  @override
+  void onInit() {
+    isFilterMode.value = Get.arguments ?? false;
+    super.onInit();
+  }
+
   final List<Map<String, dynamic>> courses = [
     {
       "image":

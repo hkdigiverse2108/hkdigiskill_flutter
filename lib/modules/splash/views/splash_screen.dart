@@ -20,27 +20,62 @@ class SplashScreen extends GetView<SplashController> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.primary.withValues(alpha: 0.4),
-                AppColors.primary,
-              ],
-              stops: const [0.4, 0.9],
-            ),
-          ),
-          child: Center(
-            child: Image(
-              image: AssetImage(AppImages.logo),
-              width: 200,
-              height: 120,
-              fit: BoxFit.contain,
-            ),
+        child: Center(
+          child: AnimatedLogo(), // animate only this part!
+        ),
+      ),
+    );
+  }
+}
+
+class AnimatedLogo extends StatefulWidget {
+  @override
+  State<AnimatedLogo> createState() => _AnimatedLogoState();
+}
+
+class _AnimatedLogoState extends State<AnimatedLogo>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fade;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+    _fade = Tween<double>(
+      begin: 0.3,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    _scale = Tween<double>(
+      begin: 0.7,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) => Opacity(
+        opacity: _fade.value,
+        child: Transform.scale(
+          scale: _scale.value,
+          child: Image(
+            image: AssetImage(AppImages.logo),
+            width: 200,
+            height: 120,
+            fit: BoxFit.contain,
           ),
         ),
       ),

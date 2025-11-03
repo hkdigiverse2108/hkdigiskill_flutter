@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/blog/controllers/blog_controller.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
@@ -36,7 +37,7 @@ class BlogsPage extends GetView<BlogController> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.teal,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(

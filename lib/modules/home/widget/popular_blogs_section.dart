@@ -35,7 +35,7 @@ class PopularBlogsSection extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {}, // handle view all
+                onTap: onViewAll, // handle view all
                 child: Text(
                   "view all",
                   style: TextStyle(
@@ -136,7 +136,7 @@ class PopularBlogsSection extends StatelessWidget {
                                 children: [
                                   Icon(
                                     Icons.event_note,
-                                    color: AppColors.info,
+                                    color: AppColors.primary,
                                     size: 16,
                                   ),
                                   const SizedBox(width: 5),
@@ -201,7 +201,7 @@ class PopularBlogsSection extends StatelessWidget {
                         color: Colors.transparent,
                         child: Ink(
                           decoration: ShapeDecoration(
-                            color: Color(0xFF21BAA8),
+                            color: AppColors.primary,
                             shape: CircleBorder(),
                           ),
                           child: IconButton(

@@ -44,7 +44,10 @@ class SignIn extends GetView<SignInController> {
             TextButton(
               onPressed: controller.onForgotPasswordTap,
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              child: Text("Forgot Password?"),
+              child: Text(
+                "Forgot Password?",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             Gap(24),
             InkWell(
@@ -77,7 +80,10 @@ class SignIn extends GetView<SignInController> {
                 TextButton(
                   onPressed: controller.onSignUpTap,
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  child: Text("Sign Up"),
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),

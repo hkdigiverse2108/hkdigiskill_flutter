@@ -38,7 +38,10 @@ class ForgotPassword extends GetView<ForgotPasswordController> {
             TextButton(
               onPressed: controller.onForgotEmailTap,
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              child: Text("Forgot Email?"),
+              child: Text(
+                "Forgot Email?",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             Gap(10),
             InkWell(
@@ -71,7 +74,10 @@ class ForgotPassword extends GetView<ForgotPasswordController> {
                 TextButton(
                   onPressed: controller.onSignUpTap,
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  child: Text("Sign Up"),
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),

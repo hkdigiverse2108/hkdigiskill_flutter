@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:async'; // Add this
+
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 
 class ImageCardCarousel extends StatefulWidget {
@@ -12,8 +14,33 @@ class ImageCardCarousel extends StatefulWidget {
 
 class _ImageCardCarouselState extends State<ImageCardCarousel> {
   int _currentPage = 0;
-
   final PageController _pageController = PageController();
+  Timer? _timer; // Add timer
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+      if (_currentPage < widget.imageList.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0; // loop back to first image
+      }
+      _pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel timer when widget is disposed
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

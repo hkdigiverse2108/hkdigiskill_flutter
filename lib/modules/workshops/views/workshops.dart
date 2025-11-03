@@ -35,7 +35,7 @@ class Workshops extends GetView<WorkshopsController> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  final course = controller.workshops[index];
+                  final workshop = controller.workshops[index];
                   return GestureDetector(
                     onTap: () => controller.onWorkshopTap(index),
                     child: Container(
@@ -63,7 +63,7 @@ class Workshops extends GetView<WorkshopsController> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     image: DecorationImage(
-                                      image: NetworkImage(course["image"]),
+                                      image: NetworkImage(workshop["image"]),
                                       fit: BoxFit.fill,
                                     ),
                                   ),
@@ -77,7 +77,7 @@ class Workshops extends GetView<WorkshopsController> {
                                       vertical: 2,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFFFCE74),
+                                      color: AppColors.primaryLight,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Row(
@@ -85,16 +85,16 @@ class Workshops extends GetView<WorkshopsController> {
                                         Icon(
                                           Icons.access_time_rounded,
                                           size: 12,
-                                          color: Color(0xFFD17D2A),
+                                          color: AppColors.primary,
                                         ),
                                         const SizedBox(width: 3),
                                         Text(
-                                          course["duration"],
+                                          workshop["duration"],
                                           style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600,
                                             fontFamily: 'Poppins',
-                                            color: Color(0xFFD17D2A),
+                                            color: AppColors.primary,
                                           ),
                                         ),
                                       ],
@@ -115,7 +115,7 @@ class Workshops extends GetView<WorkshopsController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    course["title"],
+                                    workshop["title"],
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 15,
@@ -139,7 +139,7 @@ class Workshops extends GetView<WorkshopsController> {
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        "(${course["rating"]}/ ${course["ratingCount"]} Ratings)",
+                                        "(${workshop["rating"]}/ ${workshop["ratingCount"]} Ratings)",
                                         style: TextStyle(
                                           color: AppColors.caption,
                                           fontSize: 12,
@@ -152,7 +152,7 @@ class Workshops extends GetView<WorkshopsController> {
                                   const SizedBox(height: 4),
                                   // price
                                   Text(
-                                    course["price"],
+                                    workshop["price"],
                                     style: TextStyle(
                                       color: Color(0xFFF05E54),
                                       fontSize: 14,
@@ -171,7 +171,7 @@ class Workshops extends GetView<WorkshopsController> {
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        "${course["lessons"]} Lessons",
+                                        "${workshop["lessons"]} Lessons",
                                         style: TextStyle(
                                           color: AppColors.caption,
                                           fontSize: 11,
@@ -197,7 +197,7 @@ class Workshops extends GetView<WorkshopsController> {
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        "${course["students"]} Students",
+                                        "${workshop["students"]} Students",
                                         style: TextStyle(
                                           color: AppColors.caption,
                                           fontSize: 11,
@@ -220,13 +220,32 @@ class Workshops extends GetView<WorkshopsController> {
                 itemCount: controller.workshops.length,
               ),
               Gap(20),
-              Text(
-                "Explore more",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  fontFamily: 'Poppins',
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Explore more",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {}, // handle view all
+                    child: Text(
+                      "view all",
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Gap(20),
               ListView.separated(
@@ -275,7 +294,7 @@ class Workshops extends GetView<WorkshopsController> {
                                       vertical: 2,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFFFCE74),
+                                      color: AppColors.primaryLight,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Row(
@@ -283,7 +302,7 @@ class Workshops extends GetView<WorkshopsController> {
                                         Icon(
                                           Icons.access_time_rounded,
                                           size: 12,
-                                          color: Color(0xFFD17D2A),
+                                          color: AppColors.primary,
                                         ),
                                         const SizedBox(width: 3),
                                         Text(
@@ -292,7 +311,7 @@ class Workshops extends GetView<WorkshopsController> {
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600,
                                             fontFamily: 'Poppins',
-                                            color: Color(0xFFD17D2A),
+                                            color: AppColors.primary,
                                           ),
                                         ),
                                       ],

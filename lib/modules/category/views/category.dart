@@ -24,74 +24,77 @@ class Category extends GetView<CategoryController> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final item = controller.items[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Colored square/avatar
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: item["bgColor"],
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          SizedBox(width: 16),
-                          // Details
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item["title"],
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
-                                ),
-
-                                SizedBox(height: 4),
-                                Text(
-                                  item["count"],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  item["description"],
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Poppins',
-                                    color: Colors.black.withOpacity(0.7),
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                  return InkWell(
+                    onTap: () => controller.onItemTap(id: ""),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 8,
                           ),
                         ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Colored square/avatar
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: item["bgColor"],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            // Details
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item["title"],
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                  ),
+
+                                  SizedBox(height: 4),
+                                  Text(
+                                    item["count"],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: 3),
+                                  Text(
+                                    item["description"],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black.withOpacity(0.7),
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

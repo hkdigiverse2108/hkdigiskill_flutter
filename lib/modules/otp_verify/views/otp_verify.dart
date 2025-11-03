@@ -43,7 +43,7 @@ class OtpVerify extends GetView<OtpVerifyController> {
                   TextSpan(
                     text: controller.email,
                     style: TextStyle(
-                      color: AppColors.info,
+                      color: AppColors.primary,
                       // decoration: TextDecoration.underline,
                     ),
                   ),
@@ -57,6 +57,8 @@ class OtpVerify extends GetView<OtpVerifyController> {
               isRequired: true,
               controller: controller.otpController,
               hint: "= = = = = =",
+              maxLength: 6,
+              keyboardType: TextInputType.number,
             ),
             Gap(10),
             InkWell(
@@ -88,11 +90,17 @@ class OtpVerify extends GetView<OtpVerifyController> {
                 children: [
                   Text("Don’t Received OTP? "),
                   (controller.isCountDown.value)
-                      ? Text("${controller.countDown.value} seconds left")
+                      ? Text(
+                          "${controller.countDown.value} seconds left",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
                       : TextButton(
                           onPressed: controller.resetCountDown,
                           style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                          child: Text("Resend"),
+                          child: Text(
+                            "Resend",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                 ],
               ),

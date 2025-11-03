@@ -40,6 +40,7 @@ class SignUp extends GetView<SignUpController> {
               label: "Email",
               isRequired: true,
               controller: controller.emailController,
+              keyboardType: TextInputType.emailAddress,
               hint: "study@email.com",
             ),
             AppTextField(
@@ -53,6 +54,7 @@ class SignUp extends GetView<SignUpController> {
               label: "Phone Number",
               isRequired: true,
               controller: controller.phoneNumberController,
+              keyboardType: TextInputType.phone,
               hint: "0123 xxxx xxxx",
             ),
             AppTextField(
@@ -158,7 +160,10 @@ class SignUp extends GetView<SignUpController> {
                 TextButton(
                   onPressed: controller.onSignInTap,
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  child: Text("Sign In"),
+                  child: Text(
+                    "Sign In",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),

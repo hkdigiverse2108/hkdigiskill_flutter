@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/app/themes/app_colors.dart';
 
 enum PurchaseStatus { success, failure }
 
@@ -44,11 +45,17 @@ class PurchaseResultDialog extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: Colors.blue.shade100,
+                color: isSuccess
+                    ? AppColors.primary.withValues(alpha: 0.1)
+                    : AppColors.error.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Icon(Icons.check_circle, color: Colors.blue, size: 48),
+                child: Icon(
+                  isSuccess ? Icons.check_circle : Icons.error,
+                  color: isSuccess ? AppColors.primary : AppColors.error,
+                  size: 48,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -77,7 +84,7 @@ class PurchaseResultDialog extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: isSuccess ? onClose : onRetry,
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.blue),
+                  side: BorderSide(color: AppColors.primary),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -86,7 +93,7 @@ class PurchaseResultDialog extends StatelessWidget {
                 child: Text(
                   buttonText,
                   style: const TextStyle(
-                    color: Colors.blue,
+                    color: AppColors.primary,
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                   ),

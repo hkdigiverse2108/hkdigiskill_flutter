@@ -18,6 +18,12 @@ class Notification extends GetView<NotificationController> {
         backgroundColor: Colors.white,
         scrolledUnderElevation: 2,
         iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: Text("Clear All", style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
       backgroundColor: Colors.grey[100],
       body: Obx(
