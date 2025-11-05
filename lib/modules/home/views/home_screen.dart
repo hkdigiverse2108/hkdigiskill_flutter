@@ -27,23 +27,42 @@ class HomeScreen extends GetView<HomeController> {
             children: [
               TopBar(),
               Gap(20),
-              ImageCardCarousel(imageList: controller.imageList),
-              Gap(10),
-              CategoryGridSection(
-                categories: controller.categories,
-                onViewAll: controller.onCategoryViewAll,
+              Obx(
+                () => ImageCardCarousel(
+                  imageList: controller.imageList,
+                  isLoading: controller.isLoading.value,
+                ),
               ),
               Gap(10),
-              PopularCoursesSection(
-                courses: controller.courses,
-                onViewAll: controller.onCourseViewAll,
+              Obx(
+                () => CategoryGridSection(
+                  categories: controller.categories,
+                  onViewAll: controller.onCategoryViewAll,
+                  isLoading: controller.isLoading.value,
+                ),
               ),
               Gap(10),
-              StatCountersBar(counters: controller.counters),
+              Obx(
+                () => PopularCoursesSection(
+                  courses: controller.courses,
+                  onViewAll: controller.onCourseViewAll,
+                  isLoading: controller.isLoading.value,
+                ),
+              ),
               Gap(10),
-              PopularBlogsSection(
-                blogs: controller.blogs,
-                onViewAll: controller.onBlogViewAll,
+              Obx(
+                () => StatCountersBar(
+                  counters: controller.counters,
+                  isLoading: controller.isLoading.value,
+                ),
+              ),
+              Gap(10),
+              Obx(
+                () => PopularBlogsSection(
+                  blogs: controller.blogs,
+                  onViewAll: controller.onBlogViewAll,
+                  isLoading: controller.isLoading.value,
+                ),
               ),
             ],
           ),

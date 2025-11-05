@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/services/payment_service.dart';
 import 'package:hkdigiskill/shared/widgets/purchase_result_dialog.dart';
 
 class PayController extends GetxController {
@@ -79,12 +80,26 @@ class PayController extends GetxController {
   void purchase({required BuildContext context}) {
     isLoading.value = true;
     isProcessing.value = true;
+    initiatePayment();
     Future.delayed(const Duration(seconds: 2), () {
       isLoading.value = false;
       isProcessing.value = false;
       isSuccess.value = true;
       proceedToCheckout(context: context);
     });
+  }
+
+  void initiatePayment() {
+    // Use subtotal/total from this controller
+    RazorpayService.to.openCheckout(
+      amount: total.value,
+      name: "HK Digiskill",
+      description: "Course Purchase",
+      email: "user@example.com",
+      // from user data/storage
+      contact: "1234567890", // from user data/storage
+      // extraOptions: {...} if needed
+    );
   }
 
   void onRetry({required BuildContext context}) {

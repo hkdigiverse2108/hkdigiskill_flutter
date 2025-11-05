@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class CategoryGridSection extends StatelessWidget {
   final List<Map<String, dynamic>> categories;
   final VoidCallback onViewAll;
+  final bool isLoading;
 
   const CategoryGridSection({
     super.key,
     required this.categories,
     required this.onViewAll,
+    required this.isLoading,
   });
 
   @override
@@ -64,62 +67,77 @@ class CategoryGridSection extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             final item = categories[index];
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF64748B).withOpacity(0.2),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 18.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                      text: TextSpan(
+            // Use an animation when loaded, shimmer otherwise
+            return CustomShimmer(
+              isLoading: isLoading,
+              child: AnimatedScale(
+                scale: 1.0,
+                duration: Duration(milliseconds: 400 + index * 80),
+                // Staggered by index
+                curve: Curves.easeOutBack,
+                child: AnimatedOpacity(
+                  opacity: 1.0,
+                  duration: Duration(milliseconds: 400 + index * 80),
+                  curve: Curves.easeIn,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF64748B).withOpacity(0.2),
+                          blurRadius: 6,
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 18.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextSpan(
-                            text: '${item['count']} ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                              fontFamily: 'Poppins',
-                              color: item['color'],
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${item['count']} ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18,
+                                    fontFamily: 'Poppins',
+                                    color: item['color'],
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: item['title'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                    fontFamily: 'Poppins',
+                                    color: item['color'],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          TextSpan(
-                            text: item['title'],
+                          const SizedBox(height: 6),
+                          Text(
+                            item['subtitle'],
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
+                              color: AppColors.caption,
                               fontFamily: 'Poppins',
-                              color: item['color'],
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      item['subtitle'],
-                      style: TextStyle(
-                        color: AppColors.caption,
-                        fontFamily: 'Poppins',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             );

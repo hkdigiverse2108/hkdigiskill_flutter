@@ -3,6 +3,8 @@ import 'package:hkdigiskill/app/models/models/workshop_model.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class WorkshopsController extends GetxController {
+  RxBool isLoading = true.obs;
+
   final List<Map<String, dynamic>> workshops = [
     {
       "image":
@@ -42,6 +44,15 @@ class WorkshopsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    onLoading();
+  }
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      isLoading.value = false;
+      update();
+    });
   }
 
   void onWorkshopTap(int index) {

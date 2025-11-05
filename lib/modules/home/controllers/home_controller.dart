@@ -1,11 +1,15 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class HomeController extends GetxController {
+  final networkController = Get.find<NetworkController>();
+  RxBool isLoading = true.obs;
+
   final navigationController = Get.find<NavigationController>();
 
   // Carousel images
@@ -132,6 +136,21 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     navigationController.onInit();
+
+    onLoading();
+  }
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      if (networkController.isConnected.value) {
+        isLoading.value = false;
+        update();
+      } else {
+        isLoading.value = true;
+        update();
+      }
+    });
   }
 
   void onCourseViewAll() {
@@ -143,6 +162,16 @@ class HomeController extends GetxController {
   }
 
   void onBlogViewAll() {
-    Get.toNamed(Routes.blogs);
+    if (networkController.isConnected.value) {
+      Get.toNamed(Routes.blogs);
+    }
+    if (isLoading.value) {
+    } else {
+      Get.snackbar(
+        'Error',
+        'Please check your internet connection',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 }

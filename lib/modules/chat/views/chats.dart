@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/chat/controllers/chats_controller.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Chats extends GetView<ChatsController> {
   const Chats({super.key});
@@ -42,55 +43,64 @@ class Chats extends GetView<ChatsController> {
                 onPressed: controller.deleteSelectedChats,
               );
             } else {
-              return const SizedBox.shrink();
+              return IconButton(
+                icon: const Icon(Icons.archive, color: Colors.black),
+                onPressed: () {},
+              );
             }
           }),
         ],
       ),
       backgroundColor: Colors.white,
       body: Obx(
-        () => ListView.builder(
-          padding: const EdgeInsets.only(bottom: 80),
-          itemCount: controller.chats.length,
-          itemBuilder: (context, index) {
-            final chat = controller.chats[index];
-            return Obx(() {
-              final isSelected = controller.selectedChats.contains(index);
-              return ChatListItem(
-                key: ValueKey('chat_${chat.hashCode}'),
-                chat: chat,
-                isSelected: isSelected,
-                isEditing: controller.isEditing.value,
-                onTap: () {
-                  if (controller.isEditing.value) {
-                    controller.selectChat(index);
-                  } else {
-                    Get.toNamed(Routes.chatMassage);
-                  }
+        () => controller.isLoading.value
+            ? ListView.builder(
+                padding: const EdgeInsets.only(bottom: 80),
+                itemCount: 6, // Number of shimmer items
+                itemBuilder: (context, index) => const ChatListItemShimmer(),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.only(bottom: 80),
+                itemCount: controller.chats.length,
+                itemBuilder: (context, index) {
+                  final chat = controller.chats[index];
+                  return Obx(() {
+                    final isSelected = controller.selectedChats.contains(index);
+                    return ChatListItem(
+                      key: ValueKey('chat_${chat.hashCode}'),
+                      chat: chat,
+                      isSelected: isSelected,
+                      isEditing: controller.isEditing.value,
+                      onTap: () {
+                        if (controller.isEditing.value) {
+                          controller.selectChat(index);
+                        } else {
+                          Get.toNamed(Routes.chatMassage);
+                        }
+                      },
+                      onLongPress: () {
+                        if (!controller.isEditing.value) {
+                          controller.toggleEditMode();
+                          controller.selectChat(index);
+                        }
+                      },
+                      onArchive: () {
+                        // Handle archive action
+                        Get.snackbar(
+                          'Archived',
+                          '${chat.name} has been archived',
+                          snackPosition: SnackPosition.BOTTOM,
+                          duration: const Duration(seconds: 2),
+                        );
+                      },
+                      onMore: () {
+                        // Show more options
+                        _showMoreOptions(context, chat);
+                      },
+                    );
+                  });
                 },
-                onLongPress: () {
-                  if (!controller.isEditing.value) {
-                    controller.toggleEditMode();
-                    controller.selectChat(index);
-                  }
-                },
-                onArchive: () {
-                  // Handle archive action
-                  Get.snackbar(
-                    'Archived',
-                    '${chat.name} has been archived',
-                    snackPosition: SnackPosition.BOTTOM,
-                    duration: const Duration(seconds: 2),
-                  );
-                },
-                onMore: () {
-                  // Show more options
-                  _showMoreOptions(context, chat);
-                },
-              );
-            });
-          },
-        ),
+              ),
       ),
     );
   }
@@ -340,6 +350,112 @@ class ChatListItem extends StatelessWidget {
               ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChatListItemShimmer extends StatelessWidget {
+  const ChatListItemShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Row(
+          children: [
+            // Checkbox placeholder (edit mode) - optional, can be omitted or rendered as a dummy box
+            // Container(
+            //   width: 32,
+            //   height: 32,
+            //   margin: const EdgeInsets.only(right: 12.0),
+            //   decoration: BoxDecoration(
+            //     color: Colors.grey.shade400,
+            //     borderRadius: BorderRadius.circular(6),
+            //   ),
+            // ),
+            // Avatar placeholder
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade400,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Chat Info placeholders
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name + Date
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Container(
+                        width: 56,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade400,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  // Last message placeholder
+                  Row(
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade400,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade400,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Forward arrow
+            // Container(
+            //   width: 16,
+            //   height: 16,
+            //   decoration: BoxDecoration(
+            //     color: Colors.grey.shade400,
+            //     shape: BoxShape.circle,
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

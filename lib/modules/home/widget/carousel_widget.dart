@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'dart:async'; // Add this
 
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class ImageCardCarousel extends StatefulWidget {
   final List<String> imageList;
+  final bool isLoading;
 
-  const ImageCardCarousel({super.key, required this.imageList});
+  const ImageCardCarousel({
+    super.key,
+    required this.imageList,
+    required this.isLoading,
+  });
 
   @override
   State<ImageCardCarousel> createState() => _ImageCardCarouselState();
@@ -44,68 +50,91 @@ class _ImageCardCarouselState extends State<ImageCardCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Image card
-        ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: Container(
-            color: AppColors.backgroundLight,
-            width: double.infinity,
-            height: 180,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: widget.imageList.length,
-              onPageChanged: (index) => setState(() => _currentPage = index),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(18),
-                    child: Container(
-                      color: AppColors.backgroundLight,
-                      width: double.infinity,
-                      height: 180,
-                      child: Image.network(
-                        widget.imageList[index],
-                        fit: BoxFit.cover,
+    return CustomShimmer(
+      isLoading: widget.isLoading,
+      child: Column(
+        children: [
+          // Image card
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Container(
+              color: AppColors.backgroundLight,
+              width: double.infinity,
+              height: 180,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.imageList.length,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: Container(
+                        color: AppColors.backgroundLight,
                         width: double.infinity,
-                        loadingBuilder: (context, child, progress) =>
-                            progress == null
-                            ? child
-                            : Center(child: CircularProgressIndicator()),
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: double.infinity,
-                          height: 180,
-                          color: Colors.grey,
+                        height: 180,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 600),
+                          transitionBuilder:
+                              (Widget child, Animation<double> animation) {
+                                // Fade + slight slide transition
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0.06, 0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                          child: Image.network(
+                            widget.imageList[index],
+                            key: ValueKey(widget.imageList[index]),
+                            // Unique key for change detection
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            loadingBuilder: (context, child, progress) =>
+                                progress == null
+                                ? child
+                                : Center(child: CircularProgressIndicator()),
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  width: double.infinity,
+                                  height: 180,
+                                  color: Colors.grey,
+                                ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 10),
-        // Page indicator dots
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.imageList.length, (index) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: index == _currentPage ? 10 : 7,
-              height: index == _currentPage ? 10 : 7,
-              decoration: BoxDecoration(
-                color: index == _currentPage
-                    ? AppColors.primary
-                    : AppColors.primary.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(7),
-              ),
-            );
-          }),
-        ),
-      ],
+          const SizedBox(height: 10),
+          // Page indicator dots
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(widget.imageList.length, (index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: index == _currentPage ? 10 : 7,
+                height: index == _currentPage ? 10 : 7,
+                decoration: BoxDecoration(
+                  color: index == _currentPage
+                      ? AppColors.primary
+                      : AppColors.primary.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(7),
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 }

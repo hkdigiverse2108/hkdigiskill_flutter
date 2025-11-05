@@ -10,7 +10,23 @@ class Navigation extends GetView<NavigationController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        return controller.pages[controller.currentIndex.value];
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            // Fade + Slide, you can customize
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.05, 0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            );
+          },
+          child: controller.pages[controller.currentIndex.value],
+        );
       }),
       bottomNavigationBar: Obx(
         () => CustomBottomNavBar(

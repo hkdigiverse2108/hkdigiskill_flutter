@@ -6,10 +6,12 @@ class ChatsController extends GetxController {
   final isEditing = false.obs;
   final selectedChats = <int>{}.obs;
   final chats = <ChatModel>[].obs;
+  final isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
+    onLoading();
     // Initialize with some dummy data if needed
     chats.assignAll([
       ChatModel(
@@ -21,6 +23,14 @@ class ChatsController extends GetxController {
       ),
       // Add other chat items here
     ]);
+  }
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      isLoading.value = false;
+      update();
+    });
   }
 
   void toggleEditMode() {
@@ -42,16 +52,17 @@ class ChatsController extends GetxController {
 
   void deleteSelectedChats() {
     if (selectedChats.isEmpty) return;
-    
+
     // Sort indices in descending order to avoid index shifting when removing
-    final sortedIndices = selectedChats.toList()..sort((a, b) => b.compareTo(a));
-    
+    final sortedIndices = selectedChats.toList()
+      ..sort((a, b) => b.compareTo(a));
+
     for (final index in sortedIndices) {
       if (index < chats.length) {
         chats.removeAt(index);
       }
     }
-    
+
     selectedChats.clear();
     isEditing.value = false;
     update();

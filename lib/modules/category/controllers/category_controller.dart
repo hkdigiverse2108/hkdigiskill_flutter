@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class CategoryController extends GetxController {
+  RxBool isLoading = true.obs;
+
   final List<Map<String, dynamic>> items = List.generate(
     4,
     (i) => {
@@ -15,7 +17,21 @@ class CategoryController extends GetxController {
     },
   );
 
+  @override
+  void onInit() {
+    super.onInit();
+    onLoading();
+  }
+
   void onItemTap({required id}) {
     Get.toNamed(Routes.courses, arguments: true);
+  }
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      isLoading.value = false;
+      update();
+    });
   }
 }

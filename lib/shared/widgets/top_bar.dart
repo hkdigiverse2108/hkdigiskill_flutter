@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
@@ -9,13 +10,16 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final networkController = Get.find<NetworkController>();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Profile image (use your network/local asset)
         GestureDetector(
           onTap: () {
-            Get.toNamed(Routes.profile);
+            if (networkController.isConnected.value) {
+              Get.toNamed(Routes.profile);
+            }
           },
           child: CircleAvatar(
             radius: 20,

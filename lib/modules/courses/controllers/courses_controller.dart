@@ -1,12 +1,14 @@
 import 'package:get/get.dart';
 
 class CoursesController extends GetxController {
+  RxBool isLoading = true.obs;
   final isFilterMode = false.obs;
 
   @override
   void onInit() {
     isFilterMode.value = Get.arguments ?? false;
     super.onInit();
+    onLoading();
   }
 
   final List<Map<String, dynamic>> courses = [
@@ -44,4 +46,12 @@ class CoursesController extends GetxController {
       "students": 227,
     },
   ];
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 5), () {
+      isLoading.value = false;
+      update();
+    });
+  }
 }
