@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
-import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/modules/home/controllers/home_controller.dart';
 import 'package:hkdigiskill/modules/home/widget/carousel_widget.dart';
 import 'package:hkdigiskill/modules/home/widget/category_sectin.dart';
@@ -11,6 +9,7 @@ import 'package:hkdigiskill/modules/home/widget/popular_blogs_section.dart';
 import 'package:hkdigiskill/modules/home/widget/popular_courses_section.dart';
 import 'package:hkdigiskill/modules/home/widget/stat_counter_bar.dart';
 import 'package:hkdigiskill/shared/widgets/top_bar.dart';
+import 'package:hkdigiskill/shared/widgets/animated_on_scroll.dart'; // 👈 import this
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
@@ -22,46 +21,84 @@ class HomeScreen extends GetView<HomeController> {
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              TopBar(),
-              Gap(20),
+              const TopBar(),
+              const Gap(20),
+
+              // 👇 Animate Carousel
               Obx(
-                () => ImageCardCarousel(
-                  imageList: controller.imageList,
-                  isLoading: controller.isLoading.value,
+                () => AnimatedOnScroll(
+                  // animateOnce: false,
+                  duration: const Duration(milliseconds: 400),
+                  offsetY: 32.0, // slide up from 32 pixels below
+                  child: ImageCardCarousel(
+                    imageList: controller.imageList,
+                    isLoading: controller.isLoading.value,
+                  ),
                 ),
               ),
-              Gap(10),
+              const Gap(10),
+
+              // 👇 Animate Categories
               Obx(
-                () => CategoryGridSection(
-                  categories: controller.categories,
-                  onViewAll: controller.onCategoryViewAll,
-                  isLoading: controller.isLoading.value,
+                () => AnimatedOnScroll(
+                  // animateOnce: false,
+                  duration: const Duration(milliseconds: 400),
+                  offsetY: 32.0, // slide up from 32 pixels below
+                  child: CategoryGridSection(
+                    categories: controller.categories,
+                    onViewAll: controller.onCategoryViewAll,
+                    isLoading: controller.isLoading.value,
+                  ),
                 ),
               ),
-              Gap(10),
+              const Gap(10),
+
+              // 👇 Animate Courses
               Obx(
-                () => PopularCoursesSection(
-                  courses: controller.courses,
-                  onViewAll: controller.onCourseViewAll,
-                  isLoading: controller.isLoading.value,
+                () => AnimatedOnScroll(
+                  // animateOnce: false,
+                  duration: const Duration(milliseconds: 400),
+                  offsetY: 32.0, // slide up from 32 pixels below
+                  child: PopularCoursesSection(
+                    courses: controller.courses,
+                    onViewAll: controller.onCourseViewAll,
+                    isLoading: controller.isLoading.value,
+                  ),
                 ),
               ),
-              Gap(10),
+              const Gap(10),
+
+              // 👇 Animate Stats
               Obx(
-                () => StatCountersBar(
-                  counters: controller.counters,
-                  isLoading: controller.isLoading.value,
+                () => AnimatedOnScroll(
+                  // animateOnce: false,
+                  duration: const Duration(milliseconds: 400),
+                  offsetY: 32.0,
+                  // slide up from 32 pixels below
+                  curve: Curves.bounceInOut,
+                  // offsetY: -10,
+                  child: StatCountersBar(
+                    counters: controller.counters,
+                    isLoading: controller.isLoading.value,
+                  ),
                 ),
               ),
-              Gap(10),
+              const Gap(10),
+
+              // 👇 Animate Blogs
               Obx(
-                () => PopularBlogsSection(
-                  blogs: controller.blogs,
-                  onViewAll: controller.onBlogViewAll,
-                  isLoading: controller.isLoading.value,
+                () => AnimatedOnScroll(
+                  // animateOnce: false,
+                  duration: const Duration(milliseconds: 400),
+                  offsetY: 32.0, // slide up from 32 pixels below
+                  child: PopularBlogsSection(
+                    blogs: controller.blogs,
+                    onViewAll: controller.onBlogViewAll,
+                    isLoading: controller.isLoading.value,
+                  ),
                 ),
               ),
             ],

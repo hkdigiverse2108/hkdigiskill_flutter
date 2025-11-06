@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/bindings/profile_binding.dart';
 import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/modules/profile/controllers/profile_controller.dart';
+import 'package:hkdigiskill/modules/profile/views/profile.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class TopBar extends StatelessWidget {
@@ -21,10 +24,13 @@ class TopBar extends StatelessWidget {
               Get.toNamed(Routes.profile);
             }
           },
-          child: CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(
-              'https://randomuser.me/api/portraits/women/32.jpg', // Replace with actual user image URL
+          child: Hero(
+            tag: 'profile-avatar',
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(
+                'https://randomuser.me/api/portraits/women/32.jpg',
+              ),
             ),
           ),
         ),

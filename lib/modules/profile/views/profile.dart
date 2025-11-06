@@ -42,10 +42,13 @@ class ProfileMenuPage extends GetView<ProfileController> {
                   ],
                 ),
                 padding: EdgeInsets.all(4),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(
-                    "https://randomuser.me/api/portraits/women/32.jpg",
+                child: Hero(
+                  tag: 'profile-avatar',
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(
+                      "https://randomuser.me/api/portraits/women/32.jpg",
+                    ),
                   ),
                 ),
               ),

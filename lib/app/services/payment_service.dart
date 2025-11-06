@@ -25,7 +25,9 @@ class RazorpayService extends GetxService {
   }) {
     final options = {
       'key': 'rzp_live_jnqgXIwCukFNcO',
-      'amount': (amount * 100).toInt(), // amount in paise
+      // Todo: update this key with original key
+      'amount': (amount * 100).toInt(),
+      // amount in paise
       'name': name,
       'description': description,
       'prefill': {'contact': contact, 'email': email},

@@ -82,8 +82,8 @@ class OnboardingScreen extends GetView<OnboardingController> {
                                 height: 6,
                                 decoration: BoxDecoration(
                                   color: index == controller.currentStep.value
-                                      ? AppColors.info
-                                      : AppColors.info.withOpacity(0.3),
+                                      ? AppColors.primary
+                                      : AppColors.primary.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -104,7 +104,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                           child: Text(
                             controller.isFirstStep ? 'Skip' : 'Previous',
                             style: TextStyle(
-                              color: AppColors.info,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
                               fontFamily: 'Poppins',
@@ -119,7 +119,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                             width: 56,
                             height: 56,
                             decoration: BoxDecoration(
-                              color: AppColors.info,
+                              color: AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                             child: Center(

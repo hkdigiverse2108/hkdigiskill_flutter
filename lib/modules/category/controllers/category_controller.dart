@@ -7,7 +7,7 @@ class CategoryController extends GetxController {
   RxBool isLoading = true.obs;
 
   final List<Map<String, dynamic>> items = List.generate(
-    4,
+    10,
     (i) => {
       "title": "Business Development",
       "count": "16 Course",

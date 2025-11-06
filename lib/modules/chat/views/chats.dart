@@ -207,37 +207,6 @@ class ChatListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSwipeBackground(
-    Alignment alignment,
-    String text,
-    IconData icon,
-    Color color,
-  ) {
-    return Container(
-      alignment: alignment,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      color: color,
-      child: Row(
-        mainAxisAlignment: alignment == Alignment.centerLeft
-            ? MainAxisAlignment.start
-            : MainAxisAlignment.end,
-        children: [
-          if (alignment == Alignment.centerRight) const Spacer(),
-          Icon(icon, color: Colors.white, size: 20),
-          const SizedBox(width: 8),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          if (alignment == Alignment.centerLeft) const Spacer(),
-        ],
-      ),
-    );
-  }
-
   Widget _buildListTile() {
     return Material(
       color: isSelected ? Colors.grey[100] : Colors.white,

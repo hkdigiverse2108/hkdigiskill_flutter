@@ -1,23 +1,36 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/controllers/network_controller.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/services/payment_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
+import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class SplashController extends GetxController {
-  // Example observable state
-  var isLoading = true.obs;
   final storage = StorageService();
 
-  // Initialize logic here
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    // You can start animations, timers, API checks, etc. here
-    _fakeLoading();
+    Future.microtask(() => _initSplash());
+    // ✅ Initialize heavy services after first frame (non-blocking)
   }
 
-  void _fakeLoading() async {
-    await Future.delayed(Duration(seconds: 3));
-    isLoading.value = false;
+  Future<void> _initSplash() async {
+    final context = Get.context;
+    if (context != null) {
+      // ✅ Preload images to remove loading lag
+      await Future.wait([
+        precacheImage(AssetImage(AppImages.splashBackground), context),
+        precacheImage(AssetImage(AppImages.logo), context),
+      ]);
+    }
+
+    // Give animation some time to play
+    await Future.delayed(const Duration(seconds: 3));
+
+    // Navigate based on login state
     if (storage.isLoggedIn) {
       Get.offAllNamed(Routes.navigation);
     } else if (storage.seenOnboarding) {
@@ -25,6 +38,5 @@ class SplashController extends GetxController {
     } else {
       Get.offAllNamed(Routes.onboarding);
     }
-    // Navigate or perform other actions after splash
   }
 }

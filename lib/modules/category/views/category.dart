@@ -14,112 +14,77 @@ class Category extends GetView<CategoryController> {
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              TopBar(),
-              Gap(20),
-              Obx(
-                () => (controller.isLoading.value)
-                    ? ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => _shimmerCard(),
-                        separatorBuilder: (context, index) => Gap(10),
-                        itemCount: controller.items.length,
-                      )
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final item = controller.items[index];
-                          return InkWell(
-                            onTap: () => controller.onItemTap(id: ""),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
-                                    blurRadius: 8,
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Colored square/avatar
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        color: item["bgColor"],
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    SizedBox(width: 16),
-                                    // Details
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            item["title"],
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.fade,
-                                          ),
-
-                                          SizedBox(height: 4),
-                                          Text(
-                                            item["count"],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: 'Poppins',
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(height: 3),
-                                          Text(
-                                            item["description"],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'Poppins',
-                                              color: Colors.black.withOpacity(
-                                                0.7,
-                                              ),
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => Gap(10),
-                        itemCount: controller.items.length,
-                      ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const TopBar(),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ShaderMask(
+                shaderCallback: (Rect rect) {
+                  return LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withValues(alpha: 0.9),
+                      // 0% opaque at top
+                      Colors.transparent,
+                      // 100% opaque around 15%
+                      Colors.transparent,
+                      // 100% opaque
+                      Colors.white.withValues(alpha: 0.9),
+                      // 0% opaque at bottom
+                    ],
+                    stops: [0, 0.12, 0.88, 1.0],
+                  ).createShader(rect);
+                },
+                blendMode: BlendMode.dstOut,
+                child: Obx(
+                  () => controller.isLoading.value
+                      ? _buildShimmerList()
+                      : _buildCategoryList(),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildShimmerList() {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      itemCount: 8,
+      itemBuilder: (context, index) {
+        return AnimatedOpacity(
+          opacity: 1.0,
+          duration: Duration(milliseconds: 300 + (index * 100)),
+          child: _shimmerCard(),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const Gap(16);
+      },
+    );
+  }
+
+  Widget _buildCategoryList() {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      itemCount: controller.items.length,
+      itemBuilder: (context, index) {
+        return AnimatedCategoryItem(
+          item: controller.items[index],
+          index: index,
+          onTap: () => controller.onItemTap(id: ""),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const Gap(16);
+      },
     );
   }
 
@@ -200,6 +165,152 @@ class Category extends GetView<CategoryController> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class AnimatedCategoryItem extends StatefulWidget {
+  final Map<String, dynamic> item;
+  final int index;
+  final VoidCallback onTap;
+
+  const AnimatedCategoryItem({
+    super.key,
+    required this.item,
+    required this.index,
+    required this.onTap,
+  });
+
+  @override
+  State<AnimatedCategoryItem> createState() => _AnimatedCategoryItemState();
+}
+
+class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500 + (widget.index * 100)),
+    );
+
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutQuart));
+
+    // Start animation after a small delay based on index
+    Future.delayed(Duration(milliseconds: 100 + (widget.index * 50)), () {
+      if (mounted) {
+        _controller.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return FadeTransition(
+          opacity: _opacityAnimation,
+          child: SlideTransition(position: _slideAnimation, child: child),
+        );
+      },
+      child: _buildCategoryItem(),
+    );
+  }
+
+  Widget _buildCategoryItem() {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 8,
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Colored square/avatar
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: widget.item["bgColor"],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              SizedBox(width: 16),
+              // Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.item["title"],
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                    ),
+
+                    SizedBox(height: 4),
+                    Text(
+                      widget.item["count"],
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Poppins',
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      widget.item["description"],
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
