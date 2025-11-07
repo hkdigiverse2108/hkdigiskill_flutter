@@ -11,7 +11,7 @@ class AppImages {
   static const String splashBackground = 'assets/images/splash_bg.jpg';
   static const String profilePlaceholder = 'assets/images/profile.png';
   static const String onboardingBackground =
-      'assets/images/onboardingImage.png';
+      'assets/images/onboardingImage.jpg';
   static const String courseImage = 'assets/images/courseBg.png';
   static const String help = 'assets/images/help.jpg';
   // Add more as needed

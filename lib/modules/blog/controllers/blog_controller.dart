@@ -17,6 +17,8 @@ class Blog {
 }
 
 class BlogController extends GetxController {
+  RxBool isLoading = false.obs;
+
   RxList<Blog> blogs = <Blog>[
     Blog(
       date: '15 Nov, 2023',
@@ -35,4 +37,18 @@ class BlogController extends GetxController {
           'Consectetur adipisicing elit, sed do eiusmod tempor inc idid unt...',
     ),
   ].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    onLoading();
+  }
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 2), () {
+      isLoading.value = false;
+      update();
+    });
+  }
 }

@@ -1,6 +1,14 @@
 import 'package:get/get.dart';
 
 class TestimonialsController extends GetxController {
+  var isLoading = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    onLoading();
+  }
+
   final List<Testimonial> testimonials = [
     Testimonial(
       profileUrl: 'https://randomuser.me/api/portraits/men/31.jpg',
@@ -17,6 +25,14 @@ class TestimonialsController extends GetxController {
           'Lorem ipsum dolor amet consec tur elit adicing sed do usmod zx tempor enim minim veniam quis nostrud exer citation.',
     ),
   ];
+
+  void onLoading() {
+    isLoading.value = true;
+    Future.delayed(const Duration(seconds: 2), () {
+      isLoading.value = false;
+      update();
+    });
+  }
 }
 
 class Testimonial {

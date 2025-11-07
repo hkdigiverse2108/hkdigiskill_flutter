@@ -183,69 +183,69 @@ class AnimatedMenuItem extends StatelessWidget {
 
 // ---- USAGE in a parent widget ----
 
-class MenuAccordion extends StatefulWidget {
-  const MenuAccordion({Key? key}) : super(key: key);
-
-  @override
-  State<MenuAccordion> createState() => _MenuAccordionState();
-}
-
-class _MenuAccordionState extends State<MenuAccordion> {
-  int? expandedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        CustomMenuSection(
-          title: "Learning & Resources",
-          icon: Icons.person,
-          items: [
-            "Instructor",
-            "Blogs",
-            "Gallery",
-            "Testimonials",
-            "Frequent Ask Questions",
-          ],
-          actions: [() {}, () {}, () {}, () {}, () {}],
-          expanded: expandedIndex == 0,
-          onHeaderTap: () {
-            setState(() {
-              expandedIndex = expandedIndex == 0 ? null : 0;
-            });
-          },
-        ),
-        CustomMenuSection(
-          title: "Company & Legal Info",
-          icon: Icons.verified_user,
-          items: [
-            "About Us",
-            "Contact Us",
-            "Terms & Condition",
-            "Privacy Policy",
-            "News Letter",
-          ],
-          actions: [() {}, () {}, () {}, () {}, () {}],
-          expanded: expandedIndex == 1,
-          onHeaderTap: () {
-            setState(() {
-              expandedIndex = expandedIndex == 1 ? null : 1;
-            });
-          },
-        ),
-        CustomMenuSection(
-          title: "Account Settings",
-          icon: Icons.settings,
-          items: ["Update Profile", "Change Password", "Delete Account"],
-          actions: [() {}, () {}, () {}],
-          expanded: expandedIndex == 2,
-          onHeaderTap: () {
-            setState(() {
-              expandedIndex = expandedIndex == 2 ? null : 2;
-            });
-          },
-        ),
-      ],
-    );
-  }
-}
+// class MenuAccordion extends StatefulWidget {
+//   const MenuAccordion({super.key});
+//
+//   @override
+//   State<MenuAccordion> createState() => _MenuAccordionState();
+// }
+//
+// class _MenuAccordionState extends State<MenuAccordion> {
+//   int? expandedIndex;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView(
+//       children: [
+//         CustomMenuSection(
+//           title: "Learning & Resources",
+//           icon: Icons.person,
+//           items: [
+//             "Instructor",
+//             "Blogs",
+//             "Gallery",
+//             "Testimonials",
+//             "Frequent Ask Questions",
+//           ],
+//           actions: [() {}, () {}, () {}, () {}, () {}],
+//           expanded: expandedIndex == 0,
+//           onHeaderTap: () {
+//             setState(() {
+//               expandedIndex = expandedIndex == 0 ? null : 0;
+//             });
+//           },
+//         ),
+//         CustomMenuSection(
+//           title: "Company & Legal Info",
+//           icon: Icons.verified_user,
+//           items: [
+//             "About Us",
+//             "Contact Us",
+//             "Terms & Condition",
+//             "Privacy Policy",
+//             "News Letter",
+//           ],
+//           actions: [() {}, () {}, () {}, () {}, () {}],
+//           expanded: expandedIndex == 1,
+//           onHeaderTap: () {
+//             setState(() {
+//               expandedIndex = expandedIndex == 1 ? null : 1;
+//             });
+//           },
+//         ),
+//         CustomMenuSection(
+//           title: "Account Settings",
+//           icon: Icons.settings,
+//           items: ["Update Profile", "Change Password", "Delete Account"],
+//           actions: [() {}, () {}, () {}],
+//           expanded: expandedIndex == 2,
+//           onHeaderTap: () {
+//             setState(() {
+//               expandedIndex = expandedIndex == 2 ? null : 2;
+//             });
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }

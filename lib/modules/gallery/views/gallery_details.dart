@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.dart';
 
 class GalleryDetailsPage extends StatelessWidget {
   final String title;
@@ -32,7 +33,10 @@ class GalleryDetailsPage extends StatelessWidget {
             crossAxisSpacing: 14,
             childAspectRatio: 1,
           ),
-          itemBuilder: (ctx, i) => _galleryImagePlaceholder(),
+          itemBuilder: (ctx, i) => GalleryItemAnimationWrapper(
+            index: i,
+            child: _galleryImagePlaceholder(),
+          ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/instructor/controllers/instructor_controller.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/modules/instructor/widgets/Instructor_animation_wrapper.dart';
 
 class TopInstructorsPage extends GetView<InstructorController> {
   const TopInstructorsPage({super.key});
@@ -175,8 +176,10 @@ class TopInstructorsPage extends GetView<InstructorController> {
               mainAxisSpacing: 16,
               mainAxisExtent: 200,
             ),
-            itemBuilder: (context, i) =>
-                _buildInstructorCard(controller.instructors[i], i),
+            itemBuilder: (context, i) => InstructorAnimationWrapper(
+              index: i,
+              child: _buildInstructorCard(controller.instructors[i], i),
+            ),
           ),
         ),
       ),

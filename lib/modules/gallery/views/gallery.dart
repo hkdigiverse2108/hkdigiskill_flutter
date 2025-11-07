@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/modules/gallery/controllers/gallery_controller.dart';
 import 'package:hkdigiskill/modules/gallery/views/gallery_details.dart';
+import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.dart';
 
 class GalleryPage extends GetView<GalleryController> {
   const GalleryPage({super.key});
@@ -27,51 +28,57 @@ class GalleryPage extends GetView<GalleryController> {
           final gallery = controller.galleries[i];
           return Padding(
             padding: const EdgeInsets.only(bottom: 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "${i + 1}. ${gallery['title']}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                GalleryDetailsPage(title: gallery['title']),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "view all",
+            child: GalleryAnimationWrapper(
+              index: i,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "${i + 1}. ${gallery['title']}",
                         style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  GalleryDetailsPage(title: gallery['title']),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "view all",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: List.generate(
+                      gallery['images'].length,
+                      (j) => Padding(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: GalleryItemAnimationWrapper(
+                          index: j,
+                          child: _galleryImagePlaceholder(),
                         ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: List.generate(
-                    gallery['images'].length,
-                    (j) => Padding(
-                      padding: const EdgeInsets.only(right: 14),
-                      child: _galleryImagePlaceholder(),
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

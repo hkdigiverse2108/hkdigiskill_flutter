@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/app_text_field.dart';
 
@@ -9,6 +10,20 @@ class ProfileController extends GetxController {
   // -1 means none expanded, 0=Learning, 1=Company, 2=Account
   RxInt expandedSection = (-1).obs;
   final storage = StorageService();
+
+  @override
+  void onInit() {
+    Future.microtask(() => _initLogo());
+    super.onInit();
+  }
+
+  Future<void> _initLogo() async {
+    final context = Get.context;
+    if (context != null) {
+      // ✅ Preload images to remove loading lag
+      await Future.wait([precacheImage(AssetImage(AppImages.logo), context)]);
+    }
+  }
 
   void toggleSection(int index) {
     if (expandedSection.value == index) {

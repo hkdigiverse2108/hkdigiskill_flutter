@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/chat/controllers/chats_controller.dart';
+import 'package:hkdigiskill/modules/chat/widgets/chats_animation_%20wrapper.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -66,11 +67,8 @@ class Chats extends GetView<ChatsController> {
                   final chat = controller.chats[index];
                   return Obx(() {
                     final isSelected = controller.selectedChats.contains(index);
-                    return ChatListItem(
-                      key: ValueKey('chat_${chat.hashCode}'),
-                      chat: chat,
-                      isSelected: isSelected,
-                      isEditing: controller.isEditing.value,
+                    return ChatAnimationWrapper(
+                      index: index,
                       onTap: () {
                         if (controller.isEditing.value) {
                           controller.selectChat(index);
@@ -78,25 +76,32 @@ class Chats extends GetView<ChatsController> {
                           Get.toNamed(Routes.chatMassage);
                         }
                       },
-                      onLongPress: () {
-                        if (!controller.isEditing.value) {
-                          controller.toggleEditMode();
-                          controller.selectChat(index);
-                        }
-                      },
-                      onArchive: () {
-                        // Handle archive action
-                        Get.snackbar(
-                          'Archived',
-                          '${chat.name} has been archived',
-                          snackPosition: SnackPosition.BOTTOM,
-                          duration: const Duration(seconds: 2),
-                        );
-                      },
-                      onMore: () {
-                        // Show more options
-                        _showMoreOptions(context, chat);
-                      },
+                      child: ChatListItem(
+                        key: ValueKey('chat_${chat.hashCode}'),
+                        chat: chat,
+                        isSelected: isSelected,
+                        isEditing: controller.isEditing.value,
+                        onTap: () {},
+                        onLongPress: () {
+                          if (!controller.isEditing.value) {
+                            controller.toggleEditMode();
+                            controller.selectChat(index);
+                          }
+                        },
+                        onArchive: () {
+                          // Handle archive action
+                          Get.snackbar(
+                            'Archived',
+                            '${chat.name} has been archived',
+                            snackPosition: SnackPosition.BOTTOM,
+                            duration: const Duration(seconds: 2),
+                          );
+                        },
+                        onMore: () {
+                          // Show more options
+                          _showMoreOptions(context, chat);
+                        },
+                      ),
                     );
                   });
                 },

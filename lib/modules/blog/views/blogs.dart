@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/blog/controllers/blog_controller.dart';
+import 'package:hkdigiskill/modules/blog/widgets/blog_animation_wrapper.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class BlogsPage extends GetView<BlogController> {
   const BlogsPage({super.key});
@@ -91,6 +93,94 @@ class BlogsPage extends GetView<BlogController> {
     );
   }
 
+  Widget _blogShimmer() {
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              CustomShimmer(
+                isLoading: true,
+                child: Container(
+                  height: 180,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomShimmer(
+                  isLoading: true,
+                  child: Container(
+                    height: 12,
+                    width: 80,
+
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+                CustomShimmer(
+                  isLoading: true,
+                  child: Container(
+                    height: 18,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                CustomShimmer(
+                  isLoading: true,
+                  child: Container(
+                    height: 13,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                CustomShimmer(
+                  isLoading: true,
+                  child: Container(
+                    height: 13,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,11 +199,26 @@ class BlogsPage extends GetView<BlogController> {
         ),
       ),
       body: Obx(
-        () => ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          itemCount: controller.blogs.length,
-          itemBuilder: (_, i) => _blogCard(controller.blogs[i]),
-        ),
+        () => controller.isLoading.value
+            ? ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
+                itemCount: 4,
+                itemBuilder: (_, i) => _blogShimmer(),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
+                itemCount: controller.blogs.length,
+                itemBuilder: (_, i) => BlogAnimationWrapper(
+                  index: i,
+                  child: _blogCard(controller.blogs[i]),
+                ),
+              ),
       ),
     );
   }

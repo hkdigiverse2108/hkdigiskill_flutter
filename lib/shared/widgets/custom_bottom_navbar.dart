@@ -22,9 +22,80 @@ class CustomBottomNavBar extends StatelessWidget {
       Icons.chat_bubble_outline_rounded, // Chat/Message
     ];
 
-    // Colors
     final activeColor = AppColors.primary;
     final inactiveColor = AppColors.caption.withOpacity(0.55);
+
+    Widget buildAnimatedIcon(int idx) {
+      final isActive = currentIndex == idx;
+      return TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 1.0, end: isActive ? 1.18 : 1.0),
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOutBack,
+        builder: (context, scale, child) {
+          return IconButton(
+            iconSize: 24 * scale,
+            icon: Icon(
+              icons[idx],
+              color: Color.lerp(
+                inactiveColor,
+                activeColor,
+                isActive ? 1.0 : 0.0,
+              ),
+            ),
+            onPressed: () => onTap(idx),
+          );
+        },
+      );
+    }
+
+    // Floating center icon with animated highlight
+    Widget buildFloatingIcon() {
+      final isActive = currentIndex == 2;
+      return TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 1.0, end: isActive ? 1.12 : 1.0),
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutBack,
+        builder: (context, scale, child) {
+          return Material(
+            color: Colors.transparent,
+            elevation: 2,
+            shape: const CircleBorder(),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.fastOutSlowIn,
+              padding: const EdgeInsets.all(6),
+              decoration: ShapeDecoration(
+                color: isActive
+                    ? activeColor.withValues(alpha: 0.18)
+                    : activeColor.withValues(alpha: 0.10),
+                shape: const CircleBorder(),
+                // shadows: isActive
+                //     ? [
+                //         BoxShadow(
+                //           color: activeColor.withOpacity(0.14),
+                //           blurRadius: 16,
+                //           spreadRadius: 0,
+                //           offset: const Offset(0, 4),
+                //         ),
+                //       ]
+                //     : [],
+              ),
+              child: Transform.scale(
+                scale: scale,
+                child: IconButton(
+                  icon: Icon(
+                    icons[2],
+                    size: 32,
+                    color: isActive ? activeColor : inactiveColor,
+                  ),
+                  onPressed: () => onTap(2),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
 
     return Stack(
       clipBehavior: Clip.none,
@@ -46,59 +117,20 @@ class CustomBottomNavBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // Left icons
-              IconButton(
-                icon: Icon(
-                  icons[0],
-                  color: currentIndex == 0 ? activeColor : inactiveColor,
-                ),
-                onPressed: () => onTap(0),
-              ),
-              IconButton(
-                icon: Icon(
-                  icons[1],
-                  color: currentIndex == 1 ? activeColor : inactiveColor,
-                ),
-                onPressed: () => onTap(1),
-              ),
-              SizedBox(width: 54), // Space for the floating icon
-              IconButton(
-                icon: Icon(
-                  icons[3],
-                  color: currentIndex == 3 ? activeColor : inactiveColor,
-                ),
-                onPressed: () => onTap(3),
-              ),
-              IconButton(
-                icon: Icon(
-                  icons[4],
-                  color: currentIndex == 4 ? activeColor : inactiveColor,
-                ),
-                onPressed: () => onTap(4),
-              ),
+              buildAnimatedIcon(0),
+              buildAnimatedIcon(1),
+              const SizedBox(width: 54), // Space for floating icon
+              buildAnimatedIcon(3),
+              buildAnimatedIcon(4),
             ],
           ),
         ),
-        // Floating center icon
+        // Animated floating center icon
         Positioned(
           top: 0,
           left: 0,
           right: 0,
-          child: Center(
-            child: Material(
-              color: Colors.transparent,
-              child: Ink(
-                decoration: ShapeDecoration(
-                  color: activeColor.withOpacity(0.10),
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  icon: Icon(icons[2], size: 32, color: activeColor),
-                  onPressed: () => onTap(2),
-                ),
-              ),
-            ),
-          ),
+          child: Center(child: buildFloatingIcon()),
         ),
       ],
     );
