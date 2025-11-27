@@ -1,8 +1,14 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/controllers/network_controller.dart';
+import 'package:hkdigiskill/app/models/banner/banner_model.dart';
+import 'package:hkdigiskill/app/models/blog/blog_model.dart';
+import 'package:hkdigiskill/app/models/categories/categories_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
@@ -10,42 +16,18 @@ class HomeController extends GetxController {
   final networkController = Get.find<NetworkController>();
   RxBool isLoading = true.obs;
 
+  var isBennersLoading = false.obs;
+  var isCategoriesLoading = false.obs;
+  var isCoursesLoading = false.obs;
+  var isBlogsLoading = false.obs;
+
   final navigationController = Get.find<NavigationController>();
 
   // Carousel images
-  final List<String> imageList = [
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-    'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80',
-    'https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=400&q=80',
-  ];
+  List<BannerModel> imageList = <BannerModel>[].obs;
 
   // Categories data
-  final List<Map<String, dynamic>> categories = [
-    {
-      'count': '16',
-      'title': 'Course',
-      'subtitle': 'Business Develop',
-      'color': Color(0xFFD17D2A), // orange
-    },
-    {
-      'count': '12',
-      'title': 'Course',
-      'subtitle': 'Completeness',
-      'color': AppColors.primary,
-    },
-    {
-      'count': '10',
-      'title': 'Course',
-      'subtitle': 'Assigments',
-      'color': AppColors.info,
-    },
-    {
-      'count': '12',
-      'title': 'Course',
-      'subtitle': 'Total Subject',
-      'color': Color(0xFFD17D2A), // orange
-    },
-  ];
+  final List<CategoriesModel> categories = [];
 
   // Popular courses data
   final List<Map<String, dynamic>> courses = [
@@ -102,42 +84,102 @@ class HomeController extends GetxController {
   ];
 
   // Blog posts data
-  final List<Map<String, dynamic>> blogs = [
-    {
-      "image":
-          "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
-      "category": "SCIENCE",
-      "title": "Crafting Effective Learning Guide Line",
-      "date": "16 Nov, 2023",
-      "comments": 0,
-      "excerpt": "Consectetur adipisicing elit, sed do eiusmod tempor inc...",
-    },
-    {
-      "image":
-          "https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=400&q=80",
-      "category": "SCIENCE",
-      "title": "Crafting Effective Learning Guide Line",
-      "date": "16 Nov, 2023",
-      "comments": 0,
-      "excerpt": "Consectetur adipisicing elit, sed do eiusmod tempor inc...",
-    },
-    {
-      "image":
-          "https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=400&q=80",
-      "category": "SCIENCE",
-      "title": "Crafting Effective Learning Guide Line",
-      "date": "16 Nov, 2023",
-      "comments": 0,
-      "excerpt": "Consectetur adipisicing elit, sed do eiusmod tempor inc...",
-    },
-  ];
+  final List<BlogModel> blogs = <BlogModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     navigationController.onInit();
 
+    onBanners();
+    onCategories();
+    onBlogs();
     onLoading();
+  }
+
+  void onBanners() async {
+    try {
+      isBennersLoading.value = true;
+      if (!networkController.isConnected.value) {
+        return;
+      }
+      final response = await ApiService.to.get(ApiConstants.bannersEndpoint);
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['hero_banner_data'] ?? [];
+
+        imageList.assignAll(
+          data.map((item) => BannerModel.fromJson(item)).toList(),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isBennersLoading.value = false;
+    }
+  }
+
+  void onCategories() async {
+    try {
+      isCategoriesLoading.value = true;
+      if (!networkController.isConnected.value) {
+        return;
+      }
+      final response = await ApiService.to.get(
+        ApiConstants.homeCategoriesEndpoint,
+      );
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data =
+            response['data']['course_category_data'] ?? [];
+
+        categories.assignAll(
+          data.map((item) => CategoriesModel.fromJson(item)).toList(),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isCategoriesLoading.value = false;
+    }
+  }
+
+  void onBlogs() async {
+    try {
+      isBlogsLoading.value = true;
+      if (!networkController.isConnected.value) {
+        return;
+      }
+      final response = await ApiService.to.get(ApiConstants.homeBlogsEndpoint);
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['blog_data'] ?? [];
+
+        blogs.assignAll(data.map((item) => BlogModel.fromJson(item)).toList());
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isBlogsLoading.value = false;
+    }
   }
 
   void onLoading() {

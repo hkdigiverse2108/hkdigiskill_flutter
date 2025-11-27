@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/app/models/faq/faq_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/courses/controllers/course_details_controller.dart';
 import 'package:hkdigiskill/shared/widgets/widget_animation_wrapper.dart';
 
 class FaqSection extends StatefulWidget {
-  final List<FaqItem> faqs;
+  final List<FaqModel> faqs;
 
   const FaqSection({super.key, required this.faqs});
 

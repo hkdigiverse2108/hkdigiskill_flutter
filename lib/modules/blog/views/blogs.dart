@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/blog/blog_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/blog/controllers/blog_controller.dart';
 import 'package:hkdigiskill/modules/blog/widgets/blog_animation_wrapper.dart';
 import 'package:hkdigiskill/routes/routes.dart';
@@ -9,7 +11,7 @@ import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 class BlogsPage extends GetView<BlogController> {
   const BlogsPage({super.key});
 
-  Widget _blogCard(Blog data) {
+  Widget _blogCard(BlogModel data) {
     return GestureDetector(
       onTap: () => Get.toNamed(Routes.blogDetails, arguments: data),
       child: Card(
@@ -24,10 +26,23 @@ class BlogsPage extends GetView<BlogController> {
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                   child: Image.network(
-                    data.imageUrl,
+                    data.coverImage,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: 180,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 180,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
@@ -43,7 +58,7 @@ class BlogsPage extends GetView<BlogController> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      data.date,
+                      Globals.formatDate(data.updatedAt),
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
@@ -79,7 +94,7 @@ class BlogsPage extends GetView<BlogController> {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    data.description,
+                    data.content,
                     style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

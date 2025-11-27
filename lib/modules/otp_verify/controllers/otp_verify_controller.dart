@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class OtpVerifyController extends GetxController {
   var isLoading = false.obs;
+  var isResendLoading = false.obs;
   var isLogin = false.obs;
   String? email;
   final otpController = TextEditingController();
@@ -44,6 +48,34 @@ class OtpVerifyController extends GetxController {
     });
   }
 
+  void onResendOtp() async {
+    try {
+      isResendLoading.value = true;
+      final res = await ApiService.to.post(
+        ApiConstants.resendOtpEndpoint,
+        body: {"email": email},
+      );
+      if (res['status'] == 200) {
+        startCountDown();
+      } else {
+        Get.snackbar(
+          'Error',
+          res['message'],
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isResendLoading.value = false;
+    }
+  }
+
   void resetCountDown() {
     if (countDownCount.value >= 3) {
       isMoreThenThereTime.value = true;
@@ -62,12 +94,35 @@ class OtpVerifyController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
-      if (isLogin.value) {
-        storage.isLoggedIn = true;
-        Get.offAllNamed(Routes.navigation);
-      } else {
-        Get.toNamed(Routes.newPassword);
+      callApi();
+    }
+  }
+
+  void callApi() async {
+    try {
+      isLoading.value = true;
+      final res = await ApiService.to.post(
+        ApiConstants.verifyOtpEndpoint,
+        body: {"email": email, "otp": otpController.text},
+      );
+
+      if (res['status'] == 200) {
+        if (isLogin.value) {
+          storage.isLoggedIn = true;
+          Get.offAllNamed(Routes.navigation);
+        } else {
+          Get.toNamed(Routes.newPassword);
+        }
       }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 

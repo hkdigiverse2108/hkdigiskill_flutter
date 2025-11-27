@@ -61,24 +61,28 @@ class OtpVerify extends GetView<OtpVerifyController> {
               keyboardType: TextInputType.number,
             ),
             Gap(10),
-            InkWell(
-              onTap: controller.onVerifyTap,
-              child: Container(
-                height: 56,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Verify",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                    ),
+            Obx(
+              () => InkWell(
+                onTap: controller.onVerifyTap,
+                child: Container(
+                  height: 56,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Verify",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                   ),
                 ),
               ),

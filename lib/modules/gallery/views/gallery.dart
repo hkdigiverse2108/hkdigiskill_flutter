@@ -21,78 +21,98 @@ class GalleryPage extends GetView<GalleryController> {
         leading: BackButton(color: Colors.black87),
       ),
       backgroundColor: Colors.white,
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-        itemCount: controller.galleries.length,
-        itemBuilder: (ctx, i) {
-          final gallery = controller.galleries[i];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 28),
-            child: GalleryAnimationWrapper(
-              index: i,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        "${i + 1}. ${gallery['title']}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  GalleryDetailsPage(title: gallery['title']),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "view all",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                            fontSize: 12,
+      body: Obx(
+        () => controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 16,
+                ),
+                itemCount: controller.galleries.length,
+                itemBuilder: (ctx, i) {
+                  final gallery = controller.galleries[i];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 28),
+                    child: GalleryAnimationWrapper(
+                      index: i,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "${i + 1}. ${gallery.title}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => GalleryDetailsPage(
+                                        title: gallery.title,
+                                        images: gallery.images,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "view all",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: List.generate(
-                      gallery['images'].length,
-                      (j) => Padding(
-                        padding: const EdgeInsets.only(right: 14),
-                        child: GalleryItemAnimationWrapper(
-                          index: j,
-                          child: _galleryImagePlaceholder(),
-                        ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: List.generate(
+                              gallery.images.length < 4
+                                  ? gallery.images.length
+                                  : 4,
+                              (j) => Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: GalleryItemAnimationWrapper(
+                                  index: j,
+                                  child: _galleryImagePlaceholder(
+                                    gallery.images[j],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
-            ),
-          );
-        },
       ),
     );
   }
 
-  Widget _galleryImagePlaceholder() {
+  Widget _galleryImagePlaceholder(String image) {
     return Container(
       width: 68,
       height: 68,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(6),
+        image: DecorationImage(
+          image: NetworkImage(
+            image,
+            // "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+          ),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

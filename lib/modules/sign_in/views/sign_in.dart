@@ -50,24 +50,30 @@ class SignIn extends GetView<SignInController> {
               ),
             ),
             Gap(24),
-            InkWell(
-              onTap: controller.onLoginTap,
-              child: Container(
-                height: 56,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Log in",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                    ),
+            Obx(
+              () => InkWell(
+                onTap: controller.isLoading.value
+                    ? null
+                    : controller.onLoginTap,
+                child: Container(
+                  height: 56,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Log in",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -78,7 +84,9 @@ class SignIn extends GetView<SignInController> {
               children: [
                 Text("Don't have an account? "),
                 TextButton(
-                  onPressed: controller.onSignUpTap,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : controller.onSignUpTap,
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: Text(
                     "Sign Up",

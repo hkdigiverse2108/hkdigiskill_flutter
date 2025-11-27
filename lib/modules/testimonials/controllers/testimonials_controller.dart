@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/testimonial/testimonial_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 
 class TestimonialsController extends GetxController {
   var isLoading = false.obs;
@@ -6,49 +11,32 @@ class TestimonialsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    onLoading();
+    getTestimonials();
   }
 
-  final List<Testimonial> testimonials = [
-    Testimonial(
-      profileUrl: 'https://randomuser.me/api/portraits/men/31.jpg',
-      name: 'Bob Limones',
-      role: 'Student',
-      review:
-          'Lorem ipsum dolor amet consec tur elit adicing sed do usmod zx tempor enim minim veniam quis nostrud exer citation.',
-    ),
-    Testimonial(
-      profileUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
-      name: 'Bob Limones',
-      role: 'Student',
-      review:
-          'Lorem ipsum dolor amet consec tur elit adicing sed do usmod zx tempor enim minim veniam quis nostrud exer citation.',
-    ),
-  ];
+  final List<TestimonialModel> testimonials = <TestimonialModel>[].obs;
 
-  void onLoading() {
-    isLoading.value = true;
-    Future.delayed(const Duration(seconds: 2), () {
+  void getTestimonials() async {
+    try {
+      isLoading.value = true;
+      var response = await ApiService.to.get(ApiConstants.testimonialsEndpoint);
+
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['testimonial_data'] ?? [];
+
+        testimonials.assignAll(
+          data.map((item) => TestimonialModel.fromJson(item)).toList(),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
       isLoading.value = false;
-      update();
-    });
+    }
   }
-}
-
-class Testimonial {
-  final String profileUrl;
-  final String name;
-  final String role;
-  final String review;
-  final int rating;
-  final String badgeText;
-
-  Testimonial({
-    required this.profileUrl,
-    required this.name,
-    required this.role,
-    required this.review,
-    this.rating = 5,
-    this.badgeText = "",
-  });
 }

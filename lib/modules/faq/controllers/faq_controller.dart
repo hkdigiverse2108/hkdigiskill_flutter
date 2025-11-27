@@ -1,19 +1,39 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
-import 'package:hkdigiskill/modules/courses/controllers/course_details_controller.dart';
+import 'package:hkdigiskill/app/models/faq/faq_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 
 class FaqController extends GetxController {
-  final faqs = [
-    FaqItem(
-      "How can I contact a school directly?",
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit sed eiusmod tempor incididunt labore dolore magna aliqua enim ad minim.",
-    ),
-    FaqItem(
-      "How do I find a school where I want to study?",
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-    ),
-    FaqItem(
-      "Where should I study abroad?",
-      "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.",
-    ),
-  ];
+  var faqs = <FaqModel>[].obs;
+  var isLoading = false.obs;
+
+  void onInit() {
+    super.onInit();
+    getFaqs();
+  }
+
+  void getFaqs() async {
+    try {
+      isLoading.value = true;
+      final response = await ApiService.to.get(ApiConstants.homeFaqsEndpoint);
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['faq_data'] ?? [];
+
+        faqs.assignAll(data.map((item) => FaqModel.fromJson(item)).toList());
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

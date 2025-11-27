@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hkdigiskill/app/services/storage_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,7 @@ class ApiService extends GetxService {
   final GetStorage _storage = GetStorage();
 
   // BASE URL
-  final String baseUrl = "https://yourapi.com/api"; // set your API base here
+  final String baseUrl = ApiConstants.baseUrl; // set your API base here
 
   // Check internet connectivity
   Future<bool> hasConnection() async {
@@ -28,7 +29,7 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    if (token!.isNotEmpty) headers['Authorization'] = 'Bearer $token';
+    if (token!.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
     try {

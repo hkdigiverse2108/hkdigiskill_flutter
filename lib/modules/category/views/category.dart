@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/category/controllers/category_controller.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
@@ -172,7 +173,7 @@ class Category extends GetView<CategoryController> {
 }
 
 class AnimatedCategoryItem extends StatefulWidget {
-  final Map<String, dynamic> item;
+  final CategoriesModel item;
   final int index;
   final VoidCallback onTap;
 
@@ -263,8 +264,12 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: widget.item["bgColor"],
+                  color: Color(0xFFFDE7E3),
                   borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.item.image ?? ""),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SizedBox(width: 16),
@@ -274,7 +279,7 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.item["title"],
+                      widget.item.name,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w700,
@@ -287,7 +292,9 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
 
                     SizedBox(height: 4),
                     Text(
-                      widget.item["count"],
+                      // todo: add count
+                      "10 Courses",
+                      // widget.item.count,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Poppins',
@@ -297,7 +304,7 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                     ),
                     SizedBox(height: 3),
                     Text(
-                      widget.item["description"],
+                      widget.item.description,
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'Poppins',

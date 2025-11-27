@@ -1,10 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/courses/course_models.dart';
+import 'package:hkdigiskill/app/models/faq/faq_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 
 class CourseDetailsController extends GetxController {
   final selectedTab = 0.obs;
   var isPurchased = false.obs;
+  var isLoading = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    getFaqs();
+  }
 
   final List<Tabs> tabs = [
     Tabs(title: "About"),
@@ -13,20 +25,7 @@ class CourseDetailsController extends GetxController {
     Tabs(title: "FAQ's"),
   ];
 
-  final faqs = [
-    FaqItem(
-      "How can I contact a school directly?",
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit sed eiusmod tempor incididunt labore dolore magna aliqua enim ad minim.",
-    ),
-    FaqItem(
-      "How do I find a school where I want to study?",
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
-    ),
-    FaqItem(
-      "Where should I study abroad?",
-      "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.",
-    ),
-  ];
+  final faqs = <FaqModel>[].obs;
 
   final List<Section> curriculum = [
     Section(
@@ -59,6 +58,29 @@ class CourseDetailsController extends GetxController {
     ),
   ];
 
+  void getFaqs() async {
+    try {
+      isLoading.value = true;
+      final response = await ApiService.to.get(ApiConstants.homeFaqsEndpoint);
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['faq_data'] ?? [];
+
+        faqs.assignAll(data.map((item) => FaqModel.fromJson(item)).toList());
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void changeTab(int index) {
     selectedTab.value = index;
   }
@@ -68,11 +90,4 @@ class Tabs {
   final String title;
 
   Tabs({required this.title});
-}
-
-class FaqItem {
-  final String question;
-  final String answer;
-
-  FaqItem(this.question, this.answer);
 }

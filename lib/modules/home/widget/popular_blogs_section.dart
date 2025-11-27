@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/blog/blog_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PopularBlogsSection extends StatelessWidget {
-  final List<Map<String, dynamic>> blogs;
+  final List<BlogModel> blogs;
   final VoidCallback onViewAll;
   final bool isLoading;
 
@@ -84,7 +86,7 @@ class PopularBlogsSection extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             child: Image.network(
-                              blog["image"],
+                              blog.coverImage,
                               width: 240,
                               height: 170,
                               fit: BoxFit.cover,
@@ -120,7 +122,7 @@ class PopularBlogsSection extends StatelessWidget {
                                   children: [
                                     // Category
                                     Text(
-                                      blog["category"],
+                                      blog.category,
                                       style: const TextStyle(
                                         color: Color(0xFF838D9A),
                                         fontSize: 11.5,
@@ -132,7 +134,7 @@ class PopularBlogsSection extends StatelessWidget {
                                     const SizedBox(height: 6),
                                     // Title
                                     Text(
-                                      blog["title"],
+                                      blog.title,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Poppins',
@@ -152,7 +154,7 @@ class PopularBlogsSection extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 5),
                                         Text(
-                                          blog["date"],
+                                          Globals.formatDate(blog.updatedAt),
                                           style: TextStyle(
                                             color: AppColors.caption,
                                             fontFamily: 'Poppins',
@@ -177,7 +179,8 @@ class PopularBlogsSection extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
-                                          "Com ${blog["comments"]}",
+                                          // todo: get comments count
+                                          "Com 0",
                                           style: TextStyle(
                                             color: AppColors.caption,
                                             fontFamily: 'Poppins',
@@ -190,7 +193,7 @@ class PopularBlogsSection extends StatelessWidget {
                                     const SizedBox(height: 10),
                                     // Excerpt (optional)
                                     Text(
-                                      blog["excerpt"],
+                                      blog.content,
                                       style: const TextStyle(
                                         color: Color(0xFF838D9A),
                                         fontFamily: 'Poppins',
@@ -224,7 +227,10 @@ class PopularBlogsSection extends StatelessWidget {
                                   onPressed: isLoading
                                       ? null
                                       : () {
-                                          Get.toNamed(Routes.blogDetails);
+                                          Get.toNamed(
+                                            Routes.blogDetails,
+                                            arguments: blog,
+                                          );
                                         },
                                 ),
                               ),

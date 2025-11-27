@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/bindings/profile_binding.dart';
 import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/profile/controllers/profile_controller.dart';
 import 'package:hkdigiskill/modules/profile/views/profile.dart';
 import 'package:hkdigiskill/routes/routes.dart';
@@ -44,9 +45,9 @@ class TopBar extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Text(
-                    'Namaste, Het',
-                    style: TextStyle(
+                  Text(
+                    'Namaste, ${Globals.userData?.fullName}',
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w700,
                       fontSize: 17,

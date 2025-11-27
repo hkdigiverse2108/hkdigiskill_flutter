@@ -35,7 +35,7 @@ class HomeScreen extends GetView<HomeController> {
                   offsetY: 32.0, // slide up from 32 pixels below
                   child: ImageCardCarousel(
                     imageList: controller.imageList,
-                    isLoading: controller.isLoading.value,
+                    isLoading: controller.isBennersLoading.value,
                   ),
                 ),
               ),
@@ -50,7 +50,7 @@ class HomeScreen extends GetView<HomeController> {
                   child: CategoryGridSection(
                     categories: controller.categories,
                     onViewAll: controller.onCategoryViewAll,
-                    isLoading: controller.isLoading.value,
+                    isLoading: controller.isCategoriesLoading.value,
                   ),
                 ),
               ),
@@ -97,7 +97,7 @@ class HomeScreen extends GetView<HomeController> {
                   child: PopularBlogsSection(
                     blogs: controller.blogs,
                     onViewAll: controller.onBlogViewAll,
-                    isLoading: controller.isLoading.value,
+                    isLoading: controller.isBlogsLoading.value,
                   ),
                 ),
               ),

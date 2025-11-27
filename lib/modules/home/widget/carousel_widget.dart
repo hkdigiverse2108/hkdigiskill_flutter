@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/app/models/banner/banner_model.dart';
 import 'dart:async'; // Add this
 
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class ImageCardCarousel extends StatefulWidget {
-  final List<String> imageList;
+  final List<BannerModel> imageList;
   final bool isLoading;
 
   const ImageCardCarousel({
@@ -91,8 +93,10 @@ class _ImageCardCarouselState extends State<ImageCardCarousel> {
                                 );
                               },
                           child: Image.network(
-                            widget.imageList[index],
-                            key: ValueKey(widget.imageList[index]),
+                            Globals.fixLocalhostUrl(
+                              widget.imageList[index].images[0],
+                            ),
+                            key: ValueKey(widget.imageList[index].id),
                             // Unique key for change detection
                             fit: BoxFit.cover,
                             width: double.infinity,

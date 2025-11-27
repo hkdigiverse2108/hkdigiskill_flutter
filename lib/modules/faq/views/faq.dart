@@ -25,7 +25,11 @@ class Faq extends GetView<FaqController> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: FaqSection(faqs: controller.faqs),
+        child: Obx(
+          () => controller.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : FaqSection(faqs: controller.faqs),
+        ),
       ),
     );
   }

@@ -1,54 +1,41 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
-
-class Blog {
-  final String date;
-  final String imageUrl;
-  final String category;
-  final String title;
-  final String description;
-
-  Blog({
-    required this.date,
-    required this.imageUrl,
-    required this.category,
-    required this.title,
-    required this.description,
-  });
-}
+import 'package:hkdigiskill/app/models/blog/blog_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 
 class BlogController extends GetxController {
   RxBool isLoading = false.obs;
 
-  RxList<Blog> blogs = <Blog>[
-    Blog(
-      date: '15 Nov, 2023',
-      imageUrl: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2',
-      category: 'SCIENCE',
-      title: 'Crafting Effective Learning Guide Line',
-      description:
-          'Consectetur adipisicing elit, sed do eiusmod tempor inc idid unt...',
-    ),
-    Blog(
-      date: '15 Nov, 2023',
-      imageUrl: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2',
-      category: 'SCIENCE',
-      title: 'Crafting Effective Learning Guide Line',
-      description:
-          'Consectetur adipisicing elit, sed do eiusmod tempor inc idid unt...',
-    ),
-  ].obs;
+  RxList<BlogModel> blogs = <BlogModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    onLoading();
+    onBlogs();
   }
 
-  void onLoading() {
-    isLoading.value = true;
-    Future.delayed(const Duration(seconds: 2), () {
+  void onBlogs() async {
+    try {
+      isLoading.value = true;
+      final response = await ApiService.to.get(ApiConstants.blogsEndpoint);
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['blog_data'] ?? [];
+
+        blogs.assignAll(data.map((item) => BlogModel.fromJson(item)).toList());
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
       isLoading.value = false;
-      update();
-    });
+    }
   }
 }

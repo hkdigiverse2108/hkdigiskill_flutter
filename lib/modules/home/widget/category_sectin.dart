@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class CategoryGridSection extends StatelessWidget {
-  final List<Map<String, dynamic>> categories;
+  final List<CategoriesModel> categories;
   final VoidCallback onViewAll;
   final bool isLoading;
 
@@ -102,21 +103,22 @@ class CategoryGridSection extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '${item['count']} ',
+                                  // todo: add count
+                                  text: '0 ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
-                                    color: item['color'],
+                                    color: AppColors.primary,
                                   ),
                                 ),
                                 TextSpan(
-                                  text: item['title'],
+                                  text: "Courses",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 18,
                                     fontFamily: 'Poppins',
-                                    color: item['color'],
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ],
@@ -124,7 +126,7 @@ class CategoryGridSection extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            item['subtitle'],
+                            item.name,
                             style: TextStyle(
                               color: AppColors.caption,
                               fontFamily: 'Poppins',

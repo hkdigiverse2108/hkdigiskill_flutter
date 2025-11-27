@@ -1,19 +1,42 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/gallery/gallery_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 
 class GalleryController extends GetxController {
-  final List<Map<String, dynamic>> galleries = [
-    {
-      'title': 'Ganesh Utsav 2025',
-      'images': [null, null, null, null],
-      // Replace null with img URLs or assets if needed
-    },
-    {
-      'title': 'Ganesh Utsav 2025',
-      'images': [null, null, null, null],
-    },
-    {
-      'title': 'Ganesh Utsav 2025',
-      'images': [null, null, null, null],
-    },
-  ];
+  final List<GalleryModel> galleries = <GalleryModel>[].obs;
+
+  var isLoading = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    getGalleries();
+  }
+
+  void getGalleries() async {
+    try {
+      isLoading.value = true;
+      var response = await ApiService.to.get(ApiConstants.galleryEndpoint);
+
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['gallery_data'] ?? [];
+
+        galleries.assignAll(
+          data.map((item) => GalleryModel.fromJson(item)).toList(),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

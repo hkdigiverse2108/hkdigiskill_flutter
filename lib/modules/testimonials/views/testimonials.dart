@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/testimonial/testimonial_model.dart';
 import 'package:hkdigiskill/modules/testimonials/controllers/testimonials_controller.dart';
 import 'package:hkdigiskill/modules/testimonials/widgets/testimonial_animation_wrapper.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
@@ -7,7 +8,7 @@ import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 class TestimonialsPage extends GetView<TestimonialsController> {
   const TestimonialsPage({super.key});
 
-  Widget _buildCard(Testimonial data) {
+  Widget _buildCard(TestimonialModel data) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
       elevation: 3,
@@ -22,7 +23,7 @@ class TestimonialsPage extends GetView<TestimonialsController> {
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundImage: NetworkImage(data.profileUrl),
+                  backgroundImage: NetworkImage(data.image),
                 ),
                 Positioned(
                   bottom: -8,
@@ -57,13 +58,13 @@ class TestimonialsPage extends GetView<TestimonialsController> {
             ),
             const SizedBox(height: 14),
             Text(
-              data.review,
+              data.description,
               style: TextStyle(fontSize: 15, color: Colors.grey[900]),
             ),
             const SizedBox(height: 14),
             Row(
               children: List.generate(
-                data.rating,
+                data.rate,
                 (i) => Icon(Icons.star, color: Colors.amber, size: 17),
               ),
             ),
@@ -73,7 +74,7 @@ class TestimonialsPage extends GetView<TestimonialsController> {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             Text(
-              data.role,
+              data.designation,
               style: TextStyle(fontSize: 13, color: Colors.grey[700]),
             ),
           ],

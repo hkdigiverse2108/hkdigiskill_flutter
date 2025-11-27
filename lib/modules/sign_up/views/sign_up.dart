@@ -108,11 +108,7 @@ class SignUp extends GetView<SignUpController> {
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
-                              ..onTap =
-                                  controller.onTermsTap ??
-                                  () {
-                                    // Default tap action
-                                  },
+                              ..onTap = controller.onTermsTap,
                           ),
                           const TextSpan(
                             text:
@@ -128,7 +124,11 @@ class SignUp extends GetView<SignUpController> {
             Gap(24),
             Obx(
               () => InkWell(
-                onTap: controller.isAgree.value ? controller.onSignUpTap : null,
+                onTap: controller.isLoading.value
+                    ? null
+                    : controller.isAgree.value
+                    ? controller.onSignUpTap
+                    : null,
                 child: Container(
                   height: 56,
                   width: double.infinity,
@@ -139,15 +139,17 @@ class SignUp extends GetView<SignUpController> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                   ),
                 ),
               ),

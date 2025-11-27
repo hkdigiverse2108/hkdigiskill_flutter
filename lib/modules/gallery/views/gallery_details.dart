@@ -3,13 +3,17 @@ import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.da
 
 class GalleryDetailsPage extends StatelessWidget {
   final String title;
+  final List<String> images;
 
-  const GalleryDetailsPage({super.key, required this.title});
+  const GalleryDetailsPage({
+    super.key,
+    required this.title,
+    required this.images,
+  });
 
   @override
   Widget build(BuildContext context) {
     // For demo, 8 images
-    final images = List.generate(8, (_) => null);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,20 +39,21 @@ class GalleryDetailsPage extends StatelessWidget {
           ),
           itemBuilder: (ctx, i) => GalleryItemAnimationWrapper(
             index: i,
-            child: _galleryImagePlaceholder(),
+            child: _galleryImagePlaceholder(images[i]),
           ),
         ),
       ),
     );
   }
 
-  Widget _galleryImagePlaceholder() {
+  Widget _galleryImagePlaceholder(String image) {
     return Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(8),
+        image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover),
       ),
     );
   }
