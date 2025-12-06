@@ -6,6 +6,7 @@ class CategoriesModel {
   bool isFeatured;
   bool isDeleted;
   bool isBlocked;
+  int? courseCount;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -19,6 +20,7 @@ class CategoriesModel {
     required this.isBlocked,
     required this.createdAt,
     required this.updatedAt,
+    this.courseCount = 0,
   });
 
   factory CategoriesModel.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +32,7 @@ class CategoriesModel {
         isFeatured: json["isFeatured"],
         isDeleted: json["isDeleted"],
         isBlocked: json["isBlocked"],
+        courseCount: 0,
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );

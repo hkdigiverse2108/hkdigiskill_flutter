@@ -79,6 +79,7 @@ class SignUpController extends GetxController {
           "password": passwordController.text,
           "phoneNumber": phoneNumberController.text,
           "designation": designationController.text,
+          "referralCode": referralCodeController.text,
           "agreeTerms": isAgree.value,
           // todo: add referral code
         },

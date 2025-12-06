@@ -34,12 +34,28 @@ class SignIn extends GetView<SignInController> {
               keyboardType: TextInputType.emailAddress,
               controller: controller.emailController,
             ),
-            AppTextField(
-              label: "Password",
-              isRequired: true,
-              keyboardType: TextInputType.visiblePassword,
-              controller: controller.passwordController,
-              obscureText: true,
+            Obx(
+              () => AppTextField(
+                label: "Password",
+                isRequired: true,
+                keyboardType: TextInputType.visiblePassword,
+                controller: controller.passwordController,
+                obscureText: controller.isPasswordVisible.value,
+                suffixIcon: Obx(
+                  () => IconButton(
+                    icon: Icon(
+                      controller.isPasswordVisible.value
+                          ? Icons.remove_red_eye
+                          : Icons.remove_red_eye_outlined,
+                      color: AppColors.textLight,
+                    ),
+                    onPressed: () {
+                      controller.isPasswordVisible.value =
+                          !controller.isPasswordVisible.value;
+                    },
+                  ),
+                ),
+              ),
             ),
             TextButton(
               onPressed: controller.onForgotPasswordTap,

@@ -6,6 +6,7 @@ import 'package:hkdigiskill/modules/courses/controllers/courses_controller.dart'
 import 'package:hkdigiskill/modules/courses/widgets/animated_course_card.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 
 class ViewAllCourse extends GetView<CoursesController> {
   const ViewAllCourse({super.key});
@@ -35,6 +36,8 @@ class ViewAllCourse extends GetView<CoursesController> {
                   separatorBuilder: (context, index) => const Gap(10),
                   itemCount: 3,
                 )
+              : (controller.courses.isEmpty)
+              ? NoDataWidget()
               : ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

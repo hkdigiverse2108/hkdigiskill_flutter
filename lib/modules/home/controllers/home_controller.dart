@@ -6,9 +6,11 @@ import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/models/banner/banner_model.dart';
 import 'package:hkdigiskill/app/models/blog/blog_model.dart';
 import 'package:hkdigiskill/app/models/categories/categories_model.dart';
+import 'package:hkdigiskill/app/models/courses/course_models.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
@@ -16,10 +18,10 @@ class HomeController extends GetxController {
   final networkController = Get.find<NetworkController>();
   RxBool isLoading = true.obs;
 
-  var isBennersLoading = false.obs;
-  var isCategoriesLoading = false.obs;
-  var isCoursesLoading = false.obs;
-  var isBlogsLoading = false.obs;
+  var isBennersLoading = true.obs;
+  var isCategoriesLoading = true.obs;
+  var isCoursesLoading = true.obs;
+  var isBlogsLoading = true.obs;
 
   final navigationController = Get.find<NavigationController>();
 
@@ -27,33 +29,10 @@ class HomeController extends GetxController {
   List<BannerModel> imageList = <BannerModel>[].obs;
 
   // Categories data
-  final List<CategoriesModel> categories = [];
+  final categories = <CategoriesModel>[].obs;
 
   // Popular courses data
-  final List<Map<String, dynamic>> courses = [
-    {
-      "image":
-          "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=500&q=80",
-      "duration": "15 Weeks",
-      "title": "Starting SEO as your Home Based Business",
-      "rating": 5.0,
-      "ratingCount": 3,
-      "price": "\$30",
-      "lessons": 11,
-      "students": 227,
-    },
-    {
-      "image":
-          "https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=500&q=80",
-      "duration": "15 Weeks",
-      "title": "Starting SEO as your Home Based Business",
-      "rating": 5.0,
-      "ratingCount": 3,
-      "price": "\$30",
-      "lessons": 11,
-      "students": 227,
-    },
-  ];
+  var courses = <CourseModel>[].obs;
 
   // Stats data
   final List<Map<String, dynamic>> counters = [
@@ -64,19 +43,19 @@ class HomeController extends GetxController {
       "textColor": Color(0xFFD17D2A),
     },
     {
-      "count": "100%",
+      "count": "${Globals.appSettings?.satisfactionRate ?? 0}%",
       "label": "SATISFACTION RATE",
       "color": Color(0xFFF4F1FE), // pale purple
       "textColor": Color(0xFF7C44E6),
     },
     {
-      "count": "32.4K",
+      "count": "${Globals.appSettings?.classCompleted ?? 0}",
       "label": "CLASS COMPLETED",
       "color": Color(0xFFFFF0F1), // pale red
       "textColor": Color(0xFFEB3E56),
     },
     {
-      "count": "29.3K",
+      "count": "${Globals.appSettings?.enrolledLearners ?? 0}",
       "label": "STUDENT ENROLLED",
       "color": Color(0xFFE7FBFA), // pale teal
       "textColor": Color(0xFF10A69F),
@@ -93,6 +72,7 @@ class HomeController extends GetxController {
 
     onBanners();
     onCategories();
+    onCourses();
     onBlogs();
     onLoading();
   }
@@ -128,14 +108,17 @@ class HomeController extends GetxController {
   void onCategories() async {
     try {
       isCategoriesLoading.value = true;
+
       if (!networkController.isConnected.value) {
         return;
       }
+
       final response = await ApiService.to.get(
         ApiConstants.homeCategoriesEndpoint,
       );
 
       log(response.toString());
+
       if (response['status'] == 200) {
         final List<dynamic> data =
             response['data']['course_category_data'] ?? [];
@@ -143,6 +126,8 @@ class HomeController extends GetxController {
         categories.assignAll(
           data.map((item) => CategoriesModel.fromJson(item)).toList(),
         );
+
+        await _loadCourseCountForCategories(); // <-- WAIT for completion
       }
     } catch (e) {
       log(e.toString());
@@ -154,6 +139,85 @@ class HomeController extends GetxController {
     } finally {
       isCategoriesLoading.value = false;
     }
+  }
+
+  Future<void> _loadCourseCountForCategories() async {
+    for (int i = 0; i < categories.length; i++) {
+      final category = categories[i];
+
+      final res = await ApiService.to.get(
+        '${ApiConstants.getCourseFromCategory}${category.id}',
+      );
+
+      if (res['status'] == 200) {
+        final total = res['data']['totalData'] ?? 0;
+        category.courseCount = total;
+      }
+    }
+
+    categories.refresh();
+  }
+
+  void onCourses() async {
+    try {
+      isCoursesLoading.value = true;
+
+      if (!networkController.isConnected.value) {
+        return;
+      }
+
+      // Step 1: Fetch all courses
+      final response = await ApiService.to.get(
+        ApiConstants.homeCoursesEndpoint,
+      );
+
+      log(response.toString());
+
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['course_data'] ?? [];
+
+        courses.assignAll(
+          data.map((item) => CourseModel.fromJson(item)).toList(),
+        );
+
+        // Step 2: Fetch rating for each course
+        await _loadRatingsForCourses();
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isCoursesLoading.value = false;
+    }
+  }
+
+  Future<void> _loadRatingsForCourses() async {
+    for (int i = 0; i < courses.length; i++) {
+      final course = courses[i];
+
+      if (course.id == null) continue;
+
+      final res = await ApiService.to.get(
+        '${ApiConstants.ratingEndpoint}${course.id}',
+      );
+
+      log("Rating Response for ${course.id}: $res");
+
+      if (res['status'] == 200) {
+        final ratingData = res['data'];
+
+        // Assign rating values
+        course.averageRating = ratingData["averageRating"] ?? 0;
+        course.totalRated = ratingData["totalRated"] ?? 0;
+      }
+    }
+
+    // refresh UI
+    courses.refresh();
   }
 
   void onBlogs() async {
@@ -214,6 +278,18 @@ class HomeController extends GetxController {
         'Please check your internet connection',
         snackPosition: SnackPosition.BOTTOM,
       );
+    }
+  }
+
+  Future<void> onRefresh() async {
+    try {
+      await Future.wait(
+        [onBanners(), onCategories(), onCourses(), onBlogs()]
+            as Iterable<Future>,
+      );
+    } catch (e) {
+      log('Error refreshing data: $e');
+      rethrow;
     }
   }
 }

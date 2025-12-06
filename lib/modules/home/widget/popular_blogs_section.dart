@@ -86,7 +86,7 @@ class PopularBlogsSection extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             child: Image.network(
-                              blog.coverImage,
+                              Globals.fixLocalhostUrl(blog.coverImage),
                               width: 240,
                               height: 170,
                               fit: BoxFit.cover,

@@ -48,24 +48,30 @@ class NewPassword extends GetView<NewPasswordController> {
               child: Text("Need Help?"),
             ),
             Gap(16),
-            InkWell(
-              onTap: controller.onSetNewPasswordTap,
-              child: Container(
-                height: 56,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Set New Password",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                    ),
+            Obx(
+              () => InkWell(
+                onTap: controller.isLoading.value
+                    ? () {}
+                    : controller.onSetNewPasswordTap,
+                child: Container(
+                  height: 56,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Set New Password",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                   ),
                 ),
               ),

@@ -1,54 +1,51 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
-
-class Instructor {
-  final String name;
-  final String role;
-  final String imageUrl;
-
-  Instructor({required this.name, required this.role, required this.imageUrl});
-}
+import 'package:hkdigiskill/app/models/instructor/instructor_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
 
 class InstructorController extends GetxController {
-  var instructors = <Instructor>[
-    Instructor(
-      name: 'Jane Seymour',
-      role: 'UI Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-    ),
-    Instructor(
-      name: 'Edward Norton',
-      role: 'UI Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/men/12.jpg',
-    ),
-    Instructor(
-      name: 'Jane Seymour',
-      role: 'UI Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-    ),
-    Instructor(
-      name: 'Edward Norton',
-      role: 'UI Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/men/12.jpg',
-    ),
-    Instructor(
-      name: 'Jane Seymour',
-      role: 'UI Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-    ),
-    Instructor(
-      name: 'Edward Norton',
-      role: 'UI Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/men/12.jpg',
-    ),
-  ].obs;
+  var instructors = <InstructorModel>[].obs;
 
   // controls which instructor's icons are shown
   var showIcons = <RxBool>[].obs;
 
+  RxBool isLoading = false.obs;
+
   @override
   void onInit() {
-    showIcons.value = List.generate(instructors.length, (_) => false.obs);
+    onInstructors();
     super.onInit();
+  }
+
+  void onInstructors() async {
+    try {
+      isLoading.value = true;
+      final response = await ApiService.to.get(
+        ApiConstants.instructorsEndpoint,
+      );
+
+      log(response.toString());
+      if (response['status'] == 200) {
+        final List<dynamic> data = response['data']['instructor_data'] ?? [];
+
+        instructors.assignAll(
+          data.map((item) => InstructorModel.fromJson(item)).toList(),
+        );
+
+        showIcons.value = List.generate(instructors.length, (_) => false.obs);
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar(
+        'Error',
+        'Something went wrong',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void toggleIcons(int index) {

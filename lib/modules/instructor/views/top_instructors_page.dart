@@ -2,34 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/instructor/instructor_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/instructor/controllers/instructor_controller.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/modules/instructor/widgets/Instructor_animation_wrapper.dart';
+import 'package:hkdigiskill/shared/widgets/social_link_helper.dart';
 
 class TopInstructorsPage extends GetView<InstructorController> {
   const TopInstructorsPage({super.key});
 
-  Widget _circleIcon(String asset) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white),
-      ),
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 16,
-        child: SvgPicture.asset(
-          asset,
-          width: 16,
-          height: 16,
-          color: Colors.white,
+  Widget _circleIcon(String asset, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white),
+        ),
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 16,
+          child: SvgPicture.asset(
+            asset,
+            width: 16,
+            height: 16,
+            color: Colors.white,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildInstructorCard(Instructor data, int index) {
+  Widget _buildInstructorCard(InstructorModel data, int index) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Stack(
@@ -41,9 +47,16 @@ class TopInstructorsPage extends GetView<InstructorController> {
               width: double.infinity,
               color: Colors.grey.shade100,
               child: Image.network(
-                data.imageUrl,
+                Globals.fixLocalhostUrl(data.image ?? ""),
                 fit: BoxFit.cover,
                 height: 200,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 200,
+                    color: Colors.grey.shade100,
+                    child: const Center(child: Icon(Icons.error)),
+                  );
+                },
               ),
             ),
           ),
@@ -66,11 +79,17 @@ class TopInstructorsPage extends GetView<InstructorController> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               const Spacer(),
-                              _circleIcon(AppImages.facebook),
+                              _circleIcon(AppImages.facebook, () {
+                                SocialLinkHelper.openLink(data.facebook);
+                              }),
                               Gap(4),
-                              _circleIcon(AppImages.twitter),
+                              _circleIcon(AppImages.twitter, () {
+                                SocialLinkHelper.openLink(data.twitter);
+                              }),
                               Gap(4),
-                              _circleIcon(AppImages.linkedin),
+                              _circleIcon(AppImages.linkedin, () {
+                                SocialLinkHelper.openLink(data.linkedin);
+                              }),
                               const Spacer(),
                             ],
                           ),
@@ -130,7 +149,7 @@ class TopInstructorsPage extends GetView<InstructorController> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    data.role,
+                    data.designation!,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.grey[800],
@@ -167,20 +186,22 @@ class TopInstructorsPage extends GetView<InstructorController> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Obx(
-          () => GridView.builder(
-            itemCount: controller.instructors.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.15,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              mainAxisExtent: 200,
-            ),
-            itemBuilder: (context, i) => InstructorAnimationWrapper(
-              index: i,
-              child: _buildInstructorCard(controller.instructors[i], i),
-            ),
-          ),
+          () => controller.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : GridView.builder(
+                  itemCount: controller.instructors.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.15,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    mainAxisExtent: 200,
+                  ),
+                  itemBuilder: (context, i) => InstructorAnimationWrapper(
+                    index: i,
+                    child: _buildInstructorCard(controller.instructors[i], i),
+                  ),
+                ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/blog/controllers/blog_details_controller.dart';
 
 class BlogDetailsPage extends GetView<BlogDetailsController> {
@@ -62,7 +63,7 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
               () => ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  controller.imageUrl.value,
+                  Globals.fixLocalhostUrl(controller.imageUrl.value),
                   height: 150,
                   width: double.infinity,
                   fit: BoxFit.cover,

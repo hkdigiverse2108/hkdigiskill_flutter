@@ -41,4 +41,19 @@ class StorageService {
   }
 
   void clearAll() => _box.erase();
+
+  // Save any key-value pair to storage
+  Future<void> saveToStorage(String key, dynamic value) async {
+    await _box.write(key, value);
+  }
+
+  // Read any key-value pair from storage
+  dynamic readFromStorage(String key) {
+    return _box.read(key);
+  }
+
+  // Remove any key-value pair from storage
+  void removeFromStorage(String key) {
+    _box.remove(key);
+  }
 }

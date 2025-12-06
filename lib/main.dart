@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/payment_service.dart';
+import 'package:hkdigiskill/app/services/settings_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
@@ -29,19 +30,27 @@ void main() async {
   });
 
   runApp(
-    DevicePreview(
-      enabled: !bool.fromEnvironment('dart.vm.product'),
-      // Enable only in debug/dev
-      builder: (context) => const MyApp(),
-    ),
+    MyApp(),
+    // DevicePreview(
+    //   enabled: !bool.fromEnvironment('dart.vm.product'),
+    //   // Enable only in debug/dev
+    //   builder: (context) => const MyApp(),
+    // ),
   );
 }
 
 Future<void> initializeServices() async {
-  // Initialize your services here
+  // Initialize core services
   Get.put(ApiService());
   Get.put(RazorpayService());
   Get.put(NetworkController());
+  Get.put(StorageService());
+
+  // Initialize Settings Service and load settings
+  final settingsService = Get.put(SettingsService());
+  await settingsService.initializeSettings();
+
+  // Handle user session
   final isLoggedIn = StorageService().isLoggedIn;
   if (isLoggedIn) {
     Globals.userData = UserModel.fromJson(StorageService().userData);
@@ -53,21 +62,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      useInheritedMediaQuery: true,
-      // <--- important for DevicePreview
-      builder: DevicePreview.appBuilder,
-      // <--- important for DevicePreview
-      locale: DevicePreview.locale(context),
-      // <--- use preview's selected locale
-      title: AppConstants.appName,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      themeMode: ThemeMode.system,
-      initialRoute: Routes.splash,
-      getPages: AppPages.pages,
-      defaultTransition: Transition.fade,
-      fallbackLocale: const Locale('en', 'US'),
+    return SafeArea(
+      top: false,
+      child: GetMaterialApp(
+        useInheritedMediaQuery: true,
+        builder: DevicePreview.appBuilder,
+        locale: DevicePreview.locale(context),
+        title: AppConstants.appName,
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        themeMode: ThemeMode.system,
+        initialRoute: Routes.splash,
+        getPages: AppPages.pages,
+        defaultTransition: Transition.fade,
+        fallbackLocale: const Locale('en', 'US'),
+      ),
     );
   }
 }

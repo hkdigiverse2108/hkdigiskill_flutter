@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/category/controllers/category_controller.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 import 'package:hkdigiskill/shared/widgets/top_bar.dart';
@@ -80,7 +81,7 @@ class Category extends GetView<CategoryController> {
         return AnimatedCategoryItem(
           item: controller.items[index],
           index: index,
-          onTap: () => controller.onItemTap(id: ""),
+          onTap: () => controller.onItemTap(id: controller.items[index].id),
         );
       },
       separatorBuilder: (context, index) {
@@ -264,14 +265,39 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFDE7E3),
+                  color: const Color(0xFFFDE7E3),
                   borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.item.image ?? ""),
-                    fit: BoxFit.cover,
-                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.network(
+                  Globals.fixLocalhostUrl(widget.item.image ?? ""),
+                  fit: BoxFit.cover,
+
+                  // 🔥 ERROR HANDLER
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: const Color(0xFFFDE7E3),
+                      alignment: Alignment.center,
+                      child: const Icon(
+                        Icons.broken_image_rounded,
+                        color: Colors.grey,
+                        size: 32,
+                      ),
+                    );
+                  },
+
+                  // 🔥 OPTIONAL LOADING PLACEHOLDER
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: const Color(0xFFFDE7E3),
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    );
+                  },
                 ),
               ),
+
               SizedBox(width: 16),
               // Details
               Expanded(
@@ -293,7 +319,7 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                     SizedBox(height: 4),
                     Text(
                       // todo: add count
-                      "10 Courses",
+                      "${widget.item.courseCount} Courses",
                       // widget.item.count,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,

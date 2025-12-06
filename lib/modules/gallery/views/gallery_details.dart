@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.dart';
 
 class GalleryDetailsPage extends StatelessWidget {
@@ -53,7 +54,10 @@ class GalleryDetailsPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover),
+        image: DecorationImage(
+          image: NetworkImage(Globals.fixLocalhostUrl(image)),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

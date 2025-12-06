@@ -81,13 +81,15 @@ class Pay extends GetView<PayController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Ultimate Design and Art Course",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
+                              Obx(
+                                () => Text(
+                                  controller.title.value,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 12),
@@ -242,9 +244,9 @@ class Pay extends GetView<PayController> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                  onPressed: () => controller.proceedToCheckout(
-                                    context: context,
-                                  ),
+                                  onPressed: () => controller.isLoading.value
+                                      ? null
+                                      : controller.purchase(context: context),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         AppColors.primary ?? Colors.teal,

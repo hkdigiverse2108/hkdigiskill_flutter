@@ -9,11 +9,10 @@ class ContactUsPage extends GetView<ContactUsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar with back arrow and centered title
       appBar: AppBar(
         title: Text(
           'Contact Us',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,
             fontSize: 18,
@@ -26,72 +25,83 @@ class ContactUsPage extends GetView<ContactUsController> {
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: WidgetAnimationWrapper(
           index: 0,
           animationTypes: [AnimationType.fade],
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 400),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Definitions of Privacy Policy
-              Text(
-                'Definitions of Privacy Policy',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+              _contactTile(
+                title: "Email",
+                subtitle: "Send us an email",
+                icon: Icons.email_outlined,
+                onTap: () => controller.openEmail(),
               ),
-              SizedBox(height: 8),
-              Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip commodo consequat. ...',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                  height: 1.5,
-                ),
+              const SizedBox(height: 14),
+
+              _contactTile(
+                title: "WhatsApp",
+                subtitle: "Chat with us",
+                icon: Icons.chat_bubble_outline,
+                onTap: () => controller.openWhatsApp(),
               ),
-              SizedBox(height: 24),
-              // General Information
-              Text(
-                'General information',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ...',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat.',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(height: 24),
-              // Availability of Website
-              Text(
-                'Availability of Website',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
+              const SizedBox(height: 14),
+
+              _contactTile(
+                title: "Support",
+                subtitle: "Visit support page",
+                icon: Icons.support_agent_outlined,
+                onTap: () => controller.openSupport(),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _contactTile({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 28, color: Colors.black),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+          ],
         ),
       ),
     );

@@ -29,7 +29,7 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    if (token!.isNotEmpty) headers['Authorization'] = token;
+    if (token!.isNotEmpty) headers['authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
     try {
@@ -48,13 +48,26 @@ class ApiService extends GetxService {
   }) async {
     if (!await hasConnection()) throw Exception("No internet connection");
 
+    headers ??= {};
+    final token = _getToken();
+    if (token!.isNotEmpty) headers['authorization'] = token;
+
     Uri url = Uri.parse('$baseUrl$endpoint');
+
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json', ...?headers},
-        body: jsonEncode(body),
-      );
+      final response = await http
+          .post(
+            url,
+            headers: {'Content-Type': 'application/json', ...?headers},
+            body: jsonEncode(body),
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              throw Exception("Request timeout");
+            },
+          );
+
       return _handleResponse(response);
     } catch (e) {
       throw Exception("POST error: $e");
@@ -90,9 +103,19 @@ class ApiService extends GetxService {
   }) async {
     if (!await hasConnection()) throw Exception("No internet connection");
 
+    headers ??= {};
+    final token = _getToken();
+    if (token!.isNotEmpty) headers['authorization'] = token;
+
+    // IMPORTANT: Flutter MultipartRequest does NOT set these by default
+    headers['Accept'] = 'application/json';
+
     var url = Uri.parse('$baseUrl$endpoint');
     var request = http.MultipartRequest('POST', url);
-    if (headers != null) request.headers.addAll(headers);
+
+    // ADD HEADERS HERE (you forgot this)
+    request.headers.addAll(headers); // <-- FIX
+
     if (fields != null) request.fields.addAll(fields);
     if (files != null) request.files.addAll(files);
 
@@ -112,6 +135,10 @@ class ApiService extends GetxService {
     Map<String, String>? headers,
   }) async {
     if (!await hasConnection()) throw Exception("No internet connection");
+
+    headers ??= {};
+    final token = _getToken();
+    if (token!.isNotEmpty) headers['authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
     try {

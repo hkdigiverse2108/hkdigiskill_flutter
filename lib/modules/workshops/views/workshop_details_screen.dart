@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/workshops/controllers/workshop_details_controller.dart';
+import 'package:hkdigiskill/shared/widgets/expendable_description.dart';
 import 'package:hkdigiskill/shared/widgets/faq_section.dart';
 import 'package:hkdigiskill/modules/courses/widgets/header_badge.dart';
 import 'package:hkdigiskill/routes/routes.dart';
@@ -27,7 +29,14 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.6),
             ),
-            child: Image.asset(AppImages.courseImage, fit: BoxFit.cover),
+            child: (controller.workshop.value.image == null)
+                ? Image.asset(AppImages.courseImage, fit: BoxFit.cover)
+                : Image.network(
+                    Globals.fixLocalhostUrl(controller.workshop.value.image!),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Image.asset(AppImages.courseImage, fit: BoxFit.cover),
+                  ),
           ),
           Column(
             children: [
@@ -64,10 +73,16 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                               // Pill badges
                               Row(
                                 children: [
-                                  HeaderBadge(label: "Hindi", icon: null),
+                                  HeaderBadge(
+                                    label:
+                                        controller.workshop.value.language ??
+                                        "English",
+                                    icon: null,
+                                  ),
                                   SizedBox(width: 8),
                                   HeaderBadge(
-                                    label: "03 Hours",
+                                    label:
+                                        "${controller.workshop.value.duration}",
                                     icon: Icons.access_time_rounded,
                                   ),
                                 ],
@@ -108,7 +123,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                               children: [
                                 // Title
                                 Text(
-                                  "Ultimate Design and Art Workshop",
+                                  "${controller.workshop.value.title}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 24,
@@ -120,16 +135,6 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                                 // Subtitle + Rating Row
                                 Row(
                                   children: [
-                                    Text(
-                                      "Art Workshop",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                    Spacer(),
                                     Icon(
                                       Icons.star,
                                       color: Color(0xFFFFB800),
@@ -137,7 +142,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                                     ),
                                     SizedBox(width: 3),
                                     Text(
-                                      "4.8",
+                                      "${controller.workshop.value.averageRating}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -146,7 +151,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                                     ),
                                     SizedBox(width: 2),
                                     Text(
-                                      "(2k Reviews)",
+                                      "(${controller.workshop.value.totalRated} Reviews)",
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 13,
@@ -190,7 +195,9 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                         ),
                       ),
                       Obx(
-                        () => controller.isPurchased.value
+                        () => (controller.isLoading.value)
+                            ? SizedBox.shrink()
+                            : controller.workshop.value.isUnlocked!
                             ? SizedBox.shrink()
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -205,7 +212,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                                     Row(
                                       children: [
                                         Text(
-                                          "₹ 300",
+                                          "₹ ${controller.workshop.value.price}",
                                           style: TextStyle(
                                             color: AppColors.textLight,
                                             fontSize: 22,
@@ -215,7 +222,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          "₹ 300",
+                                          "₹ ${controller.workshop.value.mrpPrice}",
                                           style: TextStyle(
                                             color: AppColors.error,
                                             decoration:
@@ -245,8 +252,9 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                                         Get.toNamed(
                                           Routes.pay,
                                           arguments: {
-                                            'id': "",
-                                            'isCourse': true,
+                                            'workshop':
+                                                controller.workshop.value,
+                                            'isCourse': false,
                                           },
                                         );
                                       },
@@ -309,18 +317,10 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
 
   Widget _aboutSection() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Description
-        Text(
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-          "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer...",
-          style: TextStyle(
-            color: Colors.grey[900],
-            fontSize: 15,
-            height: 1.4,
-            fontFamily: 'Poppins',
-          ),
-        ),
+        ExpandableDescription(text: controller.workshop.value.about ?? ""),
         SizedBox(height: 18),
         // Download Brochures Button
         OutlinedButton(
@@ -332,7 +332,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
             side: BorderSide(color: Color(0xFF264A73), width: 2),
           ),
           onPressed: () {
-            // Download brochures handler
+            controller.downloadBrochure();
           },
           child: Center(
             child: Text(
@@ -354,118 +354,122 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...controller.curriculum.map((section) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 14),
-              Text(
-                section.sectionTitle,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  fontFamily: 'Poppins',
-                ),
+        if (controller.isCurriculumLoading.value)
+          Center(child: CircularProgressIndicator()),
+        if (!controller.isCurriculumLoading.value &&
+            controller.curriculumList.isEmpty)
+          Center(child: Text("No curriculum found.")),
+        ...controller.curriculumList.map((section) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(22),
               ),
-              ...List.generate(section.lessons.length, (index) {
-                final lesson = section.lessons[index];
-                return Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    child: ListTile(
-                      onTap: () {
+              child: ListTile(
+                onTap: !controller.workshop.value.isUnlocked!
+                    ? () {
+                        Get.snackbar(
+                          "Verification Required",
+                          "You have to unlock this workshop to watch the video",
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      }
+                    : () {
                         Get.toNamed(
                           Routes.video,
                           arguments: {
-                            'videoId': null,
-                            'title': null,
-                            'description': null,
-                            'duration': null,
+                            'videoId': section.videoLink,
+                            'title': section.title,
+                            'description': section.description,
+                            'duration': section.duration,
+                            'attachment': section.attachment,
                           },
                         );
                       },
-                      leading: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(lesson.icon, color: Colors.white, size: 30),
+                leading: Container(
+                  width: 100,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        Globals.fixLocalhostUrl(section.thumbnail),
                       ),
-                      title: Text(
-                        lesson.title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.black,
-                        ),
-                      ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Upload By: ${lesson.uploadedDate}",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              if (!controller.isPurchased.value)
-                                Icon(
-                                  Icons.lock,
-                                  color: AppColors.primary,
-                                  size: 20,
-                                ),
-                              Text(
-                                lesson.duration,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  color: AppColors.primary,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                );
-              }),
-            ],
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.grey,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  section.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Upload By: ${Globals.formatDate(section.createdAt!)}",
+                      style: TextStyle(fontSize: 11, fontFamily: 'Poppins'),
+                    ),
+                    Row(
+                      children: [
+                        if (!controller.workshop.value.isUnlocked!)
+                          Icon(Icons.lock, color: AppColors.primary, size: 20),
+                        Text(
+                          section.duration,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: AppColors.primary,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
 
   Widget _reviewsSection() {
-    return Column(
-      children: [
-        testimonialCard(
-          imageUrl: "https://picsum.photos/200/300",
-          date: "May 8, 2020",
-          title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus iaculis maecenas....etc.",
-        ),
-        testimonialCard(
-          imageUrl: "https://picsum.photos/200/300",
-          date: "May 8, 2020",
-          title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus iaculis maecenas....etc.",
-        ),
-      ],
+    return Obx(
+      () => controller.isTestimonialsLoading.value
+          ? Center(child: CircularProgressIndicator())
+          : controller.testimonials.isEmpty
+          ? Center(child: Text("No Testimonial found."))
+          : Column(
+              children: [
+                ...controller.testimonials.map((testimonial) {
+                  return testimonialCard(
+                    imageUrl: Globals.fixLocalhostUrl(testimonial.image),
+                    date: Globals.formatDate(testimonial.createdAt),
+                    title: testimonial.name,
+                    description: testimonial.description,
+                  );
+                }),
+              ],
+            ),
     );
   }
 }

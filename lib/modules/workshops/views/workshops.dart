@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/workshop/workshop_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/workshops/controllers/workshops_controller.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 import 'package:hkdigiskill/shared/widgets/top_bar.dart';
 
 class Workshops extends GetView<WorkshopsController> {
@@ -27,7 +31,9 @@ class Workshops extends GetView<WorkshopsController> {
               Obx(
                 () => controller.isLoading.value
                     ? _buildShimmerList()
-                    : _buildWorkshopList(),
+                    : controller.myWorkshops.isEmpty
+                    ? NoDataWidget(message: "You Are Not Enrolled In Any")
+                    : _buildMyWorkshopList(),
               ),
               const Gap(20),
               _buildMoreHeader(),
@@ -35,6 +41,8 @@ class Workshops extends GetView<WorkshopsController> {
               Obx(
                 () => controller.isLoading.value
                     ? _buildShimmerList()
+                    : (controller.workshops.isEmpty)
+                    ? NoDataWidget()
                     : _buildWorkshopList(),
               ),
             ],
@@ -69,7 +77,7 @@ class Workshops extends GetView<WorkshopsController> {
         ),
         GestureDetector(
           onTap: () {
-            // Get.toNamed(Routes.viewAllCourse);
+            Get.toNamed(Routes.viewAllWorkshops);
           }, // handle view all
           child: Text(
             "view all",
@@ -299,7 +307,24 @@ class Workshops extends GetView<WorkshopsController> {
         return AnimatedWorkshopCard(
           workshop: controller.workshops[index],
           index: index,
-          onTap: () => controller.onWorkshopTap(index),
+          onTap: () => controller.onWorkshopTap(controller.workshops[index]),
+        );
+      },
+    );
+  }
+
+  Widget _buildMyWorkshopList() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: controller.myWorkshops.length,
+      separatorBuilder: (context, index) => const Gap(10),
+      itemBuilder: (context, index) {
+        return AnimatedWorkshopCard(
+          workshop: controller.myWorkshops[index].workshop!,
+          index: index,
+          onTap: () =>
+              controller.onWorkshopTap(controller.myWorkshops[index].workshop!),
         );
       },
     );
@@ -307,7 +332,7 @@ class Workshops extends GetView<WorkshopsController> {
 }
 
 class AnimatedWorkshopCard extends StatefulWidget {
-  final Map<String, dynamic> workshop;
+  final WorkshopModel workshop;
   final int index;
   final VoidCallback onTap;
 
@@ -415,7 +440,9 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                      image: NetworkImage(widget.workshop["image"]),
+                      image: NetworkImage(
+                        Globals.fixLocalhostUrl(widget.workshop.image!),
+                      ),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -441,7 +468,7 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
                         ),
                         const SizedBox(width: 3),
                         Text(
-                          widget.workshop["duration"],
+                          widget.workshop.duration ?? "",
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
@@ -464,10 +491,10 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    widget.workshop["title"],
+                    widget.workshop.title!,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -481,17 +508,20 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
                   // ratings
                   Row(
                     children: [
-                      ...List.generate(
-                        5,
-                        (index) => Icon(
+                      ...List.generate(5, (index) {
+                        final rating = widget.workshop.averageRating ?? 0;
+
+                        return Icon(
                           Icons.star,
                           size: 15,
-                          color: Color(0xFFFFB800),
-                        ),
-                      ),
+                          color: index < rating
+                              ? const Color(0xFFFFB800)
+                              : Colors.grey[300],
+                        );
+                      }),
                       const SizedBox(width: 4),
                       Text(
-                        "(${widget.workshop["rating"]}/ ${widget.workshop["ratingCount"]} Ratings)",
+                        "(${widget.workshop.averageRating}/ ${widget.workshop.totalRated} Ratings)",
                         style: TextStyle(
                           color: AppColors.caption,
                           fontSize: 12,
@@ -504,7 +534,7 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
                   const SizedBox(height: 4),
                   // price
                   Text(
-                    widget.workshop["price"],
+                    "₹ ${widget.workshop.price.toString()}",
                     style: TextStyle(
                       color: Color(0xFFF05E54),
                       fontSize: 14,
@@ -523,7 +553,7 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "${widget.workshop["lessons"]} Lessons",
+                        "${widget.workshop.workshopCurriculum?.length ?? 0} Chapters",
                         style: TextStyle(
                           color: AppColors.caption,
                           fontSize: 11,
@@ -531,32 +561,32 @@ class _AnimatedWorkshopCardState extends State<AnimatedWorkshopCard>
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const Gap(4),
-                      Text(
-                        '|',
-                        style: TextStyle(
-                          color: AppColors.caption,
-                          fontSize: 11,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Gap(4),
-                      Icon(
-                        Icons.person_outline_rounded,
-                        color: AppColors.caption,
-                        size: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        "${widget.workshop["students"]} Students",
-                        style: TextStyle(
-                          color: AppColors.caption,
-                          fontSize: 11,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      // const Gap(4),
+                      // Text(
+                      //   '|',
+                      //   style: TextStyle(
+                      //     color: AppColors.caption,
+                      //     fontSize: 11,
+                      //     fontFamily: 'Poppins',
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
+                      // const Gap(4),
+                      // Icon(
+                      //   Icons.person_outline_rounded,
+                      //   color: AppColors.caption,
+                      //   size: 14,
+                      // ),
+                      // const SizedBox(width: 4),
+                      // Text(
+                      //   "${widget.workshop.workshopCurriculum?.length ?? 0} Students",
+                      //   style: TextStyle(
+                      //     color: AppColors.caption,
+                      //     fontSize: 11,
+                      //     fontFamily: 'Poppins',
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],

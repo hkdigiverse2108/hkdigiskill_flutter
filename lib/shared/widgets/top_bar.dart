@@ -30,7 +30,7 @@ class TopBar extends StatelessWidget {
             child: CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(
-                'https://randomuser.me/api/portraits/women/32.jpg',
+                Globals.fixLocalhostUrl(Globals.userData?.profilePhoto ?? ""),
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 
 Widget testimonialCard({
   required String imageUrl,
@@ -24,7 +25,11 @@ Widget testimonialCard({
             topLeft: Radius.circular(16),
             bottomLeft: Radius.circular(16),
           ),
-          child: Image.network(imageUrl, width: 120, fit: BoxFit.cover),
+          child: Image.network(
+            Globals.fixLocalhostUrl(imageUrl),
+            width: 120,
+            fit: BoxFit.cover,
+          ),
         ),
         // Text content section
         Expanded(

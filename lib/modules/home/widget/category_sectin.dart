@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class CategoryGridSection extends StatelessWidget {
@@ -54,97 +56,151 @@ class CategoryGridSection extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         // Grid of category cards
-        GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemCount: categories.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.7,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            mainAxisExtent: 90,
-          ),
-          itemBuilder: (context, index) {
-            final item = categories[index];
-            // Use an animation when loaded, shimmer otherwise
-            return CustomShimmer(
-              isLoading: isLoading,
-              child: AnimatedScale(
-                scale: 1.0,
-                duration: Duration(milliseconds: 400 + index * 80),
-                // Staggered by index
-                curve: Curves.easeOutBack,
-                child: AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: Duration(milliseconds: 400 + index * 80),
-                  curve: Curves.easeIn,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF64748B).withOpacity(0.2),
-                          blurRadius: 6,
+        (categories.isEmpty && isLoading)
+            ? GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemCount: 4,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.7,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  mainAxisExtent: 90,
+                ),
+                itemBuilder: (context, index) {
+                  // Use an animation when loaded, shimmer otherwise
+                  return CustomShimmer(
+                    isLoading: isLoading,
+                    child: AnimatedScale(
+                      scale: 1.0,
+                      duration: Duration(milliseconds: 400 + index * 80),
+                      // Staggered by index
+                      curve: Curves.easeOutBack,
+                      child: AnimatedOpacity(
+                        opacity: 1.0,
+                        duration: Duration(milliseconds: 400 + index * 80),
+                        curve: Curves.easeIn,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF64748B).withOpacity(0.2),
+                                blurRadius: 6,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 18.0,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  // todo: add count
-                                  text: '0 ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18,
-                                    fontFamily: 'Poppins',
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "Courses",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                    fontFamily: 'Poppins',
-                                    color: AppColors.primary,
-                                  ),
+                    ),
+                  );
+                },
+              )
+            : GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemCount: categories.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.7,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  mainAxisExtent: 90,
+                ),
+                itemBuilder: (context, index) {
+                  final item = categories[index];
+                  // Use an animation when loaded, shimmer otherwise
+                  return CustomShimmer(
+                    isLoading: isLoading,
+                    child: AnimatedScale(
+                      scale: 1.0,
+                      duration: Duration(milliseconds: 400 + index * 80),
+                      // Staggered by index
+                      curve: Curves.easeOutBack,
+                      child: AnimatedOpacity(
+                        opacity: 1.0,
+                        duration: Duration(milliseconds: 400 + index * 80),
+                        curve: Curves.easeIn,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              Routes.courses,
+                              arguments: {
+                                'isFilterMode': true,
+                                'categoryId': item.id,
+                              },
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xFF64748B).withOpacity(0.2),
+                                  blurRadius: 6,
                                 ),
                               ],
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            item.name,
-                            style: TextStyle(
-                              color: AppColors.caption,
-                              fontFamily: 'Poppins',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 18.0,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          // todo: add count
+                                          text: '${item.courseCount} ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18,
+                                            fontFamily: 'Poppins',
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: "Courses",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                            fontFamily: 'Poppins',
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    item.name,
+                                    style: TextStyle(
+                                      color: AppColors.caption,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ],
     );
   }

@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/profile/controllers/profile_controller.dart';
 import 'package:hkdigiskill/modules/profile/widgets/custom_menu_section.dart';
 import 'package:hkdigiskill/routes/routes.dart';
@@ -51,7 +52,9 @@ class ProfileMenuPage extends GetView<ProfileController> {
                     child: CircleAvatar(
                       radius: 20,
                       backgroundImage: NetworkImage(
-                        "https://randomuser.me/api/portraits/women/32.jpg",
+                        Globals.fixLocalhostUrl(
+                          Globals.userData?.profilePhoto ?? "",
+                        ),
                       ),
                     ),
                   ),
@@ -61,7 +64,7 @@ class ProfileMenuPage extends GetView<ProfileController> {
                   style: TextStyle(color: Colors.blueGrey, fontSize: 14),
                 ),
                 subtitle: Text(
-                  "Marvin McKinney",
+                  Globals.userData?.fullName ?? "",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 trailing: InkWell(
@@ -150,7 +153,9 @@ class ProfileMenuPage extends GetView<ProfileController> {
                     () {
                       Get.toNamed(Routes.privacyPolicy);
                     },
-                    () {},
+                    () {
+                      controller.newsLetter();
+                    },
                   ],
                   expanded: controller.expandedSection.value == 1,
                   onHeaderTap: () => controller.toggleSection(1),

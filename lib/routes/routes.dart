@@ -60,6 +60,7 @@ import 'package:hkdigiskill/modules/splash/views/splash_screen.dart';
 import 'package:hkdigiskill/modules/testimonials/views/testimonials.dart';
 import 'package:hkdigiskill/modules/workshops/bindings/workshop_details_binding.dart';
 import 'package:hkdigiskill/modules/workshops/bindings/workshops_binding.dart';
+import 'package:hkdigiskill/modules/workshops/views/view_all_workshops.dart';
 import 'package:hkdigiskill/modules/workshops/views/workshop_details_screen.dart';
 import 'package:hkdigiskill/modules/workshops/views/workshops.dart';
 import 'package:hkdigiskill/shared/views/pay.dart';
@@ -100,6 +101,7 @@ class Routes {
   static const String chatMassage = '/chat-massage';
   static const String notification = '/notification';
   static const String viewAllCourse = '/view-all-course';
+  static const String viewAllWorkshops = '/view-all-workshops';
   // Add more routes as needed
 }
 
@@ -232,6 +234,11 @@ class AppPages {
       name: Routes.workshops,
       page: () => const Workshops(),
       binding: WorkshopsBinding(),
+    ),
+    GetPage(
+      name: Routes.viewAllWorkshops,
+      page: () => const ViewAllWorkshops(),
+      // binding: ViewAllWorkshopsBinding(),
     ),
     GetPage(
       name: Routes.workshopDetails,

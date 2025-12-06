@@ -44,23 +44,31 @@ class ForgotPassword extends GetView<ForgotPasswordController> {
               ),
             ),
             Gap(10),
-            InkWell(
-              onTap: controller.onSendOtpTap,
-              child: Container(
-                height: 56,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Send OTP",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
+            Obx(
+              () => InkWell(
+                onTap: controller.isLoading.value
+                    ? () {}
+                    : controller.onSendOtpTap,
+                child: Container(
+                  height: 56,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: controller.isLoading.value
+                        ? Colors.grey[400]
+                        : AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      controller.isLoading.value ? "Loading..." : "Send OTP",
+                      style: TextStyle(
+                        color: controller.isLoading.value
+                            ? Colors.grey[700]
+                            : Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
                 ),

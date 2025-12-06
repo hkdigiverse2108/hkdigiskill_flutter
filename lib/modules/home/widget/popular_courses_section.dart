@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/courses/course_models.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
 
 class PopularCoursesSection extends StatelessWidget {
-  final List<Map<String, dynamic>> courses;
+  final List<CourseModel> courses;
   final VoidCallback onViewAll;
   final bool isLoading;
 
@@ -100,7 +102,7 @@ class PopularCoursesSection extends StatelessWidget {
                                     topRight: Radius.circular(15),
                                   ),
                                   child: Image.network(
-                                    course["image"],
+                                    Globals.fixLocalhostUrl(course.image ?? ""),
                                     width: width - 40,
                                     height: 145,
                                     fit: BoxFit.cover,
@@ -134,7 +136,9 @@ class PopularCoursesSection extends StatelessWidget {
                                         ),
                                         SizedBox(width: 3),
                                         Text(
-                                          course["duration"],
+                                          Globals.convertMinutesToHoursDays(
+                                            course.duration ?? 0,
+                                          ),
                                           style: TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w600,
@@ -152,7 +156,7 @@ class PopularCoursesSection extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(14, 18, 14, 3),
                               child: Text(
-                                course["title"],
+                                course.name ?? "",
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
@@ -168,17 +172,24 @@ class PopularCoursesSection extends StatelessWidget {
                               ),
                               child: Row(
                                 children: [
-                                  ...List.generate(
-                                    5,
-                                    (index) => Icon(
+                                  // ⭐ Dynamic stars (filled based on rating)
+                                  ...List.generate(5, (index) {
+                                    final rating = course.averageRating ?? 0;
+
+                                    return Icon(
                                       Icons.star,
                                       size: 18,
-                                      color: Color(0xFFFFB800),
-                                    ),
-                                  ),
-                                  SizedBox(width: 6),
+                                      color: index < rating
+                                          ? const Color(0xFFFFB800)
+                                          : Colors.grey[300],
+                                    );
+                                  }),
+
+                                  const SizedBox(width: 6),
+
+                                  // ⭐ Rating Text
                                   Text(
-                                    "(${course["rating"]}/ ${course["ratingCount"]} Ratings)",
+                                    "(${(course.averageRating ?? 0).toStringAsFixed(1)} / ${(course.totalRated ?? 0)} Ratings)",
                                     style: TextStyle(
                                       color: AppColors.caption,
                                       fontSize: 13,
@@ -197,7 +208,7 @@ class PopularCoursesSection extends StatelessWidget {
                                 bottom: 2,
                               ),
                               child: Text(
-                                course["price"],
+                                course.price == null ? "" : "₹${course.price}",
                                 style: TextStyle(
                                   color: AppColors.primary,
                                   fontSize: 16,
@@ -217,7 +228,7 @@ class PopularCoursesSection extends StatelessWidget {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${course["lessons"]} Lessons",
+                                    "${course.totalLesson} Lessons",
                                     style: TextStyle(
                                       color: AppColors.caption,
                                       fontSize: 13,
@@ -235,7 +246,7 @@ class PopularCoursesSection extends StatelessWidget {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    "${course["students"]} Students",
+                                    "${course.enrolledLearners} Students",
                                     style: TextStyle(
                                       color: AppColors.caption,
                                       fontSize: 13,

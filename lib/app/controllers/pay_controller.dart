@@ -1,24 +1,60 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/courses/course_models.dart';
+import 'package:hkdigiskill/app/models/workshop/workshop_model.dart';
+import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/payment_service.dart';
+import 'package:hkdigiskill/app/services/storage_service.dart';
+import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
+import 'package:hkdigiskill/modules/courses/controllers/courses_controller.dart';
+import 'package:hkdigiskill/modules/workshops/controllers/workshops_controller.dart';
 import 'package:hkdigiskill/shared/widgets/purchase_result_dialog.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PayController extends GetxController {
   // Coupon Text Controller
   final TextEditingController couponController = TextEditingController();
 
+  final workshopController = Get.put(WorkshopsController());
+  final courseController = Get.put(CoursesController());
+
   // Amount values
   RxDouble discount = 0.0.obs;
   RxDouble couponValue = 0.0.obs;
-  RxDouble subtotal = 300.0.obs;
-  RxDouble total = 300.0.obs;
+  RxDouble subtotal = 0.0.obs;
+  RxDouble total = 0.0.obs;
+
+  RxBool isCourse = false.obs;
+
+  RxString title = "".obs;
 
   RxBool isSuccess = false.obs;
   RxBool isLoading = false.obs;
   RxBool isProcessing = false.obs;
 
-  // Example valid coupon(s)
-  final String validCoupon = "SAVE250";
+  CourseModel? course;
+  WorkshopModel? workshop;
+
+  @override
+  void onInit() {
+    var data = Get.arguments;
+    isCourse.value = data['isCourse'];
+    if (data['isCourse'] == true) {
+      course = data['course'];
+      title.value = course!.name!;
+      subtotal.value = course!.price!.toDouble();
+      total.value = course!.price!.toDouble();
+    } else {
+      workshop = data['workshop'];
+      title.value = workshop!.title!;
+      subtotal.value = workshop!.price!.toDouble();
+      total.value = workshop!.price!.toDouble();
+    }
+    super.onInit();
+  }
 
   @override
   void onClose() {
@@ -26,80 +62,155 @@ class PayController extends GetxController {
     super.onClose();
   }
 
-  void applyCoupon() {
+  void applyCoupon() async {
     final code = couponController.text.trim();
+
     if (code.isEmpty) {
       Get.snackbar("Error", "Please enter a coupon code");
       return;
     }
-    if (code == validCoupon) {
-      discount.value = -0.00; // Assuming discount is negative for display
-      couponValue.value = -250.00;
-      subtotal.value = 49.0; // You can adjust these based on business logic
-      total.value =
-          49.0; // Should total = subtotal + discount + couponValue? Adjust as needed
-      Get.snackbar("Success", "Coupon applied!");
-    } else {
-      discount.value = 0;
-      couponValue.value = 0;
-      subtotal.value = 49.0;
-      total.value = 49.0;
-      Get.snackbar(
-        "Invalid Coupon",
-        "The coupon code you entered is not valid.",
+
+    try {
+      final apiResponse = await ApiService.to.post(
+        ApiConstants.couponEndpoint,
+        headers: {"authorization": "${Globals.userData!.token}"},
+        body: {"code": code, "amount": total.value},
       );
+
+      if (apiResponse['status'] == 200) {
+        final data = apiResponse['data'];
+
+        discount.value = (data['discountAmount'] ?? 0).toDouble();
+        total.value = (data['finalAmount'] ?? total.value).toDouble();
+
+        /// optional if you want coupon object
+        couponValue.value = (data['coupon']?['discountValue'] ?? 0).toDouble();
+
+        Get.snackbar(
+          "Coupon Applied",
+          "${data['discountAmount']} discount applied!",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar("Invalid", apiResponse['message']);
+      }
+    } catch (e) {
+      log("Apply coupon error: $e");
+      Get.snackbar("Error", "Failed to apply coupon");
     }
   }
 
-  void proceedToCheckout({required BuildContext context}) {
+  void proceedToCheckout({String? transactionId}) {
     if (isSuccess.value) {
-      showDialog(
-        context: context,
-        builder: (_) => PurchaseResultDialog(
+      Get.dialog(
+        PurchaseResultDialog(
           status: PurchaseStatus.success,
-          transactionId: "#wbdjwdbjd",
-          onClose: () => Get.back(),
-          onRetry: () {},
+          transactionId: transactionId ?? '',
+          onClose: () {
+            Get.back(); // Close dialog
+            Get.back(); // Go back to previous screen
+          },
+          onRetry: () {}, // No need to retry on success
         ),
+        barrierDismissible: false,
       );
     } else {
-      showDialog(
-        context: context,
-        builder: (_) => PurchaseResultDialog(
+      Get.dialog(
+        PurchaseResultDialog(
           status: PurchaseStatus.failure,
-          onClose: () {},
+          onClose: () => Get.back(), // Just close the dialog
           onRetry: () {
-            Get.back();
-            onRetry(context: context);
+            Get.back(); // Close dialog
           },
         ),
+        barrierDismissible: false,
       );
     }
   }
 
   void purchase({required BuildContext context}) {
     isLoading.value = true;
-    isProcessing.value = true;
-    initiatePayment();
-    Future.delayed(const Duration(seconds: 2), () {
-      isLoading.value = false;
-      isProcessing.value = false;
-      isSuccess.value = true;
-      proceedToCheckout(context: context);
-    });
-  }
 
-  void initiatePayment() {
-    // Use subtotal/total from this controller
     RazorpayService.to.openCheckout(
       amount: total.value,
       name: "HK Digiskill",
-      description: "Course Purchase",
-      email: "user@example.com",
-      // from user data/storage
-      contact: "1234567890", // from user data/storage
-      // extraOptions: {...} if needed
+      description: title.value,
+      email: Globals.userData!.email,
+      contact: Globals.userData!.phoneNumber ?? "0000000000",
+
+      onSuccessCallback: (success) {
+        handlePaymentSuccess(success, context);
+      },
+
+      onErrorCallback: (error) {
+        handlePaymentError(error, context);
+      },
     );
+  }
+
+  void handlePaymentSuccess(
+    PaymentSuccessResponse response,
+    BuildContext context,
+  ) async {
+    isSuccess.value = true;
+    isLoading.value = false;
+
+    Get.back();
+
+    try {
+      if (isCourse.value) {
+        final body = {
+          "courseId": course!.id,
+          "razorpayOrderId": "a",
+          "razorpayPaymentId": response.paymentId,
+        };
+
+        log(body.toString());
+        final apiResponse = await ApiService.to.post(
+          ApiConstants.coursePaymentEndpoint,
+          body: {
+            "courseId": course!.id,
+            "razorpayOrderId": response.paymentId,
+            "razorpayPaymentId": response.paymentId,
+          },
+        );
+
+        if (apiResponse['status'] == 200) {
+          courseController.onInit();
+          proceedToCheckout(transactionId: response.paymentId.toString());
+        }
+      } else {
+        final apiResponse = await ApiService.to.post(
+          ApiConstants.workshopPaymentEndpoint,
+          headers: {"authorization": "${Globals.userData!.token}"},
+          body: {
+            "workshopId": workshop!.id,
+            "amount": total.value,
+            "paymentId": response.paymentId,
+            "paymentMethod": "razorpay",
+            "finalAmount": total.value,
+          },
+        );
+
+        if (apiResponse['status'] == 200) {
+          workshopController.onInit();
+          proceedToCheckout(transactionId: response.paymentId.toString());
+        }
+      }
+    } catch (e) {
+      log("Error : $e");
+      Get.snackbar("Error", "Payment verified but API failed.");
+    }
+  }
+
+  void handlePaymentError(
+    PaymentFailureResponse response,
+    BuildContext context,
+  ) {
+    isLoading.value = false;
+    isSuccess.value = false;
+    Get.back(); // Close the payment dialog
+    proceedToCheckout(); // Show error dialog
   }
 
   void onRetry({required BuildContext context}) {

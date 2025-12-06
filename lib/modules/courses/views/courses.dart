@@ -6,6 +6,7 @@ import 'package:hkdigiskill/modules/courses/controllers/courses_controller.dart'
 import 'package:hkdigiskill/modules/courses/widgets/animated_course_card.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 import 'package:hkdigiskill/shared/widgets/top_bar.dart';
 
 class Courses extends GetView<CoursesController> {
@@ -40,15 +41,37 @@ class Courses extends GetView<CoursesController> {
             children: [
               if (!controller.isFilterMode.value) TopBar(),
               (controller.isFilterMode.value) ? Gap(10) : Gap(20),
-              Text(
-                "Enrolled Course",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  fontFamily: 'Poppins',
-                ),
+              Obx(
+                () => (controller.isLoading.value)
+                    ? Text(
+                        "Enrolled Course",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          fontFamily: 'Poppins',
+                        ),
+                      )
+                    : (controller.myCourse.isEmpty)
+                    ? SizedBox.shrink()
+                    : Text(
+                        "Enrolled Course",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
               ),
-              Gap(20),
+              Obx(
+                () =>
+                    (controller.isLoading.value || controller.myCourse.isEmpty)
+                    ? Center(
+                        child: controller.isLoading.value
+                            ? Gap(20)
+                            : SizedBox.shrink(),
+                      )
+                    : Gap(20),
+              ),
               Obx(
                 () => (controller.isLoading.value)
                     ? ListView.separated(
@@ -58,11 +81,13 @@ class Courses extends GetView<CoursesController> {
                         separatorBuilder: (context, index) => const Gap(10),
                         itemCount: 3,
                       )
+                    : (controller.myCourse.isEmpty)
+                    ? SizedBox.shrink()
                     : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          final course = controller.courses[index];
+                          final course = controller.myCourse[index];
                           return AnimatedCourseCard(
                             course: course,
                             index: index,
@@ -75,10 +100,19 @@ class Courses extends GetView<CoursesController> {
                           );
                         },
                         separatorBuilder: (context, index) => const Gap(10),
-                        itemCount: controller.courses.length,
+                        itemCount: controller.myCourse.length,
                       ),
               ),
-              Gap(20),
+              Obx(
+                () =>
+                    (controller.isLoading.value || controller.myCourse.isEmpty)
+                    ? Center(
+                        child: controller.isLoading.value
+                            ? Gap(20)
+                            : SizedBox.shrink(),
+                      )
+                    : Gap(20),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -118,6 +152,8 @@ class Courses extends GetView<CoursesController> {
                         separatorBuilder: (context, index) => const Gap(10),
                         itemCount: 3,
                       )
+                    : (controller.courses.isEmpty)
+                    ? NoDataWidget()
                     : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

@@ -12,6 +12,9 @@ import 'package:hkdigiskill/routes/routes.dart';
 class SignInController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  var isPasswordVisible = false.obs;
+
   var isLoading = false.obs;
   final storage = StorageService();
 
@@ -61,7 +64,6 @@ class SignInController extends GetxController {
         }
 
         storage.token = res['data']['token'];
-        storage.isLoggedIn = true;
 
         Get.toNamed(
           Routes.otpVerify,

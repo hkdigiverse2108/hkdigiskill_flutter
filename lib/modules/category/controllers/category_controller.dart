@@ -12,7 +12,7 @@ class CategoryController extends GetxController {
   final networkController = Get.find<NetworkController>();
   RxBool isLoading = true.obs;
 
-  final List<CategoriesModel> items = <CategoriesModel>[].obs;
+  final items = <CategoriesModel>[].obs;
 
   @override
   void onInit() {
@@ -21,25 +21,34 @@ class CategoryController extends GetxController {
   }
 
   void onItemTap({required id}) {
-    Get.toNamed(Routes.courses, arguments: true);
+    Get.toNamed(
+      Routes.courses,
+      arguments: {'isFilterMode': true, 'categoryId': id},
+    );
   }
 
   void onCategories() async {
     try {
       isLoading.value = true;
+
       if (!networkController.isConnected.value) {
         return;
       }
+
+      // Step 1: Fetch all categories
       final response = await ApiService.to.get(ApiConstants.categoriesEndpoint);
 
-      log(response.toString());
       if (response['status'] == 200) {
         final List<dynamic> data =
             response['data']['course_category_data'] ?? [];
 
+        // Parse categories
         items.assignAll(
           data.map((item) => CategoriesModel.fromJson(item)).toList(),
         );
+
+        // Step 2: For each category, fetch course count
+        await _loadCourseCountForCategories();
       }
     } catch (e) {
       log(e.toString());
@@ -51,5 +60,22 @@ class CategoryController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> _loadCourseCountForCategories() async {
+    for (int i = 0; i < items.length; i++) {
+      final category = items[i];
+
+      final res = await ApiService.to.get(
+        '${ApiConstants.getCourseFromCategory}${category.id}',
+      );
+
+      if (res['status'] == 200) {
+        final total = res['data']['totalData'] ?? 0;
+        category.courseCount = total;
+      }
+    }
+
+    items.refresh();
   }
 }

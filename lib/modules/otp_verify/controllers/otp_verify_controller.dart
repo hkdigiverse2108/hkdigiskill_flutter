@@ -3,9 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/models/user/user_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 
 class OtpVerifyController extends GetxController {
@@ -26,7 +28,7 @@ class OtpVerifyController extends GetxController {
   void onInit() {
     isLogin.value = Get.arguments['isLogin'] ?? false;
     email = Get.arguments['email'];
-    startCountDown();
+    isLogin.value ? onResendOtp() : null;
     super.onInit();
   }
 
@@ -56,7 +58,7 @@ class OtpVerifyController extends GetxController {
         body: {"email": email},
       );
       if (res['status'] == 200) {
-        startCountDown();
+        resetCountDown();
       } else {
         Get.snackbar(
           'Error',
@@ -108,11 +110,32 @@ class OtpVerifyController extends GetxController {
 
       if (res['status'] == 200) {
         if (isLogin.value) {
-          storage.isLoggedIn = true;
-          Get.offAllNamed(Routes.navigation);
+          getUserData(res['data']['_id']);
         } else {
-          Get.toNamed(Routes.newPassword);
+          Get.toNamed(Routes.newPassword, arguments: {'email': email});
         }
+      }
+    } catch (e) {
+      log(e.toString());
+      Get.snackbar('Error', 'Invalid OTP', snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void onVerifyTap() {
+    validateForm();
+  }
+
+  Future<void> getUserData(String id) async {
+    try {
+      isLoading.value = true;
+      final res = await ApiService.to.get(ApiConstants.getUserEndpoint + id);
+      if (res['status'] == 200) {
+        storage.userData = res['data'];
+        Globals.userData = UserModel.fromJson(res['data']);
+        storage.isLoggedIn = true;
+        Get.offAllNamed(Routes.navigation);
       }
     } catch (e) {
       log(e.toString());
@@ -124,9 +147,5 @@ class OtpVerifyController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-  void onVerifyTap() {
-    validateForm();
   }
 }

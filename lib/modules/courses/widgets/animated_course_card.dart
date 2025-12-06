@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hkdigiskill/app/models/courses/course_models.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 
 class AnimatedCourseCard extends StatefulWidget {
-  final Map<String, dynamic> course;
+  final CourseModel course;
   final int index;
   final VoidCallback onTap;
 
@@ -111,7 +113,9 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                      image: NetworkImage(widget.course["image"]),
+                      image: NetworkImage(
+                        Globals.fixLocalhostUrl(widget.course.image ?? ""),
+                      ),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -137,7 +141,9 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                         ),
                         const SizedBox(width: 3),
                         Text(
-                          widget.course["duration"],
+                          Globals.convertMinutesToHoursDays(
+                            widget.course.duration ?? 0,
+                          ),
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
@@ -160,10 +166,10 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    widget.course["title"],
+                    widget.course.name ?? "",
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -177,17 +183,24 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                   // ratings
                   Row(
                     children: [
-                      ...List.generate(
-                        5,
-                        (index) => Icon(
+                      // ⭐ Dynamic stars (filled based on rating)
+                      ...List.generate(5, (index) {
+                        final rating = widget.course.averageRating ?? 0;
+
+                        return Icon(
                           Icons.star,
                           size: 15,
-                          color: Color(0xFFFFB800),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
+                          color: index < rating
+                              ? const Color(0xFFFFB800)
+                              : Colors.grey[300],
+                        );
+                      }),
+
+                      // const SizedBox(width: 6),
+
+                      // ⭐ Rating Text
                       Text(
-                        "(${widget.course["rating"]}/ ${widget.course["ratingCount"]} Ratings)",
+                        "(${(widget.course.averageRating ?? 0).toStringAsFixed(1)} / ${(widget.course.totalRated ?? 0)} Ratings)",
                         style: TextStyle(
                           color: AppColors.caption,
                           fontSize: 12,
@@ -200,7 +213,7 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                   const SizedBox(height: 4),
                   // price
                   Text(
-                    widget.course["price"],
+                    widget.course.price.toString(),
                     style: TextStyle(
                       color: Color(0xFFF05E54),
                       fontSize: 14,
@@ -219,7 +232,7 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "${widget.course["lessons"]} Lessons",
+                        "${widget.course.totalLesson} Lessons",
                         style: TextStyle(
                           color: AppColors.caption,
                           fontSize: 11,
@@ -245,7 +258,7 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        "${widget.course["students"]} Students",
+                        "${widget.course.enrolledLearners} Students",
                         style: TextStyle(
                           color: AppColors.caption,
                           fontSize: 11,

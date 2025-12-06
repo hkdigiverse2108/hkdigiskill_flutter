@@ -26,7 +26,7 @@ class BlogsPage extends GetView<BlogController> {
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                   child: Image.network(
-                    data.coverImage,
+                    Globals.fixLocalhostUrl(data.coverImage),
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: 180,

@@ -99,7 +99,7 @@ class OtpVerify extends GetView<OtpVerifyController> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                       : TextButton(
-                          onPressed: controller.resetCountDown,
+                          onPressed: controller.onResendOtp,
                           style: TextButton.styleFrom(padding: EdgeInsets.zero),
                           child: Text(
                             "Resend",

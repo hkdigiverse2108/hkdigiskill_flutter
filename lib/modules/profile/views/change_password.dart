@@ -41,24 +41,28 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
               obscureText: true,
             ),
             Gap(24),
-            InkWell(
-              onTap: controller.updatePassword,
-              child: Container(
-                height: 56,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Update Password",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                    ),
+            Obx(
+              () => InkWell(
+                onTap: controller.updatePassword,
+                child: Container(
+                  height: 56,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Update Password",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                   ),
                 ),
               ),
