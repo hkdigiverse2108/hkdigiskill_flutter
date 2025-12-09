@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/routes/routes.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
@@ -32,6 +34,7 @@ class ApiService extends GetxService {
     if (token!.isNotEmpty) headers['authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
+
     try {
       final response = await http.get(url, headers: headers);
       return _handleResponse(response);
@@ -70,7 +73,8 @@ class ApiService extends GetxService {
 
       return _handleResponse(response);
     } catch (e) {
-      throw Exception("POST error: $e");
+      log(e.toString());
+      throw Exception("Something went wrong");
     }
   }
 
@@ -149,7 +153,7 @@ class ApiService extends GetxService {
       );
       return _handleResponse(response);
     } catch (e) {
-      throw Exception("DELETE error: $e");
+      throw Exception("Please try again later");
     }
   }
 
@@ -157,10 +161,13 @@ class ApiService extends GetxService {
   dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return jsonDecode(response.body);
+    } else if (response.statusCode == 410) {
+      StorageService().clearAll();
+      Get.offAllNamed(Routes.login);
+      throw Exception("Token expired");
     } else {
-      throw Exception(
-        'API Error: ${response.statusCode} ${response.reasonPhrase}',
-      );
+      final body = jsonDecode(response.body);
+      throw Exception(body['message']);
     }
   }
 

@@ -14,7 +14,7 @@ class Courses extends GetView<CoursesController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.onInit();
+    final controller = Get.put(CoursesController());
     return Scaffold(
       appBar: (controller.isFilterMode.value)
           ? AppBar(
@@ -153,7 +153,7 @@ class Courses extends GetView<CoursesController> {
                         itemCount: 3,
                       )
                     : (controller.courses.isEmpty)
-                    ? NoDataWidget()
+                    ? NoDataWidget(message: "No Courses Found")
                     : ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

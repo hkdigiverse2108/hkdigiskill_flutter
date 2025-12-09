@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class AboutUsController extends GetxController {
   final isLoading = false.obs;
@@ -23,7 +24,7 @@ class AboutUsController extends GetxController {
         content.value = response['data']['aboutUs'];
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      AppSnackbar.error("Try After Some Time..");
     } finally {
       isLoading.value = false;
     }

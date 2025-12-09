@@ -32,28 +32,31 @@ class ProfileMenuPage extends GetView<ProfileController> {
               index: 0,
               child: ListTile(
                 contentPadding: EdgeInsets.all(0),
-                leading: Container(
-                  height: 58,
-                  width: 58,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.caption.withOpacity(0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.all(4),
-                  child: Hero(
-                    tag: 'profile-avatar',
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(
-                        Globals.fixLocalhostUrl(
-                          Globals.userData?.profilePhoto ?? "",
+                leading: Obx(
+                  () => Container(
+                    height: 58,
+                    width: 58,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.caption.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.all(4),
+                    child: Hero(
+                      tag: 'profile-avatar',
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
+                          Globals.fixLocalhostUrl(
+                            Globals.userData.value?.profilePhoto ??
+                                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                          ),
                         ),
                       ),
                     ),
@@ -63,9 +66,11 @@ class ProfileMenuPage extends GetView<ProfileController> {
                   "Welcome",
                   style: TextStyle(color: Colors.blueGrey, fontSize: 14),
                 ),
-                subtitle: Text(
-                  Globals.userData?.fullName ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                subtitle: Obx(
+                  () => Text(
+                    Globals.userData.value?.fullName ?? "",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                 ),
                 trailing: InkWell(
                   onTap: () => controller.showSignOutDialog(context),
@@ -133,6 +138,7 @@ class ProfileMenuPage extends GetView<ProfileController> {
                 child: CustomMenuSection(
                   title: "Company & Legal Info",
                   icon: Icons.verified_user,
+                  iconNotShow: [4],
                   items: [
                     "About Us",
                     "Contact Us",
@@ -196,7 +202,9 @@ class ProfileMenuPage extends GetView<ProfileController> {
               animationTypes: [AnimationType.slide, AnimationType.fade],
               index: 4,
               child: GestureDetector(
-                onTap: () {}, // Help callback
+                onTap: () {
+                  Get.toNamed(Routes.contactUs);
+                }, // Help callback
                 child: Container(
                   height: 85,
                   decoration: BoxDecoration(

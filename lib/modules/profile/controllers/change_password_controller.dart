@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class ChangePasswordController extends GetxController {
   var isLoading = false.obs;
@@ -11,32 +14,40 @@ class ChangePasswordController extends GetxController {
   final newPassCtrl = TextEditingController();
   final confirmPassCtrl = TextEditingController();
 
+  // Track obscure text state for each password field
+  final obscureOldPassword = true.obs;
+  final obscureNewPassword = true.obs;
+  final obscureConfirmPassword = true.obs;
+
+  // Toggle methods for each password field
+  void toggleOldPasswordVisibility() => obscureOldPassword.toggle();
+
+  void toggleNewPasswordVisibility() => obscureNewPassword.toggle();
+
+  void toggleConfirmPasswordVisibility() => obscureConfirmPassword.toggle();
+
   void updatePassword() async {
     try {
       isLoading.value = true;
       bool verify = validate();
       if (verify) {
         final res = await ApiService.to.post(
-          ApiConstants.ratingEndpoint,
+          ApiConstants.updatePassword,
           body: {
-            "email": Globals.userData!.email,
+            "email": Globals.userData.value!.email,
             "oldPassword": oldPassCtrl.text,
-            "newPassword": newPassCtrl.text,
+            "newPassword": confirmPassCtrl.text,
           },
         );
-        if (res.statusCode == 200) {
-          Get.snackbar(
-            "Success",
-            "Password updated successfully",
-            snackPosition: SnackPosition.BOTTOM,
-          );
+        log(res.toString());
+        if (res['status'] == 200) {
+          Get.back();
           clear();
+          AppSnackbar.success("Password updated successfully");
         }
-      } else {
-        return;
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.error("Something went wrong");
     } finally {
       isLoading.value = false;
     }
@@ -44,32 +55,16 @@ class ChangePasswordController extends GetxController {
 
   bool validate() {
     if (oldPassCtrl.text.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Old password is required",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Old password is required");
       return false;
     } else if (newPassCtrl.text.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "New password is required",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("New password is required");
       return false;
     } else if (confirmPassCtrl.text.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Confirm password is required",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Confirm password is required");
       return false;
     } else if (newPassCtrl.text != confirmPassCtrl.text) {
-      Get.snackbar(
-        "Error",
-        "New password and confirm password do not match",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Passwords do not match");
       return false;
     } else {
       return true;

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/instructor/instructor_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class InstructorController extends GetxController {
   var instructors = <InstructorModel>[].obs;
@@ -38,11 +39,7 @@ class InstructorController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isLoading.value = false;
     }

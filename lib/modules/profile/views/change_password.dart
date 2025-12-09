@@ -25,20 +25,53 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
         padding: const EdgeInsets.all(22),
         child: ListView(
           children: [
-            AppTextField(
-              label: 'Old Password',
-              controller: controller.oldPassCtrl,
-              obscureText: true,
+            Obx(
+              () => AppTextField(
+                label: 'Old Password',
+                controller: controller.oldPassCtrl,
+                obscureText: controller.obscureOldPassword.value,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.obscureOldPassword.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.textLight.withOpacity(0.6),
+                  ),
+                  onPressed: controller.toggleOldPasswordVisibility,
+                ),
+              ),
             ),
-            AppTextField(
-              label: 'New Password',
-              controller: controller.newPassCtrl,
-              obscureText: true,
+            Obx(
+              () => AppTextField(
+                label: 'New Password',
+                controller: controller.newPassCtrl,
+                obscureText: controller.obscureNewPassword.value,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.obscureNewPassword.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.textLight.withOpacity(0.6),
+                  ),
+                  onPressed: controller.toggleNewPasswordVisibility,
+                ),
+              ),
             ),
-            AppTextField(
-              label: 'Confirm Password',
-              controller: controller.confirmPassCtrl,
-              obscureText: true,
+            Obx(
+              () => AppTextField(
+                label: 'Confirm Password',
+                controller: controller.confirmPassCtrl,
+                obscureText: controller.obscureConfirmPassword.value,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.obscureConfirmPassword.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.textLight.withOpacity(0.6),
+                  ),
+                  onPressed: controller.toggleConfirmPasswordVisibility,
+                ),
+              ),
             ),
             Gap(24),
             Obx(

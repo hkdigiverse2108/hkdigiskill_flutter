@@ -13,6 +13,7 @@ import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class HomeController extends GetxController {
   final networkController = Get.find<NetworkController>();
@@ -95,11 +96,7 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isBennersLoading.value = false;
     }
@@ -131,11 +128,7 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isCategoriesLoading.value = false;
     }
@@ -185,11 +178,7 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isCoursesLoading.value = false;
     }
@@ -236,11 +225,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+
+      AppSnackbar.error("Something went wrong");
     } finally {
       isBlogsLoading.value = false;
     }
@@ -270,14 +256,6 @@ class HomeController extends GetxController {
   void onBlogViewAll() {
     if (networkController.isConnected.value) {
       Get.toNamed(Routes.blogs);
-    }
-    if (isLoading.value) {
-    } else {
-      Get.snackbar(
-        'Error',
-        'Please check your internet connection',
-        snackPosition: SnackPosition.BOTTOM,
-      );
     }
   }
 

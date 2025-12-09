@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +21,8 @@ import 'app/utils/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Initialize GetX storage
   await GetStorage.init();
@@ -53,7 +56,7 @@ Future<void> initializeServices() async {
   // Handle user session
   final isLoggedIn = StorageService().isLoggedIn;
   if (isLoggedIn) {
-    Globals.userData = UserModel.fromJson(StorageService().userData);
+    Globals.userData.value = UserModel.fromJson(StorageService().userData);
   }
 }
 

@@ -8,6 +8,7 @@ class CustomMenuSection extends StatefulWidget {
   final List<VoidCallback?> actions;
   final bool expanded;
   final VoidCallback onHeaderTap;
+  final List<int>? iconNotShow;
 
   const CustomMenuSection({
     super.key,
@@ -17,6 +18,7 @@ class CustomMenuSection extends StatefulWidget {
     required this.actions,
     required this.expanded,
     required this.onHeaderTap,
+    this.iconNotShow,
   });
 
   @override
@@ -122,6 +124,7 @@ class _CustomMenuSectionState extends State<CustomMenuSection>
                   text: widget.items[index],
                   onTap: widget.actions[index],
                   animation: animation,
+                  showIcon: widget.iconNotShow?.contains(index) ?? false,
                 );
               }),
             ),
@@ -137,13 +140,15 @@ class AnimatedMenuItem extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;
   final Animation<double> animation;
+  final bool? showIcon;
 
   const AnimatedMenuItem({
     required this.text,
     required this.onTap,
     required this.animation,
-    Key? key,
-  }) : super(key: key);
+    this.showIcon,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +177,12 @@ class AnimatedMenuItem extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              const Icon(Icons.chevron_right, color: Colors.black38, size: 22),
+              if (showIcon != true)
+                const Icon(
+                  Icons.chevron_right,
+                  color: Colors.black38,
+                  size: 22,
+                ),
             ],
           ),
         ),

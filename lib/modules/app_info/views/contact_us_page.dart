@@ -49,9 +49,9 @@ class ContactUsPage extends GetView<ContactUsController> {
               const SizedBox(height: 14),
 
               _contactTile(
-                title: "Support",
-                subtitle: "Visit support page",
-                icon: Icons.support_agent_outlined,
+                title: "Visit Website",
+                subtitle: "www.Hkdigiskill.com",
+                icon: Icons.web,
                 onTap: () => controller.openSupport(),
               ),
             ],

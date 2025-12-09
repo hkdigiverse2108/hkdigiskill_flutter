@@ -4,7 +4,9 @@ import 'dart:async'; // Add this
 
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ImageCardCarousel extends StatefulWidget {
   final List<BannerModel> imageList;
@@ -59,63 +61,79 @@ class _ImageCardCarouselState extends State<ImageCardCarousel> {
           // Image card
           ClipRRect(
             borderRadius: BorderRadius.circular(18),
-            child: Container(
-              color: AppColors.backgroundLight,
-              width: double.infinity,
-              height: 180,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: widget.imageList.length,
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: Container(
-                        color: AppColors.backgroundLight,
-                        width: double.infinity,
-                        height: 180,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 600),
-                          transitionBuilder:
-                              (Widget child, Animation<double> animation) {
-                                // Fade + slight slide transition
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(0.06, 0),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    child: child,
+            child: GestureDetector(
+              onTap: () async {
+                final Uri url = Uri.parse(widget.imageList[_currentPage].link);
+                try {
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    // Handle failure (e.g., show snackbar)
+                    throw 'Could not launch Url.';
+                  }
+                } catch (e) {
+                  AppSnackbar.error("Could not launch $url");
+                }
+              },
+              child: Container(
+                color: AppColors.backgroundLight,
+                width: double.infinity,
+                height: 180,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: widget.imageList.length,
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Container(
+                          color: AppColors.backgroundLight,
+                          width: double.infinity,
+                          height: 180,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 600),
+                            transitionBuilder:
+                                (Widget child, Animation<double> animation) {
+                                  // Fade + slight slide transition
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: SlideTransition(
+                                      position: Tween<Offset>(
+                                        begin: const Offset(0.06, 0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                            child: Image.network(
+                              Globals.fixLocalhostUrl(
+                                widget.imageList[index].images[0],
+                              ),
+                              key: ValueKey(widget.imageList[index].id),
+                              // Unique key for change detection
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              loadingBuilder: (context, child, progress) =>
+                                  progress == null
+                                  ? child
+                                  : Center(child: CircularProgressIndicator()),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    width: double.infinity,
+                                    height: 180,
+                                    color: Colors.grey,
                                   ),
-                                );
-                              },
-                          child: Image.network(
-                            Globals.fixLocalhostUrl(
-                              widget.imageList[index].images[0],
                             ),
-                            key: ValueKey(widget.imageList[index].id),
-                            // Unique key for change detection
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            loadingBuilder: (context, child, progress) =>
-                                progress == null
-                                ? child
-                                : Center(child: CircularProgressIndicator()),
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                                  width: double.infinity,
-                                  height: 180,
-                                  color: Colors.grey,
-                                ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),

@@ -9,6 +9,7 @@ import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class OtpVerifyController extends GetxController {
   var isLoading = false.obs;
@@ -60,19 +61,11 @@ class OtpVerifyController extends GetxController {
       if (res['status'] == 200) {
         resetCountDown();
       } else {
-        Get.snackbar(
-          'Error',
-          res['message'],
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        AppSnackbar.error(res['message']);
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isResendLoading.value = false;
     }
@@ -90,11 +83,7 @@ class OtpVerifyController extends GetxController {
 
   void validateForm() {
     if (otpController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("OTP is required", title: "Validation Error");
     } else {
       callApi();
     }
@@ -117,7 +106,7 @@ class OtpVerifyController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar('Error', 'Invalid OTP', snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.error("Something went wrong, Check your OTP");
     } finally {
       isLoading.value = false;
     }
@@ -133,17 +122,13 @@ class OtpVerifyController extends GetxController {
       final res = await ApiService.to.get(ApiConstants.getUserEndpoint + id);
       if (res['status'] == 200) {
         storage.userData = res['data'];
-        Globals.userData = UserModel.fromJson(res['data']);
+        Globals.userData.value = UserModel.fromJson(res['data']);
         storage.isLoggedIn = true;
         Get.offAllNamed(Routes.navigation);
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isLoading.value = false;
     }

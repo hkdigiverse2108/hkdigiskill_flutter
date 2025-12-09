@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/blog/controllers/blog_details_controller.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class BlogDetailsPage extends GetView<BlogDetailsController> {
   const BlogDetailsPage({super.key});
@@ -12,9 +13,17 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Blog Name',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+        title: Obx(
+          () => Text(
+            controller.title.value,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+              height: 1.3,
+              color: Colors.black,
+            ),
+            maxLines: 3,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -26,18 +35,6 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title & meta
-            Obx(
-              () => Text(
-                controller.title.value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 19,
-                  height: 1.3,
-                ),
-                maxLines: 3,
-              ),
-            ),
             const SizedBox(height: 9),
             Row(
               children: [
@@ -190,7 +187,7 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
                 SizedBox(width: 12),
                 Icon(Icons.apple, color: AppColors.primary),
                 SizedBox(width: 12),
-                Icon(Icons.facebook, color: AppColors.primary),
+                Icon(PhosphorIconsFill.twitterLogo, color: AppColors.primary),
               ],
             ),
             SizedBox(height: 15),

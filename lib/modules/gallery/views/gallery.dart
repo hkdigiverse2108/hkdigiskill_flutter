@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/gallery/controllers/gallery_controller.dart';
 import 'package:hkdigiskill/modules/gallery/views/gallery_details.dart';
 import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.dart';
@@ -108,7 +109,7 @@ class GalleryPage extends GetView<GalleryController> {
         borderRadius: BorderRadius.circular(6),
         image: DecorationImage(
           image: NetworkImage(
-            image,
+            Globals.fixLocalhostUrl(image),
             // "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
           ),
           fit: BoxFit.cover,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/testimonial/testimonial_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class TestimonialsController extends GetxController {
   var isLoading = false.obs;
@@ -30,11 +31,7 @@ class TestimonialsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isLoading.value = false;
     }

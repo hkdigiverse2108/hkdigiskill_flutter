@@ -8,6 +8,7 @@ import 'package:hkdigiskill/app/models/workshop/workshop_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WorkshopDetailsController extends GetxController {
@@ -66,11 +67,7 @@ class WorkshopDetailsController extends GetxController {
       }
     } catch (e) {
       log('Error fetching workshop details: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to load workshop details',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error('Failed to load workshop details');
     } finally {
       isLoading.value = false;
     }
@@ -92,11 +89,7 @@ class WorkshopDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load FAQs',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Failed to load faqs, please try again");
     } finally {
       isFaqsLoading.value = false;
     }
@@ -120,11 +113,7 @@ class WorkshopDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load testimonials',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Failed to load testimonials, please try again");
     } finally {
       isTestimonialsLoading.value = false;
     }
@@ -150,11 +139,7 @@ class WorkshopDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load curriculum',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Failed to load curriculum, please try again");
     } finally {
       isCurriculumLoading.value = false;
     }
@@ -177,11 +162,7 @@ class WorkshopDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load workshop rating',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Failed to load rating, please try again");
     } finally {
       isWorkshopRatingLoading.value = false;
     }
@@ -191,7 +172,7 @@ class WorkshopDetailsController extends GetxController {
     final url = Globals.fixLocalhostUrl(workshop.value.pdfAttach ?? "");
 
     if (url.isEmpty) {
-      Get.snackbar("Error", "No brochure available");
+      AppSnackbar.error("No brochure available");
       return;
     }
 
@@ -199,7 +180,7 @@ class WorkshopDetailsController extends GetxController {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      Get.snackbar("Error", "Unable to open brochure");
+      AppSnackbar.error("Can't open brochure");
     }
   }
 }

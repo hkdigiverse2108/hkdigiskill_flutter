@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class SignInController extends GetxController {
   TextEditingController emailController = TextEditingController();
@@ -23,6 +25,8 @@ class SignInController extends GetxController {
   }
 
   void onSignUpTap() {
+    emailController.clear();
+    passwordController.clear();
     Get.toNamed(Routes.register);
   }
 
@@ -32,11 +36,7 @@ class SignInController extends GetxController {
 
   void validateForm() {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error('Please fill in all fields', title: 'Validation Error');
     } else {
       callApi();
     }
@@ -55,11 +55,10 @@ class SignInController extends GetxController {
 
       if (res['status'] == 200) {
         if (res['data']['role'] == "admin") {
-          Get.snackbar(
-            'Admin Login detected!',
+          AppSnackbar.error(
             "You can not login with admin credentials in the user section",
-            snackPosition: SnackPosition.BOTTOM,
           );
+          isLoading.value = false;
           return;
         }
 
@@ -69,21 +68,14 @@ class SignInController extends GetxController {
           Routes.otpVerify,
           arguments: {'isLogin': true, 'email': emailController.text},
         );
-        Get.snackbar(
-          'OTP',
-          'OTP sent to ${emailController.text}',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        AppSnackbar.info('OTP sent to ${emailController.text}');
       } else {
-        Get.snackbar(
-          'Error',
-          res['message'],
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        AppSnackbar.error(res['message']);
       }
+    } on SocketException {
+      AppSnackbar.error("No internet connection", title: "Network Error");
     } catch (e) {
-      log(e.toString());
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      AppSnackbar.error("Login failed, please try again");
     } finally {
       isLoading.value = false;
     }

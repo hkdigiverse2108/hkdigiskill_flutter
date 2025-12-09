@@ -7,6 +7,7 @@ import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class CategoryController extends GetxController {
   final networkController = Get.find<NetworkController>();
@@ -52,11 +53,7 @@ class CategoryController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isLoading.value = false;
     }

@@ -36,20 +36,20 @@ class ViewAllWorkshops extends GetView<WorkshopsController> {
                   itemCount: 3,
                 )
               : controller.workshops.isEmpty
-                  ? const NoDataWidget()
-                  : ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.workshops.length,
-                      separatorBuilder: (context, index) => const Gap(10),
-                      itemBuilder: (context, index) {
-                        final workshop = controller.workshops[index];
-                        return WorkshopCard(
-                          workshop: workshop,
-                          onTap: () => controller.onWorkshopTap(workshop),
-                        );
-                      },
-                    ),
+              ? const NoDataWidget(message: "No Workshops Found")
+              : ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.workshops.length,
+                  separatorBuilder: (context, index) => const Gap(10),
+                  itemBuilder: (context, index) {
+                    final workshop = controller.workshops[index];
+                    return WorkshopCard(
+                      workshop: workshop,
+                      onTap: () => controller.onWorkshopTap(workshop),
+                    );
+                  },
+                ),
         ),
       ),
     );

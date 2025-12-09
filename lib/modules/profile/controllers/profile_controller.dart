@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:flutter/material.dart';
@@ -53,15 +54,16 @@ class ProfileController extends GetxController {
   }
 
   final nameCtrl = TextEditingController(
-    text: Globals.userData?.fullName ?? "",
+    text: Globals.userData.value?.fullName ?? "",
   );
   final phoneCtrl = TextEditingController(
-    text: Globals.userData?.phoneNumber ?? "",
+    text: Globals.userData.value?.phoneNumber ?? "",
   );
   final designationCtrl = TextEditingController(
-    text: Globals.userData?.designation ?? "",
+    text: Globals.userData.value?.designation ?? "",
   );
-  final Rx<String?> photoUrl = Globals.userData?.profilePhoto.obs ?? "".obs;
+  final Rx<String?> photoUrl =
+      Globals.userData.value?.profilePhoto.obs ?? "".obs;
 
   Future<void> pickImage({bool camera = false}) async {
     final XFile? image = await picker.pickImage(
@@ -75,6 +77,18 @@ class ProfileController extends GetxController {
 
       // Replace network photo with picked file
       photoUrl.value = null;
+    }
+  }
+
+  void validateFields() {
+    if (nameCtrl.text.isEmpty) {
+      AppSnackbar.error("Name is required");
+    } else if (phoneCtrl.text.isEmpty) {
+      AppSnackbar.error("Phone number is required");
+    } else if (designationCtrl.text.isEmpty) {
+      AppSnackbar.error("Designation is required");
+    } else {
+      updateProfile();
     }
   }
 
@@ -97,17 +111,18 @@ class ProfileController extends GetxController {
       final res = await ApiService.to.post(
         ApiConstants.updateProfileEndpoint,
         body: {
-          'userId': Globals.userData!.id,
+          'userId': Globals.userData.value!.id,
           'fullName': nameCtrl.text,
           'phoneNumber': phoneCtrl.text,
           'designation': designationCtrl.text,
+          'profilePhoto': photoUrl.value,
         },
       );
 
       log(res.toString());
       if (res['status'] == 200) {
+        await getUserProfile();
         Get.snackbar('Success', res['message']);
-        getUserProfile();
       } else {
         Get.snackbar('Error', res['message']);
       }
@@ -219,16 +234,16 @@ class ProfileController extends GetxController {
     }
   }
 
-  void getUserProfile() async {
+  Future<void> getUserProfile() async {
     try {
       isLoading.value = true;
       final res = await ApiService.to.get(
-        ApiConstants.getUserEndpoint + Globals.userData!.id,
+        ApiConstants.getUserEndpoint + Globals.userData.value!.id,
       );
 
       if (res['status'] == 200) {
         storage.userData = res['data'];
-        Globals.userData = UserModel.fromJson(res['data']);
+        Globals.userData.value = UserModel.fromJson(res['data']);
         Get.back();
       }
       log(res.toString());
@@ -376,10 +391,10 @@ class ProfileController extends GetxController {
                 if (res['status'] == 200) {
                   storage.clearUserData();
                   Get.offAllNamed(Routes.login);
-                  Get.snackbar('Success', res['message']);
+                  AppSnackbar.success(res['message']);
                 } else {
                   Get.back();
-                  Get.snackbar('Error', res['message']);
+                  AppSnackbar.error("Can't delete account");
                 }
               } catch (e) {
                 log(e.toString());
@@ -408,16 +423,17 @@ class ProfileController extends GetxController {
     try {
       final res = await ApiService.to.post(
         ApiConstants.newsLetterEndpoint,
-        body: {'email': Globals.userData!.email},
+        body: {'email': Globals.userData.value!.email},
       );
 
       if (res['status'] == 200) {
-        Get.snackbar('Success', res['message']);
+        AppSnackbar.success(res['message']);
       } else {
-        Get.snackbar('Error', res['message']);
+        AppSnackbar.info(res['message']);
       }
     } catch (e) {
       log(e.toString());
+      AppSnackbar.info("Your Email is already Added");
     }
   }
 }

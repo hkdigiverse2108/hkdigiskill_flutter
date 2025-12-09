@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsController extends GetxController {
@@ -9,10 +10,15 @@ class ContactUsController extends GetxController {
     final subject = Uri.encodeComponent("Support request");
     final body = Uri.encodeComponent("Hello, I need help with...");
 
+    if (email.isEmpty) {
+      AppSnackbar.error("Could not open email, Use Any Other Method");
+      return;
+    }
+
     final url = Uri.parse("mailto:$email?subject=$subject&body=$body");
 
     if (!await launchUrl(url)) {
-      Get.snackbar("Error", "Could not open email");
+      AppSnackbar.error("Could not open email");
     }
   }
 
@@ -21,12 +27,17 @@ class ContactUsController extends GetxController {
     final phone = "+91${Globals.appSettings?.phoneNumber ?? ""}";
     const message = "Hello! I need help."; // Change
 
+    if (phone.isEmpty || phone.length < 4) {
+      AppSnackbar.error("Could not open WhatsApp, Use Any Other Method");
+      return;
+    }
+
     final url = Uri.parse(
       "https://wa.me/$phone?text=${Uri.encodeComponent(message)}",
     );
 
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      Get.snackbar("Error", "Could not open WhatsApp");
+      AppSnackbar.error("Could not open WhatsApp");
     }
   }
 
@@ -34,8 +45,13 @@ class ContactUsController extends GetxController {
   Future<void> openSupport() async {
     final url = Globals.appSettings?.link ?? "";
 
+    if (url.isEmpty) {
+      AppSnackbar.error("Could not open support page, Use Any Other Method");
+      return;
+    }
+
     if (!await launchUrl(Uri.parse(url))) {
-      Get.snackbar("Error", "Could not open support page");
+      AppSnackbar.error("Could not open support page");
     }
   }
 }

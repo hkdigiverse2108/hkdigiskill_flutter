@@ -32,7 +32,9 @@ class Workshops extends GetView<WorkshopsController> {
                 () => controller.isLoading.value
                     ? _buildShimmerList()
                     : controller.myWorkshops.isEmpty
-                    ? NoDataWidget(message: "You Are Not Enrolled In Any")
+                    ? NoDataWidget(
+                        message: "You Are Not Enrolled In Any Workshop",
+                      )
                     : _buildMyWorkshopList(),
               ),
               const Gap(20),
@@ -42,7 +44,7 @@ class Workshops extends GetView<WorkshopsController> {
                 () => controller.isLoading.value
                     ? _buildShimmerList()
                     : (controller.workshops.isEmpty)
-                    ? NoDataWidget()
+                    ? NoDataWidget(message: "No Workshops Found")
                     : _buildWorkshopList(),
               ),
             ],

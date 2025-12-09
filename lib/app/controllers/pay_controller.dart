@@ -73,7 +73,7 @@ class PayController extends GetxController {
     try {
       final apiResponse = await ApiService.to.post(
         ApiConstants.couponEndpoint,
-        headers: {"authorization": "${Globals.userData!.token}"},
+        headers: {"authorization": "${Globals.userData.value!.token}"},
         body: {"code": code, "amount": total.value},
       );
 
@@ -135,8 +135,8 @@ class PayController extends GetxController {
       amount: total.value,
       name: "HK Digiskill",
       description: title.value,
-      email: Globals.userData!.email,
-      contact: Globals.userData!.phoneNumber ?? "0000000000",
+      email: Globals.userData.value!.email,
+      contact: Globals.userData.value!.phoneNumber ?? "0000000000",
 
       onSuccessCallback: (success) {
         handlePaymentSuccess(success, context);
@@ -182,7 +182,7 @@ class PayController extends GetxController {
       } else {
         final apiResponse = await ApiService.to.post(
           ApiConstants.workshopPaymentEndpoint,
-          headers: {"authorization": "${Globals.userData!.token}"},
+          headers: {"authorization": "${Globals.userData.value!.token}"},
           body: {
             "workshopId": workshop!.id,
             "amount": total.value,

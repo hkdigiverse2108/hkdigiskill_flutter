@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:hkdigiskill/app/controllers/video_controller.dart';
@@ -40,6 +41,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   @override
   void dispose() {
     _overlayTimer?.cancel();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
 

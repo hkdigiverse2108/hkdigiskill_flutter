@@ -19,18 +19,23 @@ class TopBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Profile image (use your network/local asset)
-        GestureDetector(
-          onTap: () {
-            if (networkController.isConnected.value) {
-              Get.toNamed(Routes.profile);
-            }
-          },
-          child: Hero(
-            tag: 'profile-avatar',
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(
-                Globals.fixLocalhostUrl(Globals.userData?.profilePhoto ?? ""),
+        Obx(
+          () => GestureDetector(
+            onTap: () {
+              if (networkController.isConnected.value) {
+                Get.toNamed(Routes.profile);
+              }
+            },
+            child: Hero(
+              tag: 'profile-avatar',
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(
+                  Globals.fixLocalhostUrl(
+                    Globals.userData.value?.profilePhoto ??
+                        "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+                  ),
+                ),
               ),
             ),
           ),
@@ -45,13 +50,23 @@ class TopBar extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    'Namaste, ${Globals.userData?.fullName}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 17,
-                      fontFamily: 'Poppins',
+                  Obx(
+                    () => Text(
+                      (Globals.userData.value?.fullName.isNotEmpty ?? false)
+                          ? (Globals.userData.value?.fullName
+                                            .split(' ')[0]
+                                            .length ??
+                                        0) >
+                                    7
+                                ? 'Namaste, ${Globals.userData.value?.fullName.substring(0, 7)}...'
+                                : 'Namaste, ${Globals.userData.value?.fullName.split(' ')[0]}'
+                          : "User",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
                   const SizedBox(width: 3),

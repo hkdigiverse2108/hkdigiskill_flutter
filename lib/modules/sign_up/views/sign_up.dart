@@ -43,12 +43,23 @@ class SignUp extends GetView<SignUpController> {
               keyboardType: TextInputType.emailAddress,
               hint: "study@email.com",
             ),
-            AppTextField(
-              label: "Password",
-              isRequired: true,
-              controller: controller.passwordController,
-              obscureText: true,
-              hint: "Your password",
+            Obx(
+              () => AppTextField(
+                label: "Password",
+                isRequired: true,
+                controller: controller.passwordController,
+                obscureText: controller.obscurePassword.value,
+                hint: "Your password",
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.obscurePassword.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.textLight.withOpacity(0.6),
+                  ),
+                  onPressed: () => controller.obscurePassword.toggle(),
+                ),
+              ),
             ),
             AppTextField(
               label: "Phone Number",

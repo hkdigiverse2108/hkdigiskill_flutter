@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = "http://192.168.29.195:5555";
+  static const String baseUrl = "https://api.hkdigiskill.com";
   static const String apiVersion = '/v1';
 
   // Auth

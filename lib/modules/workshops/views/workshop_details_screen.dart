@@ -424,7 +424,7 @@ class WorkshopDetailsScreen extends GetView<WorkshopDetailsController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Upload By: ${Globals.formatDate(section.createdAt!)}",
+                      "Date: ${Globals.formatDate(section.createdAt!)}",
                       style: TextStyle(fontSize: 11, fontFamily: 'Poppins'),
                     ),
                     Row(

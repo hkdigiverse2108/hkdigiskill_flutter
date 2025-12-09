@@ -9,6 +9,7 @@ import 'package:hkdigiskill/app/models/lesson/lesson_model.dart';
 import 'package:hkdigiskill/app/models/testimonial/testimonial_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class CourseDetailsController extends GetxController {
   final selectedTab = 0.obs;
@@ -91,11 +92,7 @@ class CourseDetailsController extends GetxController {
       }
     } catch (e) {
       log('Error fetching course details: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to load course details',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Reopen the Page and Try Again");
     } finally {
       isLoading.value = false;
     }
@@ -118,11 +115,7 @@ class CourseDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load FAQs',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Reopen the Page and Try Again");
     } finally {
       isFaqsLoading.value = false;
     }
@@ -147,11 +140,7 @@ class CourseDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load testimonials',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Reopen the Page and Try Again");
     } finally {
       isTestimonialsLoading.value = false;
     }
@@ -244,11 +233,7 @@ class CourseDetailsController extends GetxController {
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Failed to load workshop rating',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Reopen the Page and Try Again");
     } finally {
       isCourseRatingLoading.value = false;
     }

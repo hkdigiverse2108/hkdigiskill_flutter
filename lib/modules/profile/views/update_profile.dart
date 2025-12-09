@@ -105,7 +105,9 @@ class UpdateProfilePage extends GetView<ProfileController> {
               Gap(24),
               Obx(
                 () => InkWell(
-                  onTap: controller.updateProfile,
+                  onTap: controller.isLoading.value
+                      ? null
+                      : controller.validateFields,
                   child: Container(
                     height: 56,
                     width: double.infinity,

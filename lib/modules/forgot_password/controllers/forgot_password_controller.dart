@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class ForgotPasswordController extends GetxController {
   var isLoading = false.obs;
@@ -12,11 +13,9 @@ class ForgotPasswordController extends GetxController {
 
   void validateForm() {
     if (emailController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Email is required");
+    } else if (!GetUtils.isEmail(emailController.text)) {
+      AppSnackbar.error("Invalid Email", title: "Validation Error");
     } else {
       callApi();
     }
@@ -36,20 +35,10 @@ class ForgotPasswordController extends GetxController {
           Routes.otpVerify,
           arguments: {'email': emailController.text},
         );
-      } else {
-        Get.snackbar(
-          'Error',
-          res['message'],
-          snackPosition: SnackPosition.BOTTOM,
-        );
       }
     } catch (e) {
       log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error("Something went wrong");
     } finally {
       isLoading.value = false;
     }
@@ -64,7 +53,7 @@ class ForgotPasswordController extends GetxController {
   }
 
   void onForgotEmailTap() {
-    //
+    Get.toNamed(Routes.contactUs);
   }
 
   void onClose() {

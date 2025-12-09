@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/routes/routes.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class SignUpController extends GetxController {
   final fullNameController = TextEditingController();
@@ -13,6 +14,7 @@ class SignUpController extends GetxController {
   final phoneNumberController = TextEditingController();
   final designationController = TextEditingController();
   final referralCodeController = TextEditingController();
+  final obscurePassword = true.obs;
 
   var isAgree = false.obs;
 
@@ -40,28 +42,21 @@ class SignUpController extends GetxController {
         passwordController.text.isEmpty ||
         phoneNumberController.text.isEmpty ||
         designationController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error('Please fill in all fields', title: 'Validation Error');
     } else if (!emailController.text.isValidEmail()) {
-      Get.snackbar(
-        'Error',
+      AppSnackbar.error(
         'Please enter a valid email',
-        snackPosition: SnackPosition.BOTTOM,
+        title: 'Validation Error',
       );
     } else if (passwordController.text.length < 8) {
-      Get.snackbar(
-        'Error',
+      AppSnackbar.error(
         'Password must be at least 8 characters',
-        snackPosition: SnackPosition.BOTTOM,
+        title: 'Validation Error',
       );
     } else if (phoneNumberController.text.length < 10) {
-      Get.snackbar(
-        'Error',
+      AppSnackbar.error(
         'Phone number must be at least 10 characters',
-        snackPosition: SnackPosition.BOTTOM,
+        title: 'Validation Error',
       );
     } else {
       callApi();
@@ -79,7 +74,8 @@ class SignUpController extends GetxController {
           "password": passwordController.text,
           "phoneNumber": phoneNumberController.text,
           "designation": designationController.text,
-          "referralCode": referralCodeController.text,
+          if (referralCodeController.text.isNotEmpty)
+            "referralCode": referralCodeController.text,
           "agreeTerms": isAgree.value,
           // todo: add referral code
         },
@@ -90,25 +86,14 @@ class SignUpController extends GetxController {
 
       if (res['status'] == 200) {
         Get.back();
-        Get.snackbar(
-          'Success',
-          'User registered successfully',
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        AppSnackbar.success('User registered successfully');
       } else {
-        Get.snackbar(
-          'Error',
-          res['message'],
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        AppSnackbar.error(res['message'] ?? 'An error occurred');
       }
+    } on Exception catch (e) {
+      AppSnackbar.error(e.toString().replaceFirst('Exception: ', ''));
     } catch (e) {
-      log(e.toString());
-      Get.snackbar(
-        'Error',
-        'Something went wrong',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.error('Something went wrong');
     } finally {
       isLoading.value = false;
     }

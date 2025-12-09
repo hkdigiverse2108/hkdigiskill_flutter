@@ -1,11 +1,12 @@
 import 'dart:developer';
 
+import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/settings/settings_model.dart';
 import 'package:hkdigiskill/app/models/user/user_model.dart';
 import 'package:intl/intl.dart';
 
 class Globals {
-  static UserModel? userData;
+  static Rx<UserModel?> userData = Rx<UserModel?>(null);
 
   static AppSettings? appSettings;
 

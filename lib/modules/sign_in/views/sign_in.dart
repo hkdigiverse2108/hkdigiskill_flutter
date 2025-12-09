@@ -40,13 +40,13 @@ class SignIn extends GetView<SignInController> {
                 isRequired: true,
                 keyboardType: TextInputType.visiblePassword,
                 controller: controller.passwordController,
-                obscureText: controller.isPasswordVisible.value,
+                obscureText: !controller.isPasswordVisible.value,
                 suffixIcon: Obx(
                   () => IconButton(
                     icon: Icon(
-                      controller.isPasswordVisible.value
-                          ? Icons.remove_red_eye
-                          : Icons.remove_red_eye_outlined,
+                      !controller.isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       color: AppColors.textLight,
                     ),
                     onPressed: () {
