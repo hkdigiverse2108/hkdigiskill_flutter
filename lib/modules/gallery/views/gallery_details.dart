@@ -4,7 +4,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.dart';
-import 'package:flutter/material.dart';
 
 class GalleryDetailsPage extends StatelessWidget {
   final String title;
@@ -138,7 +137,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
             },
             itemCount: widget.galleryItems.length,
             loadingBuilder: (context, event) => Center(
-              child: Container(
+              child: SizedBox(
                 width: 20.0,
                 height: 20.0,
                 child: CircularProgressIndicator(

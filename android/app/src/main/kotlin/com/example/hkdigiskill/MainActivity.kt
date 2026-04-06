@@ -1,4 +1,4 @@
-package com.example.hkdigiskill
+package com.hkdigiskill.app
 
 import io.flutter.embedding.android.FlutterActivity
 

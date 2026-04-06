@@ -41,7 +41,7 @@ class ProfileMenuPage extends GetView<ProfileController> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.caption.withOpacity(0.3),
+                          color: AppColors.caption.withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -76,7 +76,7 @@ class ProfileMenuPage extends GetView<ProfileController> {
                   onTap: () => controller.showSignOutDialog(context),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.caption.withOpacity(0.3),
+                      color: AppColors.caption.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(14),

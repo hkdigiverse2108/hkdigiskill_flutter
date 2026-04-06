@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/settings/settings_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
@@ -29,19 +30,28 @@ class SettingsService extends GetxService {
   // Initialize app settings from API
   Future<void> initializeSettings() async {
     try {
-      // Call your settings API endpoint
-      final response = await _apiService.get('/settings/all');
+      final response = await _apiService.get(ApiConstants.settingsEndpoint);
 
-      if (response != null && response is Map<String, dynamic>) {
-        _settings.value = Map<String, dynamic>.from(response['data']);
-        // Cache the settings
-        await _storage.saveToStorage(_settingsKey, _settings);
+      if (response != null && response['status'] == 200) {
+        final data = response['data'];
+        Map<String, dynamic>? settingsData;
 
-        Globals.appSettings = AppSettings.fromJson(response['data']);
+        if (data is Map<String, dynamic>) {
+          settingsData = data;
+        } else if (data is List && data.isNotEmpty) {
+          settingsData = data[0];
+        }
+
+        if (settingsData != null) {
+          _settings.assignAll(settingsData);
+          // Cache the settings
+          await _storage.saveToStorage(_settingsKey, settingsData);
+          Globals.appSettings = AppSettings.fromJson(settingsData);
+        }
       }
     } catch (e) {
       // If API call fails, use cached settings
-      print('Failed to fetch settings: $e');
+      log('Failed to fetch settings: $e');
       _loadCachedSettings();
     }
   }
@@ -60,12 +70,12 @@ class SettingsService extends GetxService {
     // Optionally, you can also send the update to the server
     try {
       await _apiService.post(
-        '${ApiConstants.apiVersion}/settings/update',
+        ApiConstants.updateSettingsEndpoint,
         body: {'key': key, 'value': value},
       );
     } catch (e) {
       // Handle error or implement retry logic
-      print('Failed to update setting on server: $e');
+      log('Failed to update setting on server: $e');
     }
   }
 

@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/user/user_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
-import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';

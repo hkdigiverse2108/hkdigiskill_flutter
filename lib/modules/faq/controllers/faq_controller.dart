@@ -10,6 +10,7 @@ class FaqController extends GetxController {
   var faqs = <FaqModel>[].obs;
   var isLoading = false.obs;
 
+  @override
   void onInit() {
     super.onInit();
     getFaqs();

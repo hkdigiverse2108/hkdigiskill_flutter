@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hkdigiskill/app/controllers/network_controller.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/payment_service.dart';
@@ -14,7 +13,6 @@ import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:device_preview/device_preview.dart';
 
-import 'app/bindings/splash_binding.dart';
 import 'app/models/user/user_model.dart';
 import 'app/themes/app_theme.dart';
 import 'app/utils/constants.dart';

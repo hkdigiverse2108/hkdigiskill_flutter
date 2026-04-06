@@ -33,6 +33,7 @@ class OtpVerifyController extends GetxController {
     super.onInit();
   }
 
+  @override
   void onClose() {
     otpController.dispose();
     super.onClose();

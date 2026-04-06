@@ -1,0 +1,21 @@
+Analyzing hkdigiskill...
+
+warning - lib\modules\courses\widgets\animated_course_card.dart:188:68 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\modules\courses\widgets\animated_course_card.dart:188:71 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\modules\courses\widgets\animated_course_card.dart:203:58 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\modules\courses\widgets\animated_course_card.dart:203:61 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\modules\courses\widgets\animated_course_card.dart:203:117 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\modules\forgot_password\controllers\forgot_password_controller.dart:6:8 - Unused import: 'package:hkdigiskill/app/utils/api_constants.dart'. Try removing the import directive. - unused_import
+warning - lib\modules\gallery\views\gallery_details.dart:7:8 - Duplicate import. Try removing all but one import of the library. - duplicate_import
+warning - lib\modules\home\widget\popular_courses_section.dart:176:73 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\modules\home\widget\popular_courses_section.dart:176:76 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\modules\home\widget\popular_courses_section.dart:191:63 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\modules\home\widget\popular_courses_section.dart:191:66 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\modules\home\widget\popular_courses_section.dart:191:115 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\modules\sign_up\controllers\sign_up_controller.dart:7:8 - Unused import: 'package:hkdigiskill/routes/routes.dart'. Try removing the import directive. - unused_import
+warning - lib\shared\views\pay.dart:252:59 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\shared\views\pay.dart:252:62 - The left operand can't be null, so the right operand is never executed. Try removing the operator and the right operand. - dead_null_aware_expression
+warning - lib\shared\views\video_screen.dart:76:11 - The value of the local variable 'width' isn't used. Try removing the variable or using it. - unused_local_variable
+   info - lib\modules\instructor\views\top_instructors_page.dart:31:13 - 'color' is deprecated and shouldn't be used. Use colorFilter instead. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+
+17 issues found.

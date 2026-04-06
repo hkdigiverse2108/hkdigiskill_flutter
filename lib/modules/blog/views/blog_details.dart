@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/blog/controllers/blog_details_controller.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class BlogDetailsPage extends GetView<BlogDetailsController> {
   const BlogDetailsPage({super.key});
@@ -96,7 +95,7 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
                         color: Colors.grey.shade50,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: Colors.grey.withOpacity(0.22),
+                          color: Colors.grey.withValues(alpha: 0.22),
                         ),
                       ),
                       child: Column(
@@ -176,21 +175,21 @@ class BlogDetailsPage extends GetView<BlogDetailsController> {
             ),
             SizedBox(height: 20),
             // Social share row
-            Row(
-              children: [
-                Text(
-                  "Share on:",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                SizedBox(width: 8),
-                Icon(Icons.facebook, color: AppColors.primary),
-                SizedBox(width: 12),
-                Icon(Icons.apple, color: AppColors.primary),
-                SizedBox(width: 12),
-                Icon(PhosphorIconsFill.twitterLogo, color: AppColors.primary),
-              ],
-            ),
-            SizedBox(height: 15),
+            // Row(
+            //   children: [
+            //     Text(
+            //       "Share on:",
+            //       style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            //     ),
+            //     SizedBox(width: 8),
+            //     Icon(Icons.facebook, color: AppColors.primary),
+            //     SizedBox(width: 12),
+            //     Icon(Icons.apple, color: AppColors.primary),
+            //     SizedBox(width: 12),
+            //     Icon(PhosphorIconsFill.twitterLogo, color: AppColors.primary),
+            //   ],
+            // ),
+            // SizedBox(height: 15),
           ],
         ),
       ),

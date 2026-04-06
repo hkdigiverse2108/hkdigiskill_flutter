@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
-import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
@@ -56,6 +55,7 @@ class ForgotPasswordController extends GetxController {
     Get.toNamed(Routes.contactUs);
   }
 
+  @override
   void onClose() {
     emailController.dispose();
     super.onClose();

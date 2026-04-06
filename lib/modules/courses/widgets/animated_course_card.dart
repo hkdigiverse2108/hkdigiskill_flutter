@@ -185,7 +185,7 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
                     children: [
                       // ⭐ Dynamic stars (filled based on rating)
                       ...List.generate(5, (index) {
-                        final rating = widget.course.averageRating ?? 0;
+                        final rating = widget.course.averageRating;
 
                         return Icon(
                           Icons.star,
@@ -200,7 +200,7 @@ class _AnimatedCourseCardState extends State<AnimatedCourseCard>
 
                       // ⭐ Rating Text
                       Text(
-                        "(${(widget.course.averageRating ?? 0).toStringAsFixed(1)} / ${(widget.course.totalRated ?? 0)} Ratings)",
+                        "(${widget.course.averageRating.toStringAsFixed(1)} / ${widget.course.totalRated} Ratings)",
                         style: TextStyle(
                           color: AppColors.caption,
                           fontSize: 12,

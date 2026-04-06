@@ -4,6 +4,7 @@ import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/gallery/controllers/gallery_controller.dart';
 import 'package:hkdigiskill/modules/gallery/views/gallery_details.dart';
 import 'package:hkdigiskill/modules/gallery/widgets/gallery_animation_wrapper.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 
 class GalleryPage extends GetView<GalleryController> {
   const GalleryPage({super.key});
@@ -25,6 +26,8 @@ class GalleryPage extends GetView<GalleryController> {
       body: Obx(
         () => controller.isLoading.value
             ? const Center(child: CircularProgressIndicator())
+            : controller.galleries.isEmpty
+            ? const NoDataWidget(message: "No Gallery Items Found")
             : ListView.builder(
                 padding: const EdgeInsets.symmetric(
                   vertical: 18,

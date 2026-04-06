@@ -24,7 +24,7 @@ class Pay extends GetView<PayController> {
             width: width,
             height: height * 0.4,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.6),
+              color: AppColors.primary.withValues(alpha: 0.6),
             ),
             child: Image.asset(AppImages.courseImage, fit: BoxFit.cover),
           ),
@@ -248,8 +248,7 @@ class Pay extends GetView<PayController> {
                                       ? null
                                       : controller.purchase(context: context),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        AppColors.primary ?? Colors.teal,
+                                    backgroundColor: AppColors.primary,
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 18,
                                     ),

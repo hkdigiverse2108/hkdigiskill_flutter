@@ -4,6 +4,7 @@ import 'package:hkdigiskill/app/models/testimonial/testimonial_model.dart';
 import 'package:hkdigiskill/modules/testimonials/controllers/testimonials_controller.dart';
 import 'package:hkdigiskill/modules/testimonials/widgets/testimonial_animation_wrapper.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 
 class TestimonialsPage extends GetView<TestimonialsController> {
   const TestimonialsPage({super.key});
@@ -223,6 +224,10 @@ class TestimonialsPage extends GetView<TestimonialsController> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (_, __) => _testimonialShimmer(),
+          );
+        } else if (controller.testimonials.isEmpty) {
+          return const Center(
+            child: NoDataWidget(message: "No Testimonials Found"),
           );
         } else {
           return ListView.builder(

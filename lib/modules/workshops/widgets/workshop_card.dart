@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
-import 'package:hkdigiskill/routes/routes.dart';
 
 class WorkshopCard extends StatelessWidget {
   final dynamic workshop;
@@ -21,7 +19,7 @@ class WorkshopCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),

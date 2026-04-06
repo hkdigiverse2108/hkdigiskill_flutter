@@ -4,6 +4,8 @@ import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 
 class CategoryGridSection extends StatelessWidget {
   final List<CategoriesModel> categories;
@@ -56,13 +58,13 @@ class CategoryGridSection extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         // Grid of category cards
-        (categories.isEmpty && isLoading)
+        isLoading
             ? GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 itemCount: 4,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 1.7,
                   crossAxisSpacing: 12,
@@ -70,13 +72,11 @@ class CategoryGridSection extends StatelessWidget {
                   mainAxisExtent: 90,
                 ),
                 itemBuilder: (context, index) {
-                  // Use an animation when loaded, shimmer otherwise
                   return CustomShimmer(
                     isLoading: isLoading,
                     child: AnimatedScale(
                       scale: 1.0,
                       duration: Duration(milliseconds: 400 + index * 80),
-                      // Staggered by index
                       curve: Curves.easeOutBack,
                       child: AnimatedOpacity(
                         opacity: 1.0,
@@ -88,7 +88,9 @@ class CategoryGridSection extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xFF64748B).withOpacity(0.2),
+                                color: const Color(
+                                  0xFF64748B,
+                                ).withValues(alpha: 0.2),
                                 blurRadius: 6,
                               ),
                             ],
@@ -99,12 +101,17 @@ class CategoryGridSection extends StatelessWidget {
                   );
                 },
               )
+            : categories.isEmpty
+            ? NoDataWidget(
+                message: "No Categories Found",
+                icon: PhosphorIcons.squaresFour(),
+              )
             : GridView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 itemCount: categories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 1.7,
                   crossAxisSpacing: 12,
@@ -113,13 +120,11 @@ class CategoryGridSection extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   final item = categories[index];
-                  // Use an animation when loaded, shimmer otherwise
                   return CustomShimmer(
                     isLoading: isLoading,
                     child: AnimatedScale(
                       scale: 1.0,
                       duration: Duration(milliseconds: 400 + index * 80),
-                      // Staggered by index
                       curve: Curves.easeOutBack,
                       child: AnimatedOpacity(
                         opacity: 1.0,
@@ -141,7 +146,9 @@ class CategoryGridSection extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color(0xFF64748B).withOpacity(0.2),
+                                  color: const Color(
+                                    0xFF64748B,
+                                  ).withValues(alpha: 0.2),
                                   blurRadius: 6,
                                 ),
                               ],
@@ -158,7 +165,6 @@ class CategoryGridSection extends StatelessWidget {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          // todo: add count
                                           text: '${item.courseCount} ',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w700,

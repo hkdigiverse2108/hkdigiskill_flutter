@@ -5,7 +5,8 @@ import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 
 class PopularBlogsSection extends StatelessWidget {
   final List<BlogModel> blogs;
@@ -58,13 +59,26 @@ class PopularBlogsSection extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         // Blog cards scrollable row
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: blogs.map((blog) {
-              return isLoading
-                  ? BlogCardShimmer()
-                  : Container(
+        isLoading
+            ? SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    3,
+                    (index) => const BlogCardShimmer(),
+                  ),
+                ),
+              )
+            : blogs.isEmpty
+            ? NoDataWidget(
+            message: "No Recent Blogs",
+            icon: PhosphorIcons.article(),
+          )
+            : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: blogs.map((blog) {
+                    return Container(
                       width: 240,
                       height: 260,
                       margin: const EdgeInsets.symmetric(
@@ -76,7 +90,7 @@ class PopularBlogsSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0xFF64748B).withOpacity(0.08),
+                            color: Color(0xFF64748B).withValues(alpha: 0.08),
                             blurRadius: 10,
                           ),
                         ],
@@ -239,9 +253,9 @@ class PopularBlogsSection extends StatelessWidget {
                         ],
                       ),
                     );
-            }).toList(),
-          ),
-        ),
+                  }).toList(),
+                ),
+              ),
       ],
     );
   }
@@ -260,7 +274,10 @@ class BlogCardShimmer extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
-          BoxShadow(color: Color(0xFF64748B).withOpacity(0.08), blurRadius: 10),
+          BoxShadow(
+            color: Color(0xFF64748B).withValues(alpha: 0.08),
+            blurRadius: 10,
+          ),
         ],
       ),
       child: Stack(

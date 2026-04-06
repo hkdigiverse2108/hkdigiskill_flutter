@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../app/themes/app_colors.dart'; // your colors
-import '../../app/themes/app_text_styles.dart'; // your text styles (optional)
+// your text styles (optional)
 
 class AppTextField extends StatelessWidget {
   final String label;
@@ -106,7 +106,7 @@ class AppTextField extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
-                    color: AppColors.caption.withOpacity(0.5),
+                    color: AppColors.caption.withValues(alpha: 0.5),
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(

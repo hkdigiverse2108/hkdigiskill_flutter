@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/chat/controllers/chats_controller.dart';
-import 'package:hkdigiskill/modules/chat/widgets/chats_animation_%20wrapper.dart';
+import 'package:hkdigiskill/modules/chat/widgets/chats_animation_wrapper.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:shimmer/shimmer.dart';
 

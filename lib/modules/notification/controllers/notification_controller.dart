@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/notification/notification_model.dart';
 import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';

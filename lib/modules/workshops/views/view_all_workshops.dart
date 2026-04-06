@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/workshops/controllers/workshops_controller.dart';
 import 'package:hkdigiskill/modules/workshops/widgets/workshop_card.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
@@ -62,7 +61,7 @@ class ViewAllWorkshops extends GetView<WorkshopsController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 9),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 9),
         ],
       ),
       child: Row(

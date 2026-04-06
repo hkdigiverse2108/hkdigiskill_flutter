@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
-import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 
 class SignUpController extends GetxController {
@@ -77,7 +76,6 @@ class SignUpController extends GetxController {
           if (referralCodeController.text.isNotEmpty)
             "referralCode": referralCodeController.text,
           "agreeTerms": isAgree.value,
-          // todo: add referral code
         },
       );
 
@@ -99,6 +97,7 @@ class SignUpController extends GetxController {
     }
   }
 
+  @override
   void onClose() {
     fullNameController.dispose();
     emailController.dispose();

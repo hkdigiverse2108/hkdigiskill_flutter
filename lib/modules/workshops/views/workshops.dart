@@ -121,7 +121,7 @@ class Workshops extends GetView<WorkshopsController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 9),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 9),
         ],
       ),
       child: Row(

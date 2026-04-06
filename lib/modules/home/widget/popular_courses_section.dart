@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/courses/course_models.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
-import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 
 class PopularCoursesSection extends StatelessWidget {
   final List<CourseModel> courses;
@@ -59,18 +61,34 @@ class PopularCoursesSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          height: 320,
-          width: double.infinity,
-          child: PageView.builder(
-            controller: pageController,
-            itemCount: courses.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final course = courses[index];
-              return (isLoading)
-                  ? verticalCardShimmer(width)
-                  : GestureDetector(
+        isLoading
+            ? SizedBox(
+                height: 320,
+                width: double.infinity,
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: 3,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return verticalCardShimmer(width);
+                  },
+                ),
+              )
+            : courses.isEmpty
+            ? NoDataWidget(
+            message: "No Courses Available",
+            icon: PhosphorIcons.graduationCap(),
+          )
+            : SizedBox(
+                height: 320,
+                width: double.infinity,
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: courses.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final course = courses[index];
+                    return GestureDetector(
                       onTap: () {
                         Get.toNamed(Routes.courseDetails, arguments: course);
                       },
@@ -85,7 +103,7 @@ class PopularCoursesSection extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFF64748B).withOpacity(0.08),
+                              color: Color(0xFF64748B).withValues(alpha: 0.08),
                               blurRadius: 10,
                             ),
                           ],
@@ -174,7 +192,7 @@ class PopularCoursesSection extends StatelessWidget {
                                 children: [
                                   // ⭐ Dynamic stars (filled based on rating)
                                   ...List.generate(5, (index) {
-                                    final rating = course.averageRating ?? 0;
+                                    final rating = course.averageRating;
 
                                     return Icon(
                                       Icons.star,
@@ -189,7 +207,7 @@ class PopularCoursesSection extends StatelessWidget {
 
                                   // ⭐ Rating Text
                                   Text(
-                                    "(${(course.averageRating ?? 0).toStringAsFixed(1)} / ${(course.totalRated ?? 0)} Ratings)",
+                                    "(${course.averageRating.toStringAsFixed(1)} / ${course.totalRated} Ratings)",
                                     style: TextStyle(
                                       color: AppColors.caption,
                                       fontSize: 13,
@@ -261,9 +279,9 @@ class PopularCoursesSection extends StatelessWidget {
                         ),
                       ),
                     );
-            },
-          ),
-        ),
+                  },
+                ),
+              ),
       ],
     );
   }
@@ -276,7 +294,10 @@ class PopularCoursesSection extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
-          BoxShadow(color: Color(0xFF64748B).withOpacity(0.08), blurRadius: 10),
+          BoxShadow(
+            color: Color(0xFF64748B).withValues(alpha: 0.08),
+            blurRadius: 10,
+          ),
         ],
       ),
       child: CustomShimmer(

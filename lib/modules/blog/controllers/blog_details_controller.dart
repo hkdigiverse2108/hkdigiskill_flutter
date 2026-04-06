@@ -32,6 +32,7 @@ Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserun
         blog.quote ??
         "Lorem ipsum dolor amet con sectur eltiadicing elit sed do usmod tempor uniciidunt enim minim veniam nostrud.";
     quoteAuthor.value = blog.author;
+    tags = [blog.category].obs;
     // tags = blog.tags;
   }
 }

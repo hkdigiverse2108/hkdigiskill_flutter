@@ -1,7 +1,7 @@
 class AppConstants {
   // App metadata
-  static const String appName = 'HK Digital Skills';
-  static const String appVersion = '1.0.0';
+  static const String appName = 'HK DigiSkill';
+  static const String appVersion = '1.0.1';
 
   // Assets paths
   static const String logoPath = 'assets/images/logo.png';

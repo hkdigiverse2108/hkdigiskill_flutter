@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -36,7 +35,7 @@ class NetworkController extends GetxController {
           "Please check your network connection.",
           snackPosition: SnackPosition.TOP,
           // margin: const EdgeInsets.symmetric(vertical: 16),
-          backgroundColor: Get.theme.colorScheme.error.withOpacity(0.85),
+          backgroundColor: Get.theme.colorScheme.error.withValues(alpha: 0.85),
           colorText: Get.theme.colorScheme.onError,
           duration: Duration(seconds: 5),
         );
@@ -55,7 +54,7 @@ class NetworkController extends GetxController {
         "No Internet",
         "Please check your network connection.",
         snackPosition: SnackPosition.TOP,
-        backgroundColor: Get.theme.colorScheme.error.withOpacity(0.85),
+        backgroundColor: Get.theme.colorScheme.error.withValues(alpha: 0.85),
         colorText: Get.theme.colorScheme.onError,
         duration: Duration(seconds: 5),
       );

@@ -11,9 +11,7 @@ class ExpandableDescription extends StatefulWidget {
   });
 
   @override
-  _ExpandableDescriptionState createState() {
-    return _ExpandableDescriptionState();
-  }
+  State<ExpandableDescription> createState() => _ExpandableDescriptionState();
 }
 
 class _ExpandableDescriptionState extends State<ExpandableDescription> {

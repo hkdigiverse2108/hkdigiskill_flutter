@@ -10,12 +10,12 @@ class PurchaseResultDialog extends StatelessWidget {
   final VoidCallback onRetry;
 
   const PurchaseResultDialog({
-    Key? key,
+    super.key,
     required this.status,
     this.transactionId,
     required this.onClose,
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

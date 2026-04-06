@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/models/settings/settings_model.dart';

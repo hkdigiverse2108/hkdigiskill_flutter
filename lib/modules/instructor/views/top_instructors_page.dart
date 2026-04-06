@@ -6,8 +6,9 @@ import 'package:hkdigiskill/app/models/instructor/instructor_model.dart';
 import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/instructor/controllers/instructor_controller.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
-import 'package:hkdigiskill/modules/instructor/widgets/Instructor_animation_wrapper.dart';
+import 'package:hkdigiskill/modules/instructor/widgets/instructor_animation_wrapper.dart';
 import 'package:hkdigiskill/shared/widgets/social_link_helper.dart';
 
 class TopInstructorsPage extends GetView<InstructorController> {
@@ -28,7 +29,7 @@ class TopInstructorsPage extends GetView<InstructorController> {
             asset,
             width: 16,
             height: 16,
-            color: Colors.white,
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
         ),
       ),
@@ -115,7 +116,7 @@ class TopInstructorsPage extends GetView<InstructorController> {
                     horizontal: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.88),
+                    color: Colors.white.withValues(alpha: 0.88),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -145,7 +146,7 @@ class TopInstructorsPage extends GetView<InstructorController> {
                     horizontal: 9,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.84),
+                    color: Colors.white.withValues(alpha: 0.84),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -188,6 +189,8 @@ class TopInstructorsPage extends GetView<InstructorController> {
         child: Obx(
           () => controller.isLoading.value
               ? const Center(child: CircularProgressIndicator())
+              : controller.instructors.isEmpty
+              ? const NoDataWidget(message: "No Instructors Found")
               : GridView.builder(
                   itemCount: controller.instructors.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

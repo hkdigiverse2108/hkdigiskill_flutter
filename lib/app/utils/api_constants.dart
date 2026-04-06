@@ -87,4 +87,8 @@ class ApiConstants {
 
   // coupon
   static const String couponEndpoint = '/coupon-code/validate';
+
+  // Settings
+  static const String settingsEndpoint = '/settings/all';
+  static const String updateSettingsEndpoint = '/settings/update';
 }

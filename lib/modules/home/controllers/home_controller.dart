@@ -8,7 +8,6 @@ import 'package:hkdigiskill/app/models/blog/blog_model.dart';
 import 'package:hkdigiskill/app/models/categories/categories_model.dart';
 import 'package:hkdigiskill/app/models/courses/course_models.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
-import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/navigation/controllers/navigation_controller.dart';
@@ -78,7 +77,7 @@ class HomeController extends GetxController {
     onLoading();
   }
 
-  void onBanners() async {
+  Future<void> onBanners() async {
     try {
       isBennersLoading.value = true;
       if (!networkController.isConnected.value) {
@@ -102,7 +101,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void onCategories() async {
+  Future<void> onCategories() async {
     try {
       isCategoriesLoading.value = true;
 
@@ -151,7 +150,7 @@ class HomeController extends GetxController {
     categories.refresh();
   }
 
-  void onCourses() async {
+  Future<void> onCourses() async {
     try {
       isCoursesLoading.value = true;
 
@@ -209,7 +208,7 @@ class HomeController extends GetxController {
     courses.refresh();
   }
 
-  void onBlogs() async {
+  Future<void> onBlogs() async {
     try {
       isBlogsLoading.value = true;
       if (!networkController.isConnected.value) {
@@ -261,10 +260,7 @@ class HomeController extends GetxController {
 
   Future<void> onRefresh() async {
     try {
-      await Future.wait(
-        [onBanners(), onCategories(), onCourses(), onBlogs()]
-            as Iterable<Future>,
-      );
+      await Future.wait([onBanners(), onCategories(), onCourses(), onBlogs()]);
     } catch (e) {
       log('Error refreshing data: $e');
       rethrow;

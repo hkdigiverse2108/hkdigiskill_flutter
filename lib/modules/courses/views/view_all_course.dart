@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/modules/courses/controllers/courses_controller.dart';
 import 'package:hkdigiskill/modules/courses/widgets/animated_course_card.dart';
 import 'package:hkdigiskill/routes/routes.dart';
@@ -66,7 +65,7 @@ class ViewAllCourse extends GetView<CoursesController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 9),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 9),
         ],
       ),
       child: Row(

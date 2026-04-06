@@ -41,37 +41,15 @@ class Courses extends GetView<CoursesController> {
             children: [
               if (!controller.isFilterMode.value) TopBar(),
               (controller.isFilterMode.value) ? Gap(10) : Gap(20),
-              Obx(
-                () => (controller.isLoading.value)
-                    ? Text(
-                        "Enrolled Course",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          fontFamily: 'Poppins',
-                        ),
-                      )
-                    : (controller.myCourse.isEmpty)
-                    ? SizedBox.shrink()
-                    : Text(
-                        "Enrolled Course",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
+              const Text(
+                "Enrolled Course",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  fontFamily: 'Poppins',
+                ),
               ),
-              Obx(
-                () =>
-                    (controller.isLoading.value || controller.myCourse.isEmpty)
-                    ? Center(
-                        child: controller.isLoading.value
-                            ? Gap(20)
-                            : SizedBox.shrink(),
-                      )
-                    : Gap(20),
-              ),
+              const Gap(10),
               Obx(
                 () => (controller.isLoading.value)
                     ? ListView.separated(
@@ -82,37 +60,31 @@ class Courses extends GetView<CoursesController> {
                         itemCount: 3,
                       )
                     : (controller.myCourse.isEmpty)
-                    ? SizedBox.shrink()
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final course = controller.myCourse[index];
-                          return AnimatedCourseCard(
-                            course: course,
-                            index: index,
-                            onTap: () {
-                              Get.toNamed(
-                                Routes.courseDetails,
-                                arguments: course,
+                        ? const NoDataWidget(
+                            message: "Not Enrolled In Any Course Yet")
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final course = controller.myCourse[index];
+                              return AnimatedCourseCard(
+                                course: course,
+                                index: index,
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.courseDetails,
+                                    arguments: course,
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        separatorBuilder: (context, index) => const Gap(10),
-                        itemCount: controller.myCourse.length,
-                      ),
+                            separatorBuilder: (context, index) => const Gap(10),
+                            itemCount: controller.myCourse.length,
+                          ),
               ),
-              Obx(
-                () =>
-                    (controller.isLoading.value || controller.myCourse.isEmpty)
-                    ? Center(
-                        child: controller.isLoading.value
-                            ? Gap(20)
-                            : SizedBox.shrink(),
-                      )
-                    : Gap(20),
-              ),
+
+              const Gap(20),
+
               Row(
                 children: [
                   Expanded(
@@ -188,7 +160,7 @@ class Courses extends GetView<CoursesController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 9),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 9),
         ],
       ),
       child: Row(

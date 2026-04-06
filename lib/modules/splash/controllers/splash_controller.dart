@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hkdigiskill/app/controllers/network_controller.dart';
-import 'package:hkdigiskill/app/services/api_service.dart';
-import 'package:hkdigiskill/app/services/payment_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/routes/routes.dart';

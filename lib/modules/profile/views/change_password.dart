@@ -35,7 +35,7 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
                     controller.obscureOldPassword.value
                         ? Icons.visibility_off
                         : Icons.visibility,
-                    color: AppColors.textLight.withOpacity(0.6),
+                    color: AppColors.textLight.withValues(alpha: 0.6),
                   ),
                   onPressed: controller.toggleOldPasswordVisibility,
                 ),
@@ -51,7 +51,7 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
                     controller.obscureNewPassword.value
                         ? Icons.visibility_off
                         : Icons.visibility,
-                    color: AppColors.textLight.withOpacity(0.6),
+                    color: AppColors.textLight.withValues(alpha: 0.6),
                   ),
                   onPressed: controller.toggleNewPasswordVisibility,
                 ),
@@ -67,7 +67,7 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
                     controller.obscureConfirmPassword.value
                         ? Icons.visibility_off
                         : Icons.visibility,
-                    color: AppColors.textLight.withOpacity(0.6),
+                    color: AppColors.textLight.withValues(alpha: 0.6),
                   ),
                   onPressed: controller.toggleConfirmPasswordVisibility,
                 ),

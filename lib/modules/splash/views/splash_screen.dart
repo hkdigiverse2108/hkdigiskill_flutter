@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hkdigiskill/app/themes/app_colors.dart';
 import 'package:hkdigiskill/app/utils/app_images.dart';
 import 'package:hkdigiskill/modules/splash/controllers/splash_controller.dart';
 

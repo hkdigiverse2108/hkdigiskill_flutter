@@ -23,7 +23,7 @@ class CustomBottomNavBar extends StatelessWidget {
     ];
 
     final activeColor = AppColors.primary;
-    final inactiveColor = AppColors.caption.withOpacity(0.55);
+    final inactiveColor = AppColors.caption.withValues(alpha: 0.55);
 
     Widget buildAnimatedIcon(int idx) {
       final isActive = currentIndex == idx;
@@ -108,7 +108,7 @@ class CustomBottomNavBar extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),

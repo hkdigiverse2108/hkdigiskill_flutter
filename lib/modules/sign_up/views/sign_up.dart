@@ -55,7 +55,7 @@ class SignUp extends GetView<SignUpController> {
                     controller.obscurePassword.value
                         ? Icons.visibility_off
                         : Icons.visibility,
-                    color: AppColors.textLight.withOpacity(0.6),
+                    color: AppColors.textLight.withValues(alpha: 0.6),
                   ),
                   onPressed: () => controller.obscurePassword.toggle(),
                 ),
@@ -146,7 +146,7 @@ class SignUp extends GetView<SignUpController> {
                   decoration: BoxDecoration(
                     color: controller.isAgree.value
                         ? AppColors.primary
-                        : AppColors.primary.withOpacity(0.5),
+                        : AppColors.primary.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(

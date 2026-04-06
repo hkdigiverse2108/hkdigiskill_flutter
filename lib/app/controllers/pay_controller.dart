@@ -6,11 +6,11 @@ import 'package:hkdigiskill/app/models/courses/course_models.dart';
 import 'package:hkdigiskill/app/models/workshop/workshop_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/payment_service.dart';
-import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/modules/courses/controllers/courses_controller.dart';
 import 'package:hkdigiskill/modules/workshops/controllers/workshops_controller.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 import 'package:hkdigiskill/shared/widgets/purchase_result_dialog.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -86,17 +86,13 @@ class PayController extends GetxController {
         /// optional if you want coupon object
         couponValue.value = (data['coupon']?['discountValue'] ?? 0).toDouble();
 
-        Get.snackbar(
-          "Coupon Applied",
-          "${data['discountAmount']} discount applied!",
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        AppSnackbar.success("Coupon applied successfully");
       } else {
-        Get.snackbar("Invalid", apiResponse['message']);
+        AppSnackbar.error("Failed to apply coupon");
       }
     } catch (e) {
       log("Apply coupon error: $e");
-      Get.snackbar("Error", "Failed to apply coupon");
+      AppSnackbar.error("No coupon found");
     }
   }
 
@@ -199,7 +195,7 @@ class PayController extends GetxController {
       }
     } catch (e) {
       log("Error : $e");
-      Get.snackbar("Error", "Payment verified but API failed.");
+      AppSnackbar.error("Something went wrong");
     }
   }
 

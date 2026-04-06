@@ -83,7 +83,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                                 decoration: BoxDecoration(
                                   color: index == controller.currentStep.value
                                       ? AppColors.primary
-                                      : AppColors.primary.withOpacity(0.3),
+                                      : AppColors.primary.withValues(alpha: 0.3),
                                   shape: BoxShape.circle,
                                 ),
                               ),

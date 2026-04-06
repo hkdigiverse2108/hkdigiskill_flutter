@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:hkdigiskill/app/utils/globals.dart';
+import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -125,7 +126,7 @@ class VideoController extends GetxController {
     final url = Globals.fixLocalhostUrl(pdf.value);
 
     if (url.isEmpty) {
-      Get.snackbar("Error", "No PDF available");
+      AppSnackbar.error("No PDF available");
       return;
     }
 
@@ -133,7 +134,7 @@ class VideoController extends GetxController {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      Get.snackbar("Error", "Unable to open PDF");
+      AppSnackbar.error("Could not open PDF");
     }
   }
 

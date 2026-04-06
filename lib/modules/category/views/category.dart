@@ -46,7 +46,9 @@ class Category extends GetView<CategoryController> {
                 child: Obx(
                   () => controller.isLoading.value
                       ? _buildShimmerList()
-                      : _buildCategoryList(),
+                      : controller.items.isNotEmpty
+                      ? _buildCategoryList()
+                      : const Center(child: Text("No Categories Found")),
                 ),
               ),
             ),
@@ -96,7 +98,7 @@ class Category extends GetView<CategoryController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 8),
         ],
       ),
       child: Padding(
@@ -318,7 +320,6 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
 
                     SizedBox(height: 4),
                     Text(
-                      // todo: add count
                       "${widget.item.courseCount} Courses",
                       // widget.item.count,
                       style: TextStyle(
@@ -334,7 +335,7 @@ class _AnimatedCategoryItemState extends State<AnimatedCategoryItem>
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'Poppins',
-                        color: Colors.black.withOpacity(0.7),
+                        color: Colors.black.withValues(alpha: 0.7),
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

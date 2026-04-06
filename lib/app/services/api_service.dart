@@ -22,7 +22,7 @@ class ApiService extends GetxService {
   // Check internet connectivity
   Future<bool> hasConnection() async {
     var connectivityResult = await Connectivity().checkConnectivity();
-    return connectivityResult != ConnectivityResult.none;
+    return !connectivityResult.contains(ConnectivityResult.none);
   }
 
   // GET request
@@ -61,7 +61,7 @@ class ApiService extends GetxService {
       final response = await http
           .post(
             url,
-            headers: {'Content-Type': 'application/json', ...?headers},
+            headers: {'Content-Type': 'application/json', ...headers},
             body: jsonEncode(body),
           )
           .timeout(
@@ -148,7 +148,7 @@ class ApiService extends GetxService {
     try {
       final response = await http.delete(
         url,
-        headers: {'Content-Type': 'application/json', ...?headers},
+        headers: {'Content-Type': 'application/json', ...headers},
         body: jsonEncode(body),
       );
       return _handleResponse(response);

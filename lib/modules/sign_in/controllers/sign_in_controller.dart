@@ -1,13 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hkdigiskill/app/models/user/user_model.dart';
 import 'package:hkdigiskill/app/services/api_service.dart';
 import 'package:hkdigiskill/app/services/storage_service.dart';
 import 'package:hkdigiskill/app/utils/api_constants.dart';
-import 'package:hkdigiskill/app/utils/globals.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/app_snackbar.dart';
 

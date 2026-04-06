@@ -8,13 +8,13 @@ class AppTheme {
     colorScheme: ColorScheme.light(
       primary: AppColors.primary,
       secondary: AppColors.textLight,
-      background: AppColors.backgroundLight,
+      surface: AppColors.backgroundLight,
       onPrimary: Colors.white,
-      onBackground: AppColors.textLight,
+      onSurface: AppColors.textLight,
     ),
     scaffoldBackgroundColor: AppColors.backgroundLight,
     appBarTheme: AppBarTheme(
-      color: AppColors.primary,
+      backgroundColor: AppColors.primary,
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(
         color: Colors.white,
@@ -39,13 +39,13 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       primary: AppColors.primary,
       secondary: AppColors.textLight,
-      background: AppColors.backgroundDark,
+      surface: AppColors.backgroundDark,
       onPrimary: Colors.white,
-      onBackground: AppColors.textDark,
+      onSurface: AppColors.textDark,
     ),
     scaffoldBackgroundColor: AppColors.backgroundDark,
     appBarTheme: AppBarTheme(
-      color: AppColors.primary,
+      backgroundColor: AppColors.primary,
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(
         color: Colors.white,

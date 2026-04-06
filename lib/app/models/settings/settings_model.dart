@@ -11,7 +11,7 @@ class AppSettings {
   final String phoneNumber;
   final String razorpayKey;
   final String razorpaySecret;
-  final int satisfactionRate;
+  final double satisfactionRate;
   final DateTime updatedAt;
   final SocialMediaLinks socialMediaLinks;
 
@@ -38,16 +38,16 @@ class AppSettings {
       id: json["_id"] ?? "",
       isDeleted: json["isDeleted"] ?? false,
       address: json["address"] ?? "",
-      classCompleted: json["classCompleted"] ?? 0,
+      classCompleted: (json["classCompleted"] ?? 0).toInt(),
       createdAt: DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
       email: json["email"] ?? "",
-      enrolledLearners: json["enrolledLearners"] ?? 0,
+      enrolledLearners: (json["enrolledLearners"] ?? 0).toInt(),
       link: json["link"] ?? "",
       logo: json["logo"] ?? "",
       phoneNumber: json["phoneNumber"] ?? "",
       razorpayKey: json["razorpayKey"] ?? "",
       razorpaySecret: json["razorpaySecret"] ?? "",
-      satisfactionRate: json["satisfactionRate"] ?? 0,
+      satisfactionRate: (json["satisfactionRate"] ?? 0).toDouble(),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? "") ?? DateTime.now(),
       socialMediaLinks: SocialMediaLinks.fromJson(
         json["socialMediaLinks"] ?? {},

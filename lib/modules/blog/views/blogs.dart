@@ -7,6 +7,8 @@ import 'package:hkdigiskill/modules/blog/controllers/blog_controller.dart';
 import 'package:hkdigiskill/modules/blog/widgets/blog_animation_wrapper.dart';
 import 'package:hkdigiskill/routes/routes.dart';
 import 'package:hkdigiskill/shared/widgets/custom_shimmer.dart';
+import 'package:hkdigiskill/shared/widgets/no_data_widget.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class BlogsPage extends GetView<BlogController> {
   const BlogsPage({super.key});
@@ -223,7 +225,8 @@ class BlogsPage extends GetView<BlogController> {
                 itemCount: 4,
                 itemBuilder: (_, i) => _blogShimmer(),
               )
-            : ListView.builder(
+            : controller.blogs.isNotEmpty
+            ? ListView.builder(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 8,
@@ -232,6 +235,12 @@ class BlogsPage extends GetView<BlogController> {
                 itemBuilder: (_, i) => BlogAnimationWrapper(
                   index: i,
                   child: _blogCard(controller.blogs[i]),
+                ),
+              )
+            : Center(
+                child: NoDataWidget(
+                  message: "No Blogs Found",
+                  icon: PhosphorIcons.article(),
                 ),
               ),
       ),

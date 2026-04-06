@@ -73,7 +73,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -133,7 +132,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.85),
+                              color: AppColors.primary.withValues(alpha: 0.85),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
@@ -191,7 +190,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.black.withOpacity(0.35),
+                                Colors.black.withValues(alpha: 0.35),
                                 Colors.transparent,
                                 Colors.transparent,
                               ],
@@ -205,8 +204,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
 
                     // Top overlay controls (back + duration) — show/hide with auto-hide
                     Obx(() {
-                      if (!_overlayVisible.value)
+                      if (!_overlayVisible.value) {
                         return const SizedBox.shrink();
+                      }
                       return SafeArea(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -227,7 +227,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                                   vertical: 7,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.85),
+                                  color: AppColors.primary.withValues(alpha: 0.85),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Row(
@@ -369,7 +369,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.45),
+          color: Colors.black.withValues(alpha: 0.45),
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: Colors.white, size: 22),

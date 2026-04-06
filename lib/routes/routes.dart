@@ -43,7 +43,6 @@ import 'package:hkdigiskill/modules/courses/views/view_all_course.dart';
 import 'package:hkdigiskill/modules/faq/views/faq.dart';
 import 'package:hkdigiskill/modules/forgot_password/views/forgot_password.dart';
 import 'package:hkdigiskill/modules/gallery/views/gallery.dart';
-import 'package:hkdigiskill/modules/gallery/views/gallery_details.dart';
 import 'package:hkdigiskill/modules/home/views/home_screen.dart';
 import 'package:hkdigiskill/modules/instructor/views/top_instructors_page.dart';
 import 'package:hkdigiskill/modules/navigation/views/navigation.dart';

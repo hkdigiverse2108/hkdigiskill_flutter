@@ -35,10 +35,14 @@ class HomeScreen extends GetView<HomeController> {
                     // animateOnce: false,
                     duration: const Duration(milliseconds: 400),
                     offsetY: 32.0, // slide up from 32 pixels below
-                    child: ImageCardCarousel(
-                      imageList: controller.imageList,
-                      isLoading: controller.isBennersLoading.value,
-                    ),
+                    child:
+                        controller.isBennersLoading.value == false &&
+                            controller.imageList.isNotEmpty
+                        ? ImageCardCarousel(
+                            imageList: controller.imageList,
+                            isLoading: controller.isBennersLoading.value,
+                          )
+                        : const SizedBox.shrink(),
                   ),
                 ),
                 const Gap(10),
